@@ -10,27 +10,54 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ShirtIcon as Tshirt } from "lucide-react"
 import Link from "next/link"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function LoginPage() {
   const router = useRouter()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError(null)
 
-    // Simulate login - in a real app, this would be an API call
-    setTimeout(() => {
-      setIsLoading(false)
-      // Redirect based on role (hardcoded for demo)
-      if (username.includes("admin")) {
+    try {
+      // Make API call to the login endpoint
+      const response = await fetch("/api/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed")
+      }
+
+      // Login successful
+      const { user } = data
+
+      // Redirect based on user role
+      if (user.role === "admin") {
         router.push("/dashboard/admin")
+      } else if (user.role === "staff") {
+        router.push("/dashboard/staff")
       } else {
+        // For limited role or any other role
         router.push("/dashboard/staff")
       }
-    }, 1000)
+    } catch (err) {
+      console.error("Login error:", err)
+      setError(err instanceof Error ? err.message : "An unexpected error occurred")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -44,6 +71,11 @@ export default function LoginPage() {
           <CardDescription className="text-center">Enter your credentials to access your dashboard</CardDescription>
         </CardHeader>
         <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
           <form onSubmit={handleLogin}>
             <div className="grid gap-4">
               <div className="grid gap-2">
@@ -72,6 +104,11 @@ export default function LoginPage() {
               </Button>
             </div>
           </form>
+          <div className="mt-4 text-center text-sm text-gray-500">
+            <p>Demo credentials:</p>
+            <p>Username: admin or staff</p>
+            <p>Password: password</p>
+          </div>
         </CardContent>
         <CardFooter className="flex justify-center">
           <Link href="/" className="text-sm text-emerald-600 hover:text-emerald-700">
