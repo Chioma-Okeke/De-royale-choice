@@ -26,6 +26,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 
 export default function StaffDashboard() {
     // Mock data for recent registrations
@@ -67,7 +68,7 @@ export default function StaffDashboard() {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar role="staff" />
-            <div className="flex-1">
+            <MainDashboardContainer>
                 <Header title="Staff Dashboard" role="staff" username="staff" />
                 <main className="p-4 md:p-6 space-y-6">
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -268,7 +269,7 @@ export default function StaffDashboard() {
                         </CardFooter>
                     </Card>
                 </main>
-            </div>
+            </MainDashboardContainer>
         </div>
     );
 }

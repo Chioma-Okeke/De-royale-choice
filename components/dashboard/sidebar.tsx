@@ -92,7 +92,7 @@ export function Sidebar({ role }: SidebarProps) {
     ];
 
     return (
-        <>
+        <div className="fixed top-0 h-screen bg-white z-30">
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild className="lg:hidden">
                     <Button variant="outline" size="icon" className="ml-2 mt-2">
@@ -187,6 +187,6 @@ export function Sidebar({ role }: SidebarProps) {
                     </Button>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

@@ -28,6 +28,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState("overview");
@@ -103,11 +104,11 @@ export default function AdminDashboard() {
     ];
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="flex h-screen bg-gray-50 overflow-hidden w-full">
             <Sidebar role="admin" />
-            <div className="flex-1">
+            <MainDashboardContainer>
                 <Header title="Admin Dashboard" role="admin" username="admin" />
-                <main className="p-4 md:p-6 space-y-6">
+                <main className="p-4 md:p-6 space-y-6 overflow-y-auto">
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                         {stats.map((stat, index) => (
                             <Card key={index}>
@@ -369,7 +370,7 @@ export default function AdminDashboard() {
                         </TabsContent>
                     </Tabs>
                 </main>
-            </div>
+            </MainDashboardContainer>
         </div>
     );
 }

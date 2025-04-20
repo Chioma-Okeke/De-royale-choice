@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/select";
 import { Plus, Minus, Trash2, Printer, Save } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 
 export default function CustomerRegistration() {
     const { toast } = useToast();
@@ -168,15 +169,15 @@ export default function CustomerRegistration() {
     };
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="flex h-screen bg-gray-50 overflow-hidden w-full">
             <Sidebar role="staff" />
-            <div className="flex-1">
+            <MainDashboardContainer>
                 <Header
                     title="Register Customer"
                     role="staff"
                     username="staff"
                 />
-                <main className="p-4 md:p-6">
+                <main className="p-4 md:p-6 overflow-y-auto">
                     <Tabs
                         value={activeTab}
                         onValueChange={setActiveTab}
@@ -679,7 +680,7 @@ export default function CustomerRegistration() {
                         </TabsContent>
                     </Tabs>
                 </main>
-            </div>
+            </MainDashboardContainer>
         </div>
     );
 }
