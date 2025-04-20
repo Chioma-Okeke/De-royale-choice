@@ -3,44 +3,16 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ShirtIcon, Clock, PhoneCall, MapPin, Star } from "lucide-react"
+import NavBar from "@/components/navigation"
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-white">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <ShirtIcon className="h-6 w-6 text-emerald-600" />
-            <span className="text-xl font-bold">CleanPress Laundry</span>
-          </div>
-          <nav className="hidden md:flex gap-6">
-            <Link href="#services" className="text-sm font-medium hover:text-emerald-600 transition-colors">
-              Services
-            </Link>
-            <Link href="#process" className="text-sm font-medium hover:text-emerald-600 transition-colors">
-              How It Works
-            </Link>
-            <Link href="#pricing" className="text-sm font-medium hover:text-emerald-600 transition-colors">
-              Pricing
-            </Link>
-            <Link href="#testimonials" className="text-sm font-medium hover:text-emerald-600 transition-colors">
-              Testimonials
-            </Link>
-            <Link href="#contact" className="text-sm font-medium hover:text-emerald-600 transition-colors">
-              Contact
-            </Link>
-          </nav>
-          <Button className="bg-emerald-600 hover:bg-emerald-700">
-            <PhoneCall className="mr-2 h-4 w-4" />
-            Contact Us
-          </Button>
-        </div>
-      </header>
-
+      <NavBar />
       {/* Hero Section */}
       <section className="w-full py-12 md:py-24 lg:py-32 bg-emerald-50">
-        <div className="container px-4 md:px-6">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
@@ -75,7 +47,7 @@ export default function Home() {
 
       {/* Services Section */}
       <section id="services" className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container px-4 md:px-6">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Our Services</h2>
@@ -124,7 +96,7 @@ export default function Home() {
 
       {/* How It Works Section */}
       <section id="process" className="w-full py-12 md:py-24 lg:py-32 bg-gray-50">
-        <div className="container px-4 md:px-6">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">How It Works</h2>
@@ -173,7 +145,7 @@ export default function Home() {
 
       {/* Pricing Section */}
       <section id="pricing" className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container px-4 md:px-6">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Our Pricing</h2>
@@ -260,7 +232,7 @@ export default function Home() {
 
       {/* Testimonials Section */}
       <section id="testimonials" className="w-full py-12 md:py-24 lg:py-32 bg-emerald-50">
-        <div className="container px-4 md:px-6">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">What Our Customers Say</h2>
@@ -348,7 +320,7 @@ export default function Home() {
 
       {/* Contact Section */}
       <section id="contact" className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container px-4 md:px-6">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-start">
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
@@ -448,7 +420,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="w-full py-6 bg-gray-100">
-        <div className="container px-4 md:px-6">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
