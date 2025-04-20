@@ -30,14 +30,14 @@ export function Header({ title, role, username }: HeaderProps) {
   return (
     <header className="sticky top-0 z-10 w-full border-b bg-white">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6">
-        <h1 className="text-xl font-semibold">{title}</h1>
+        <h1 className="text-xl font-semibold text-brand-navy">{title}</h1>
         <div className="flex items-center gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon" className="relative">
                 <Bell className="h-5 w-5" />
                 {notifications > 0 && (
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center">
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center bg-brand-red">
                     {notifications}
                   </Badge>
                 )}
@@ -64,7 +64,7 @@ export function Header({ title, role, username }: HeaderProps) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative rounded-full">
                 <Avatar>
-                  <AvatarFallback className="bg-emerald-100 text-emerald-700">
+                  <AvatarFallback className="bg-brand-navy text-white">
                     {username.substring(0, 2).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>

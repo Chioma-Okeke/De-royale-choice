@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ShirtIcon as Tshirt } from "lucide-react"
 import Link from "next/link"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Logo } from "@/components/ui/logo"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -61,13 +61,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-brand-lightblue px-4">
+      <Card className="w-full max-w-md border-brand-navy">
         <CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
-            <Tshirt className="h-12 w-12 text-emerald-600" />
+            <Logo size="lg" />
           </div>
-          <CardTitle className="text-2xl text-center">Laundry Inventory System</CardTitle>
+          <CardTitle className="text-2xl text-center text-brand-navy">Staff Portal</CardTitle>
           <CardDescription className="text-center">Enter your credentials to access your dashboard</CardDescription>
         </CardHeader>
         <CardContent>
@@ -99,7 +99,11 @@ export default function LoginPage() {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button
+                type="submit"
+                className="w-full bg-brand-navy hover:bg-brand-purple text-white"
+                disabled={isLoading}
+              >
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
             </div>
@@ -111,7 +115,7 @@ export default function LoginPage() {
           </div>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Link href="/" className="text-sm text-emerald-600 hover:text-emerald-700">
+          <Link href="/" className="text-sm text-brand-navy hover:text-brand-purple">
             Back to Home
           </Link>
         </CardFooter>
