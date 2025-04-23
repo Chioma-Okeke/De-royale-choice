@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/select";
 import { Search, Eye, Printer, Filter } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 
 export default function CustomerSearch() {
     const { toast } = useToast();
@@ -143,7 +144,7 @@ export default function CustomerSearch() {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar role="staff" />
-            <div className="flex-1">
+            <MainDashboardContainer>
                 <Header title="Search Records" role="staff" username="staff" />
                 <main className="p-4 md:p-6 space-y-6">
                     <Card>
@@ -336,7 +337,7 @@ export default function CustomerSearch() {
                         </Card>
                     )}
                 </main>
-            </div>
+            </MainDashboardContainer>
         </div>
     );
 }

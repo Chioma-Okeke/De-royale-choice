@@ -14,8 +14,8 @@ export function Logo({ size = "md", withText = true, className = "" }: LogoProps
   }
 
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
-      <div className="relative">
+    <div className={`flex items-center ${className}`}>
+      {/* <div className="relative">
         <Image
           src="/images/logo.png"
           alt="DE UNIQUE ROYAL CHOICE DRY CLEANERS"
@@ -23,7 +23,7 @@ export function Logo({ size = "md", withText = true, className = "" }: LogoProps
           height={sizes[size].height}
           className="object-contain"
         />
-      </div>
+      </div> */}
       {withText && (
         <div className="flex flex-col">
           <span className="font-bold text-brand-purple leading-tight">DE UNIQUE ROYAL CHOICE</span>

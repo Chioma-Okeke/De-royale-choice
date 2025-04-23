@@ -25,6 +25,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Printer, Search, FileText, Tag } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 
 export default function ReceiptPrinting() {
     const { toast } = useToast();
@@ -137,7 +138,7 @@ export default function ReceiptPrinting() {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar role="staff" />
-            <div className="flex-1">
+            <MainDashboardContainer>
                 <Header title="Print Receipts" role="staff" username="staff" />
                 <main className="p-4 md:p-6">
                     <Tabs
@@ -615,7 +616,7 @@ export default function ReceiptPrinting() {
                         </TabsContent>
                     </Tabs>
                 </main>
-            </div>
+            </MainDashboardContainer>
         </div>
     );
 }

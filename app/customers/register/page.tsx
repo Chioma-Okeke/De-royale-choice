@@ -169,7 +169,7 @@ export default function CustomerRegistration() {
     };
 
     return (
-        <div className="flex h-screen bg-gray-50 overflow-hidden w-full">
+        <div className="flex min-h-screen bg-gray-50 ">
             <Sidebar role="staff" />
             <MainDashboardContainer>
                 <Header
@@ -177,7 +177,7 @@ export default function CustomerRegistration() {
                     role="staff"
                     username="staff"
                 />
-                <main className="p-4 md:p-6 overflow-y-auto">
+                <main className="p-4 md:p-6 ">
                     <Tabs
                         value={activeTab}
                         onValueChange={setActiveTab}

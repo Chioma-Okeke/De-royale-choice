@@ -40,6 +40,7 @@ import {
 import { Calendar, Download, Printer } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { format } from "date-fns";
+import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 
 export default function DailyReports() {
     const { toast } = useToast();
@@ -182,7 +183,7 @@ export default function DailyReports() {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar role="admin" />
-            <div className="flex-1">
+            <MainDashboardContainer>
                 <Header title="Daily Reports" role="admin" username="admin" />
                 <main className="p-4 md:p-6 space-y-6">
                     <Card>
@@ -430,7 +431,7 @@ export default function DailyReports() {
                         </CardContent>
                     </Card>
                 </main>
-            </div>
+            </MainDashboardContainer>
         </div>
     );
 }

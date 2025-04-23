@@ -32,6 +32,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Pencil, Trash2, Save } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 
 export default function InventoryManagement() {
     const { toast } = useToast();
@@ -224,7 +225,7 @@ export default function InventoryManagement() {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar role="admin" />
-            <div className="flex-1">
+            <MainDashboardContainer className="flex-1">
                 <Header
                     title="Inventory Management"
                     role="admin"
@@ -634,7 +635,7 @@ export default function InventoryManagement() {
                         </TabsContent>
                     </Tabs>
                 </main>
-            </div>
+            </MainDashboardContainer>
         </div>
     );
 }

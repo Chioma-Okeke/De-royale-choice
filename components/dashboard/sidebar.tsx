@@ -78,17 +78,17 @@ export function Sidebar({ role }: SidebarProps) {
         {
             label: "Inventory",
             icon: ShoppingBag,
-            href: "/inventory",
-            active: pathname === "/inventory",
+            href: "/dashboard/admin/inventory",
+            active: pathname === "/dashboard/admin/inventory",
             roles: ["admin"],
         },
-        {
-            label: "Settings",
-            icon: Settings,
-            href: "/settings",
-            active: pathname === "/settings",
-            roles: ["admin"],
-        },
+        // {
+        //     label: "Settings",
+        //     icon: Settings,
+        //     href: "/settings",
+        //     active: pathname === "/settings",
+        //     roles: ["admin"],
+        // },
     ];
 
     return (
