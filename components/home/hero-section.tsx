@@ -18,21 +18,6 @@ function Hero() {
                                 detail.
                             </p>
                         </div>
-                        <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                            <Button
-                                className="bg-brand-navy hover:bg-brand-purple"
-                                size="lg"
-                            >
-                                Get Started
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="lg"
-                                className="border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white"
-                            >
-                                View Pricing
-                            </Button>
-                        </div>
                     </div>
                     <div className="flex items-center justify-center">
                         <Image
