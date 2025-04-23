@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
+import { Bed, Shirt, WashingMachine } from "lucide-react";
 
 function ServicesSection() {
     return (
@@ -21,13 +22,7 @@ function ServicesSection() {
                     <Card className="border-none shadow-md">
                         <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
                             <div className="p-3 rounded-full bg-brand-lightblue">
-                                <Image
-                                    src="/images/logo.png"
-                                    alt="Regular Laundry"
-                                    width={32}
-                                    height={32}
-                                    className="object-contain"
-                                />
+                                <WashingMachine/>
                             </div>
                             <h3 className="text-xl font-bold text-brand-navy">
                                 Regular Laundry
@@ -41,13 +36,7 @@ function ServicesSection() {
                     <Card className="border-none shadow-md">
                         <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
                             <div className="p-3 rounded-full bg-brand-lightblue">
-                                <Image
-                                    src="/images/logo.png"
-                                    alt="Dry Cleaning"
-                                    width={32}
-                                    height={32}
-                                    className="object-contain"
-                                />
+                                <Shirt/>
                             </div>
                             <h3 className="text-xl font-bold text-brand-navy">
                                 Dry Cleaning
@@ -61,13 +50,7 @@ function ServicesSection() {
                     <Card className="border-none shadow-md">
                         <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
                             <div className="p-3 rounded-full bg-brand-lightblue">
-                                <Image
-                                    src="/images/logo.png"
-                                    alt="Bedding & Curtains"
-                                    width={32}
-                                    height={32}
-                                    className="object-contain"
-                                />
+                                <Bed />
                             </div>
                             <h3 className="text-xl font-bold text-brand-navy">
                                 Bedding & Curtains

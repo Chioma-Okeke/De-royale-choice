@@ -73,11 +73,11 @@ export default function LoginPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center px-4">
-            <Card className="w-full max-w-md border-brand-navy">
+            <Card className="w-full max-w-md border-brand-navy/20 shadow-lg rounded-md">
                 <CardHeader className="space-y-1">
-                    <div className="flex justify-center mb-4">
+                    {/* <div className="flex justify-center mb-4">
                         <Logo size="lg" />
-                    </div>
+                    </div> */}
                     <CardTitle className="text-2xl text-center text-brand-navy">
                         Staff Portal
                     </CardTitle>
