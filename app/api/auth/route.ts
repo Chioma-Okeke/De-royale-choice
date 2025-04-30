@@ -4,8 +4,12 @@ import type { User } from "../../../models/types";
 import { cookies } from "next/headers";
 import { sign, verify } from "jsonwebtoken";
 
-// Secret key for JWT
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const isKeyAvailable = () => {
+    if (!process.env.JWT_SECRET) {
+        throw new Error("Please define the MONGODB_URI environment variable")
+    }
+    return process.env.JWT_SECRET
+}
 
 // Login endpoint
 export async function POST(request: NextRequest) {
@@ -48,7 +52,7 @@ export async function POST(request: NextRequest) {
                 username: foundUser.username,
                 role: foundUser.role,
             },
-            JWT_SECRET,
+            isKeyAvailable(),
             { expiresIn: "24h" }
         );
 
@@ -96,7 +100,7 @@ export async function GET() {
         }
 
         // Verify token
-        const decoded = verify(token, JWT_SECRET) as { id: string };
+        const decoded = verify(token, isKeyAvailable()) as { id: string };
         const user = db.users.get(decoded.id);
 
         if (!user) {

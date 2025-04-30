@@ -5,7 +5,7 @@ export type Role = "admin" | "staff" | "limited"
 export interface User {
   id: string
   username: string
-  password: string // Hashed password
+  password: string
   role: Role
   name: string
   email?: string
@@ -92,4 +92,18 @@ export interface DailyReport {
   registrationIds: string[]
   createdAt: Date
   updatedAt: Date
+}
+
+export interface IContact {
+  id?: string
+  name: string
+  email: string
+  subject: string
+  message: string
+  createdAt?: Date
+}
+
+export interface IContactResponse {
+  message: string
+  status: number
 }
