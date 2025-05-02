@@ -124,7 +124,7 @@ function ContactForm() {
                 isLoading={isLoading}
                 className="w-full bg-brand-navy hover:bg-brand-purple"
             >
-                Send Message
+                {isLoading ? 'Sending' : 'Send Message'}
             </Button>
         </form>
     );

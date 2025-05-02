@@ -13,6 +13,7 @@ import {
     LogOut,
     Menu,
     ShoppingBag,
+    Phone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -81,6 +82,13 @@ export function Sidebar({ role }: SidebarProps) {
             href: "/dashboard/admin/inventory",
             active: pathname === "/dashboard/admin/inventory",
             roles: ["admin"],
+        },
+        {
+            label: "Contacts",
+            icon: Phone,
+            href: "/dashboard/contacts",
+            active: pathname === "/dashboard/staff/contacts",
+            roles: ["admin", "staff"],
         },
         // {
         //     label: "Settings",
