@@ -11,6 +11,9 @@ const CustomerSchema: Schema<ICustomer> = new mongoose.Schema(
             type: String,
             required: true,
         },
+        address: {
+            type: String
+        },
         orders: [
             {
                 type: mongoose.Schema.Types.ObjectId,

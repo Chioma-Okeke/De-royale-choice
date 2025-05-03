@@ -117,11 +117,9 @@ export interface ILaundryItem {
   price: number
   total: number
 }
-
+  
 export interface IOrder extends Document {
-  customerName: string
-  phoneNumber: string
-  address?: string
+  customerId: string
   laundryItems: ILaundryItem[]
   totalAmount: number
   receiptId: string

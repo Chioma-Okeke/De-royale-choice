@@ -1,19 +1,14 @@
 import mongoose, { Model } from "mongoose"
 import { LaundryItemSchema } from "./laundry-item-model"
 import { IOrder } from "./types";
+import Customer from "./customer-model";
 
 const OrderSchema = new mongoose.Schema(
     {
-        customerName: {
-            type: String,
-            required: true,   
-        },
-        phoneNumber: {
-            type: String,
-            required: true
-        },
-        address: {
-            type: String
+        customerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Customer",
+            required: true,
         },
         laundryItems: [LaundryItemSchema],
         totalAmount: {

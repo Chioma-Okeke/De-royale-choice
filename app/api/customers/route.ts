@@ -1,7 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "../../../models/db";
-import type { Customer } from "../../../models/types";
 import { verifyAuth } from "../utils/auth";
+import Customer from "@/models/customer-model";
+import connectDb from "@/lib/db-connect";
 
 // Get all customers
 export async function GET(request: NextRequest) {
@@ -21,15 +22,18 @@ export async function GET(request: NextRequest) {
         const limit = Number.parseInt(url.searchParams.get("limit") || "50");
         const offset = Number.parseInt(url.searchParams.get("offset") || "0");
 
+        // connecting DB
+        await connectDb()
+
         // Filter customers by search term
-        let customers: Customer[] = Array.from(db.customers.values());
+        let customers = await Customer.find()
 
         if (search) {
             const searchLower = search.toLowerCase();
             customers = customers.filter(
                 (customer) =>
                     customer.name.toLowerCase().includes(searchLower) ||
-                    customer.phone.includes(search)
+                    customer.phoneNumber.includes(search)
             );
         }
 
@@ -72,29 +76,24 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        await connectDb()
+
         // Check if customer with same phone already exists
-        for (const customer of db.customers.values()) {
-            if (customer.phone === phone) {
-                return NextResponse.json(
-                    { error: "Customer with this phone number already exists" },
-                    { status: 409 }
-                );
-            }
+        const existingUser = await Customer.findOne({phoneNumber: phone})
+        if (existingUser) {
+            return NextResponse.json({message: "Customer already exists."}, {status: 400})
         }
 
-        // Create new customer
-        const id = db.generateId();
-        const newCustomer: Customer = {
-            id,
+        const newCustomer = new Customer({
             name,
             phone,
             address,
-            registrations: [],
+            orders: [],
             createdAt: new Date(),
             updatedAt: new Date(),
-        };
+        });
 
-        db.customers.set(id, newCustomer);
+        await newCustomer.save()
 
         return NextResponse.json(
             {
