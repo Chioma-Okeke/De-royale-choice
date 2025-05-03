@@ -1,5 +1,7 @@
 // Define TypeScript types for our models
 
+import { Document } from "mongoose"
+
 export type Role = "admin" | "staff" | "limited"
 
 export interface User {
@@ -106,4 +108,22 @@ export interface IContact {
 export interface IContactResponse {
   message: string
   status: number
+}
+
+export interface ILaundryItem {
+  category: string
+  description: string
+  quantity: number
+  price: number
+  total: number
+}
+
+export interface IOrder extends Document {
+  customerName: string
+  phoneNumber: string
+  address?: string
+  laundryItems: ILaundryItem[]
+  totalAmount: number
+  receiptId: string
+  createdAt: Date
 }

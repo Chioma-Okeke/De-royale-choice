@@ -6,7 +6,7 @@ import { sign, verify } from "jsonwebtoken";
 
 const isKeyAvailable = () => {
     if (!process.env.JWT_SECRET) {
-        throw new Error("Please define the MONGODB_URI environment variable")
+        throw new Error("Please define the JWT_SECRET environment variable")
     }
     return process.env.JWT_SECRET
 }
