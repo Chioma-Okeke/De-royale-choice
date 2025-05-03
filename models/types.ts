@@ -97,7 +97,7 @@ export interface DailyReport {
 export interface IContact {
   id?: string
   name: string
-  email: string
+  phoneNumber: string
   subject: string
   message: string
   createdAt?: Date

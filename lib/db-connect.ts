@@ -1,19 +1,22 @@
 import mongoose from "mongoose"
+import { isConnectionString } from "./utils"
 
-const isConnectionString = () => {
-    if (!process.env.MONGODB_URI) {
-        throw new Error("Please define the MONGODB_URI environment variable")
-    }
-    return process.env.MONGODB_URI
-}
 
 const connectDb = async () => {
     try {
-        isConnectionString()
-        await mongoose.connect(process.env.MONGODB_URI ? process.env.MONGODB_URI : "")
+        const mongoURI = isConnectionString()
+        await mongoose.connect(mongoURI)
         console.log("connected to db")
     } catch (error) {
         console.error(error)
+    }
+}
+
+export const disconnectDb = async () => {
+    try {
+        await mongoose.disconnect()
+    } catch (error) {
+        console.log("Error when diconnecting mongo", error)
     }
 }
 
