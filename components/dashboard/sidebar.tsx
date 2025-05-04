@@ -84,10 +84,10 @@ export function Sidebar({ role }: SidebarProps) {
             roles: ["admin"],
         },
         {
-            label: "Contacts",
+            label: "Inquires",
             icon: Phone,
-            href: "/dashboard/contacts",
-            active: pathname === "/dashboard/staff/contacts",
+            href: "/inquires",
+            active: pathname === "/inquires",
             roles: ["admin", "staff"],
         },
         // {

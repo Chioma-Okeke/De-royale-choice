@@ -110,6 +110,17 @@ export interface IContactResponse {
   status: number
 }
 
+export interface IGetContactsResponse {
+  data: IGetContactsContent[]
+}
+
+export interface IGetContactsContent {
+  name: string
+  phoneNumber: string
+  subject: string
+  message: string
+}
+
 export interface ILaundryItem {
   category: string
   description: string

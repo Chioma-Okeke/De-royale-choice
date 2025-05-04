@@ -1,32 +1,32 @@
-import { emailRegex } from "@/lib/constants";
+import { phoneRegex } from "@/lib/constants";
 import connectDb from "@/lib/db-connect";
-import Contact from "@/models/contact-nodel";
+import Contact from "@/models/contact-model";
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "../utils/auth";
 
 export async function POST(request: NextRequest) {
     try {
         await connectDb();
-        const { name, email, subject, message } = await request.json();
+        const { name, phoneNumber, subject, message } = await request.json();
 
-        if (!name || !email || !subject || !message) {
+        if (!name || !phoneNumber || !subject || !message) {
             return NextResponse.json(
                 {
                     message:
-                        "Name, email, subject and message are all required.",
+                        "Name, phone Number, subject and message are all required.",
                 },
                 { status: 400 }
             );
         }
 
-        if (!emailRegex.test(email)) {
+        if (!phoneRegex.test(phoneNumber)) {
             return NextResponse.json(
-                { message: "Invalid email address" },
+                { message: "Invalid phone number" },
                 { status: 400 }
             );
         }
 
-        const newContact = new Contact({ name, email, subject, message });
+        const newContact = new Contact({ name, phoneNumber, subject, message });
         await newContact.save();
         return NextResponse.json(
             { message: "Message successfully sent." },
@@ -44,34 +44,34 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
     try {
         // Verify authentication
-        const authResult = await verifyAuth(request);
-        if (!authResult.success) {
-            return NextResponse.json(
-                { error: authResult.error },
-                { status: authResult.status }
-            );
-        }
+        // const authResult = await verifyAuth(request);
+        // if (!authResult.success) {
+        //     return NextResponse.json(
+        //         { error: authResult.error },
+        //         { status: authResult.status }
+        //     );
+        // }
         // Connecting to db
         await connectDb();
 
         // fetching of all contacts
-        const contacts = await Contact.find()
-        
+        const contacts = await Contact.find();
+
         if (!contacts) {
             return NextResponse.json(
-                {message: "No contacts found", data: []},
-                {status: 404}
-            )
+                { message: "No contacts found", data: [] },
+                { status: 404 }
+            );
         }
         return NextResponse.json(
-            {message: "Contacts fetched successfully", data: contacts},
-            {status: 200}
-        )
+            { message: "Contacts fetched successfully", data: contacts },
+            { status: 200 }
+        );
     } catch (error) {
         console.error(error);
         return NextResponse.json(
-            {message: "Error fetching contacts", error: error},
-            {status: 500}
-        )
+            { message: "Error fetching contacts", error: error },
+            { status: 500 }
+        );
     }
 }

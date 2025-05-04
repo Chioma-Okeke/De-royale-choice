@@ -96,7 +96,7 @@ export default function CustomerRegistration() {
         ]);
     };
 
-    const removeItem = (id) => {
+    const removeItem = (id: number) => {
         if (items.length > 1) {
             const updatedItems = items.filter((item) => item.id !== id);
             setItems(updatedItems);
@@ -104,7 +104,7 @@ export default function CustomerRegistration() {
         }
     };
 
-    const updateItem = (id, field, value) => {
+    const updateItem = (id: number, field: string, value: number          ) => {
         const updatedItems = items.map((item) => {
             if (item.id === id) {
                 const updatedItem = { ...item, [field]: value };
