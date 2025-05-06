@@ -16,7 +16,12 @@ import InquiryDetailsModal from "@/components/modals/inquiries-details-modal";
 
 async function InquiriesPage() {
     const contactService = new ContactService();
-    const inquiries = await contactService.getContacts();
+    let inquiries: IGetContactsContent[] = [];
+    try {
+    inquiries = await contactService.getContacts();
+    } catch (error) {
+    console.error("Failed to fetch inquiries:", error);
+    }
 
     return (
         <div>
@@ -69,3 +74,4 @@ async function InquiriesPage() {
 }
 
 export default InquiriesPage;
+// export const dynamic = "force-dynamic";
