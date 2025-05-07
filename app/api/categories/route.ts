@@ -1,7 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "../../../models/db";
-import type { Category } from "../../../models/types";
 import { verifyAuth } from "../utils/auth";
+import connectDb from "@/lib/db-connect";
+import Category from "@/models/categories.model";
+import Item from "@/models/item-model";
 
 // Get all categories
 export async function GET(request: NextRequest) {
@@ -15,12 +17,32 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        const categories = Array.from(db.categories.values());
+        const categories = await Category.find();
+
+        if (!categories || categories.length === 0) {
+            return NextResponse.json(
+                { error: "No categories found" },
+                { status: 400 }
+            );
+        }
+
+        // For each category, count the number of items associated with it
+        const categoriesWithCounts = await Promise.all(
+            categories.map(async (category) => {
+                const itemCount = await Item.countDocuments({
+                    categoryId: category._id,
+                });
+                return {
+                    ...category.toObject(),
+                    items: itemCount,
+                };
+            })
+        );
 
         // Sort by name
-        categories.sort((a, b) => a.name.localeCompare(b.name));
+        categoriesWithCounts.sort((a, b) => a.name.localeCompare(b.name));
 
-        return NextResponse.json({ categories });
+        return NextResponse.json({ categories: categoriesWithCounts });
     } catch (error) {
         console.error("Error fetching categories:", error);
         return NextResponse.json(
@@ -35,7 +57,11 @@ export async function POST(request: NextRequest) {
     try {
         // Verify authentication
         const authResult = await verifyAuth(request);
-        if (!authResult.success || authResult.user.role !== "admin") {
+        if (
+            !authResult.success ||
+            !authResult.user ||
+            authResult.user.role !== "admin"
+        ) {
             return NextResponse.json(
                 { error: "Unauthorized. Only admins can create categories" },
                 { status: 403 }
@@ -43,7 +69,7 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json();
-        const { name } = body;
+        const name = body.name?.trim();
 
         // Validate required fields
         if (!name) {
@@ -53,26 +79,19 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        await connectDb();
         // Check if category with same name already exists
-        for (const category of db.categories.values()) {
-            if (category.name.toLowerCase() === name.toLowerCase()) {
-                return NextResponse.json(
-                    { error: "Category with this name already exists" },
-                    { status: 409 }
-                );
-            }
+        const existingCategory = await Category.findOne({ name });
+        if (existingCategory) {
+            return NextResponse.json(
+                { error: "Category with this name already exists" },
+                { status: 409 }
+            );
         }
 
         // Create new category
-        const id = db.generateId();
-        const newCategory: Category = {
-            id,
-            name,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        };
-
-        db.categories.set(id, newCategory);
+        const newCategory = new Category({ name });
+        await newCategory.save();
 
         return NextResponse.json(
             {

@@ -1,6 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "../../../../models/db";
 import { verifyAuth } from "../../utils/auth";
+import Category from "@/models/categories.model";
+import connectDb from "@/lib/db-connect";
+import Item from "@/models/item-model";
 
 // Get category by ID
 export async function GET(
@@ -18,7 +21,9 @@ export async function GET(
         }
 
         const { id } = params;
-        const category = db.categories.get(id);
+
+        await connectDb()
+        const category = await Category.findById(id);
 
         if (!category) {
             return NextResponse.json(
@@ -45,25 +50,16 @@ export async function PUT(
     try {
         // Verify authentication
         const authResult = await verifyAuth(request);
-        if (!authResult.success || authResult.user.role !== "admin") {
+        if (!authResult.success || !authResult.user || authResult.user.role !== "admin") {
             return NextResponse.json(
                 { error: "Unauthorized. Only admins can update categories" },
                 { status: 403 }
             );
         }
 
-        const { id } = params;
-        const category = db.categories.get(id);
-
-        if (!category) {
-            return NextResponse.json(
-                { error: "Category not found" },
-                { status: 404 }
-            );
-        }
-
         const body = await request.json();
         const { name } = body;
+        const { id } = params;
 
         // Validate required fields
         if (!name) {
@@ -73,36 +69,34 @@ export async function PUT(
             );
         }
 
-        // Check if name is already used by another category
-        if (name.toLowerCase() !== category.name.toLowerCase()) {
-            for (const c of db.categories.values()) {
-                if (
-                    c.id !== id &&
-                    c.name.toLowerCase() === name.toLowerCase()
-                ) {
-                    return NextResponse.json(
-                        { error: "Category with this name already exists" },
-                        { status: 409 }
-                    );
-                }
-            }
-        }
+        await connectDb()
 
-        // Update category
-        const updatedCategory = {
-            ...category,
-            name,
-            updatedAt: new Date(),
+        const categoryUpdated = await Category.findByIdAndUpdate(id, {name}, {
+            new: true,
+            runValidators: true,
+        });
+
+        if (!categoryUpdated) {
+            return NextResponse.json(
+                { error: "Category not found" },
+                { status: 404 }
+            );
         };
-
-        db.categories.set(id, updatedCategory);
 
         return NextResponse.json({
             message: "Category updated successfully",
-            category: updatedCategory,
+            category: categoryUpdated,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error updating category:", error);
+
+        if (error.code === 11000) {
+            return NextResponse.json(
+                { error: "Category name must be unique" },
+                { status: 400 }
+            );
+        }
+
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }
@@ -118,7 +112,7 @@ export async function DELETE(
     try {
         // Verify authentication
         const authResult = await verifyAuth(request);
-        if (!authResult.success || authResult.user.role !== "admin") {
+        if (!authResult.success || !authResult.user || authResult.user.role !== "admin") {
             return NextResponse.json(
                 { error: "Unauthorized. Only admins can delete categories" },
                 { status: 403 }
@@ -126,7 +120,7 @@ export async function DELETE(
         }
 
         const { id } = params;
-        const category = db.categories.get(id);
+        const category = await Category.findById(id);
 
         if (!category) {
             return NextResponse.json(
@@ -135,21 +129,15 @@ export async function DELETE(
             );
         }
 
-        // Check if category has items
-        for (const item of db.items.values()) {
-            if (item.categoryId === id) {
-                return NextResponse.json(
-                    { error: "Cannot delete category with existing items" },
-                    { status: 400 }
-                );
-            }
-        }
+        // delete items in this category
+        await Item.deleteMany({ categoryId: id });
 
-        // Delete category
-        db.categories.delete(id);
+        //delete category
+        await Category.findByIdAndDelete(id)
 
         return NextResponse.json({
             message: "Category deleted successfully",
+            category: category,
         });
     } catch (error) {
         console.error("Error deleting category:", error);

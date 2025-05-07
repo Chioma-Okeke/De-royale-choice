@@ -25,15 +25,14 @@ export interface Customer {
   updatedAt: Date
 }
 
-export interface Category {
+export interface ICategory extends Document {
   id: string
   name: string
   createdAt: Date
   updatedAt: Date
 }
 
-export interface Item {
-  id: string
+export interface IItem extends Document{
   name: string
   categoryId: string
   price: number

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { Header } from "@/components/dashboard/header";
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,8 @@ import {
 import { Plus, Minus, Trash2, Printer, Save } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
+import { Typeahead } from "@/components/shared/typeahead-input";
+import LookupService from "@/app/services/lookup-services";
 
 export default function CustomerRegistration() {
     const { toast } = useToast();
@@ -42,6 +44,11 @@ export default function CustomerRegistration() {
         { id: 1, category: "", description: "", quantity: 1, price: 0 },
     ]);
     const [totalAmount, setTotalAmount] = useState(0);
+    const [isRegistering, setIsRegistering] = useState(false)
+
+    const registerCustomer = async () => {
+        setIsRegistering(true)
+    }
 
     // Mock categories
     const categories = [
@@ -104,7 +111,7 @@ export default function CustomerRegistration() {
         }
     };
 
-    const updateItem = (id: number, field: string, value: number          ) => {
+    const updateItem = (id: number, field: string, value: number) => {
         const updatedItems = items.map((item) => {
             if (item.id === id) {
                 const updatedItem = { ...item, [field]: value };
@@ -129,6 +136,16 @@ export default function CustomerRegistration() {
         }, 0);
         setTotalAmount(total);
     };
+
+    const getCustomerList = useCallback(
+        async (term: string) => {
+            const lookupService = new LookupService();
+            const response = await lookupService.getCustomerList(term)
+            return response.map((c: any) => ({
+                label: `${c.name} (${c.phoneNumber})`,
+                value: c._id,
+            }))
+        }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -206,6 +223,22 @@ export default function CustomerRegistration() {
                                             </CardDescription>
                                         </CardHeader>
                                         <CardContent className="space-y-4">
+                                            <div>
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="customerName">
+                                                        Search Customer
+                                                    </Label>
+                                                    <Typeahead
+                                                        placeholder="Search for a customer either by number or name"
+                                                        onSearch={getCustomerList}
+                                                        onSelect={(customer) => {
+                                                            console.log("Selected customer:", customer);
+                                                            // use customer.label or value
+                                                        }}
+                                                    />
+
+                                                </div>
+                                            </div>
                                             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                                 <div className="space-y-2">
                                                     <Label htmlFor="customerName">
@@ -239,6 +272,11 @@ export default function CustomerRegistration() {
                                                     name="address"
                                                     placeholder="Enter customer address"
                                                 />
+                                            </div>
+                                            <div>
+                                                <Button isLoading={isRegistering} onClick={registerCustomer}>
+                                                    Register User
+                                                </Button>
                                             </div>
                                         </CardContent>
                                     </Card>
@@ -381,7 +419,7 @@ export default function CustomerRegistration() {
                                                                                 Math.max(
                                                                                     1,
                                                                                     item.quantity -
-                                                                                        1
+                                                                                    1
                                                                                 )
                                                                             )
                                                                         }
@@ -406,7 +444,7 @@ export default function CustomerRegistration() {
                                                                                 item.id,
                                                                                 "quantity",
                                                                                 item.quantity +
-                                                                                    1
+                                                                                1
                                                                             )
                                                                         }
                                                                     >
@@ -541,8 +579,8 @@ export default function CustomerRegistration() {
                                                                 <TableCell>
                                                                     {item.description ||
                                                                         "Item " +
-                                                                            (index +
-                                                                                1)}
+                                                                        (index +
+                                                                            1)}
                                                                 </TableCell>
                                                                 <TableCell className="text-right">
                                                                     {

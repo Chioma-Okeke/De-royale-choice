@@ -33,6 +33,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Pencil, Trash2, Save } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
+import { ConfirmDeleteDialog } from "@/components/modals/delete-modal";
+import { Category } from "@/types";
 
 export default function InventoryManagement() {
     const { toast } = useToast();
@@ -41,7 +43,25 @@ export default function InventoryManagement() {
     const [isAddingItem, setIsAddingItem] = useState(false);
     const [isEditingItem, setIsEditingItem] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+    const [open, setOpen] = useState(false);
+    const [isDeleteInProgress, setIsDeleteInProgress] = useState(false);
+
+    const handleOpenDialog = (category: any) => {
+        setSelectedCategory(category);
+        setOpen(true);
+    };
+
+    const handleDelete = async () => {
+        if (!selectedCategory) return;
+        setIsDeleteInProgress(true);
+        try {
+            console.log("delete will happen here")
+        } finally {
+            setIsDeleteInProgress(false);
+            setOpen(false);
+        }
+    };
 
     // Mock data for categories
     const [categories, setCategories] = useState([
@@ -173,50 +193,6 @@ export default function InventoryManagement() {
         });
     };
 
-    const handleDeleteItem = (item) => {
-        // Remove the item
-        setItems(items.filter((i) => i.id !== item.id));
-
-        // Update category item count
-        setCategories(
-            categories.map((category) => {
-                if (category.id === item.category) {
-                    return { ...category, items: category.items - 1 };
-                }
-                return category;
-            })
-        );
-
-        toast({
-            title: "Item Deleted",
-            description: `Item "${item.name}" has been deleted successfully.`,
-        });
-    };
-
-    const handleDeleteCategory = (category) => {
-        // Check if category has items
-        const categoryItems = items.filter(
-            (item) => item.category === category.id
-        );
-
-        if (categoryItems.length > 0) {
-            toast({
-                title: "Cannot Delete Category",
-                description: `Category "${category.name}" has ${categoryItems.length} items. Remove all items first.`,
-                variant: "destructive",
-            });
-            return;
-        }
-
-        // Remove the category
-        setCategories(categories.filter((c) => c.id !== category.id));
-
-        toast({
-            title: "Category Deleted",
-            description: `Category "${category.name}" has been deleted successfully.`,
-        });
-    };
-
     const openEditItemDialog = (item) => {
         setSelectedItem(item);
         setIsEditingItem(true);
@@ -291,19 +267,27 @@ export default function InventoryManagement() {
                                                     </TableCell>
                                                     <TableCell className="text-right">
                                                         <Button
-                                                            variant="ghost"
+                                                            variant="destructive"
                                                             size="icon"
-                                                            onClick={() =>
-                                                                handleDeleteCategory(
-                                                                    category
-                                                                )
-                                                            }
-                                                        >
+                                                            onClick={() => handleOpenDialog(category)}>
+
                                                             <Trash2 className="h-4 w-4" />
                                                             <span className="sr-only">
                                                                 Delete
                                                             </span>
                                                         </Button>
+
+                                                        <ConfirmDeleteDialog
+                                                            open={open}
+                                                            onClose={() => {
+                                                                setOpen(false);
+                                                                setSelectedCategory(null);
+                                                            }}
+                                                            onConfirm={handleDelete}
+                                                            title={`Delete "${selectedCategory?.name}"?`}
+                                                            description="This will permanently delete the category and all items in it."
+                                                            loading={isDeleteInProgress}
+                                                        />
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -425,20 +409,30 @@ export default function InventoryManagement() {
                                                                     Edit
                                                                 </span>
                                                             </Button>
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="icon"
-                                                                onClick={() =>
-                                                                    handleDeleteItem(
-                                                                        item
-                                                                    )
-                                                                }
-                                                            >
-                                                                <Trash2 className="h-4 w-4" />
-                                                                <span className="sr-only">
-                                                                    Delete
-                                                                </span>
-                                                            </Button>
+                                                            <>
+                                                                <Button
+                                                                    variant="destructive"
+                                                                    size="icon"
+                                                                    onClick={() => handleOpenDialog(item)}>
+
+                                                                    <Trash2 className="h-4 w-4" />
+                                                                    <span className="sr-only">
+                                                                        Delete
+                                                                    </span>
+                                                                </Button>
+
+                                                                <ConfirmDeleteDialog
+                                                                    open={open}
+                                                                    onClose={() => {
+                                                                        setOpen(false);
+                                                                        setSelectedCategory(null);
+                                                                    }}
+                                                                    onConfirm={handleDelete}
+                                                                    title={`Delete "${selectedCategory?.name}"?`}
+                                                                    description="This will permanently delete the item. Are you sure?"
+                                                                    loading={isDeleteInProgress}
+                                                                />
+                                                            </>
                                                         </div>
                                                     </TableCell>
                                                 </TableRow>

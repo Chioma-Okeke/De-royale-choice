@@ -74,4 +74,4 @@ async function InquiriesPage() {
 }
 
 export default InquiriesPage;
-// export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";
