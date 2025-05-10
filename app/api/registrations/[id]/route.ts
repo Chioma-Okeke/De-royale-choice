@@ -45,6 +45,14 @@ export async function GET(
     }
 }
 
+// make to look into this when fetrching individual orcers
+// const order = await Order.findById(orderId).populate({
+//     path: "laundryItems",
+//     populate: {
+//       path: "item categoryId", // populates nested refs
+//     }
+//   });
+
 // Update registration status
 export async function PATCH(
     request: NextRequest,
@@ -123,7 +131,7 @@ export async function DELETE(
     try {
         // Verify authentication
         const authResult = await verifyAuth(request);
-        if (!authResult.success || authResult.user.role !== "admin") {
+        if (!authResult.success || !authResult.user || authResult.user.role !== "admin") {
             return NextResponse.json(
                 { error: "Unauthorized. Only admins can delete registrations" },
                 { status: 403 }

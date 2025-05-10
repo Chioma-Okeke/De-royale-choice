@@ -9,7 +9,7 @@ const ItemSchema = new Schema(
             required: true,
             unique: true,
         },
-        price: {
+        ItemPrice: {
             type: Number,
             required: true
         },
@@ -20,6 +20,8 @@ const ItemSchema = new Schema(
         }
     }
 )
+
+ItemSchema.index({ itemName: 1 }, { collation: { locale: "en", strength: 2 } });
 
 const Item: Model<IItem> = mongoose.models.Item || mongoose.model("Item", ItemSchema)
 export default Item

@@ -31,3 +31,16 @@ export interface Category {
   item: string
   id: string
 }
+
+export interface IGetItemsResponse {
+  _id: string
+  itemName: string
+  categoryName: string
+  itemPrice: number
+}
+
+export interface ICreateItemRequest {
+  itemName: string
+  categoryId: string
+  itemPrice: number
+}

@@ -1,6 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "../../../../models/db";
 import { verifyAuth } from "../../utils/auth";
+import Item from "@/models/item-model";
+import Category from "@/models/categories.model";
+import connectDb from "@/lib/db-connect";
 
 // Get item by ID
 export async function GET(
@@ -45,7 +48,11 @@ export async function PUT(
     try {
         // Verify authentication
         const authResult = await verifyAuth(request);
-        if (!authResult.success || authResult.user.role !== "admin") {
+        if (
+            !authResult.success ||
+            !authResult.user ||
+            authResult.user.role !== "admin"
+        ) {
             return NextResponse.json(
                 { error: "Unauthorized. Only admins can update items" },
                 { status: 403 }
@@ -53,7 +60,10 @@ export async function PUT(
         }
 
         const { id } = params;
-        const item = db.items.get(id);
+
+        await connectDb();
+
+        const item = await Item.findById(id);
 
         if (!item) {
             return NextResponse.json(
@@ -63,26 +73,28 @@ export async function PUT(
         }
 
         const body = await request.json();
-        const { name, categoryId, price } = body;
+        const { itemName, categoryId, itemPrice } = body;
 
         // Validate required fields
-        if (!name || !categoryId || price === undefined) {
+        if (!itemName || !categoryId || itemPrice === undefined) {
             return NextResponse.json(
-                { error: "Name, category ID, and price are required" },
+                {
+                    error: "item name, category ID, and item price are required",
+                },
                 { status: 400 }
             );
         }
 
         // Validate price
-        if (typeof price !== "number" || price <= 0) {
+        if (typeof itemPrice !== "number" || itemPrice <= 0) {
             return NextResponse.json(
-                { error: "Price must be a positive number" },
+                { error: "Item price must be a positive number" },
                 { status: 400 }
             );
         }
 
         // Check if category exists
-        const category = db.categories.get(categoryId);
+        const category = await Category.findById(categoryId);
         if (!category) {
             return NextResponse.json(
                 { error: "Category not found" },
@@ -91,40 +103,32 @@ export async function PUT(
         }
 
         // Check if name is already used by another item in the same category
-        if (
-            categoryId === item.categoryId &&
-            name.toLowerCase() !== item.name.toLowerCase()
-        ) {
-            for (const i of db.items.values()) {
-                if (
-                    i.id !== id &&
-                    i.categoryId === categoryId &&
-                    i.name.toLowerCase() === name.toLowerCase()
-                ) {
-                    return NextResponse.json(
-                        {
-                            error: "Item with this name already exists in the category",
-                        },
-                        { status: 409 }
-                    );
-                }
-            }
+        const existingItem = await Item.findOne({
+            _id: { $ne: id },
+            categoryId,
+            itemName,
+        }).collation({ locale: "en", strength: 2 });
+
+        if (existingItem) {
+            return NextResponse.json(
+                {
+                    error: "Item with this name already exists in the category",
+                },
+                { status: 409 }
+            );
         }
 
         // Update item
-        const updatedItem = {
-            ...item,
-            name,
-            categoryId,
-            price,
-            updatedAt: new Date(),
-        };
+        item.itemName = itemName;
+        item.itemPrice = itemPrice;
+        item.categoryId = categoryId;
+        item.updatedAt = new Date();
 
-        db.items.set(id, updatedItem);
+        await item.save();
 
         return NextResponse.json({
             message: "Item updated successfully",
-            item: updatedItem,
+            item,
         });
     } catch (error) {
         console.error("Error updating item:", error);
@@ -143,7 +147,11 @@ export async function DELETE(
     try {
         // Verify authentication
         const authResult = await verifyAuth(request);
-        if (!authResult.success || authResult.user.role !== "admin") {
+        if (
+            !authResult.success ||
+            !authResult.user ||
+            authResult.user.role !== "admin"
+        ) {
             return NextResponse.json(
                 { error: "Unauthorized. Only admins can delete items" },
                 { status: 403 }
@@ -151,7 +159,10 @@ export async function DELETE(
         }
 
         const { id } = params;
-        const item = db.items.get(id);
+
+        await connectDb()
+        
+        const item = await Item.findById(id);
 
         if (!item) {
             return NextResponse.json(
@@ -160,20 +171,7 @@ export async function DELETE(
             );
         }
 
-        // Check if item is used in any registrations
-        for (const laundryItem of db.laundryItems.values()) {
-            if (laundryItem.itemId === id) {
-                return NextResponse.json(
-                    {
-                        error: "Cannot delete item that is used in registrations",
-                    },
-                    { status: 400 }
-                );
-            }
-        }
-
-        // Delete item
-        db.items.delete(id);
+        await Item.findByIdAndDelete(id)
 
         return NextResponse.json({
             message: "Item deleted successfully",

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { createCategorySchema } from '@/schema'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -28,8 +28,8 @@ function CategoryForm() {
 
     const { mutate, isPending, error } = useMutation({
         mutationFn: async (data: z.infer<typeof createCategorySchema>) => {
-            const projectInitialization = new CategoryService()
-            return await projectInitialization.createCategory(
+            const categoriesService = new CategoryService()
+            return await categoriesService.createCategory(
                 data
             )
         },
@@ -93,6 +93,7 @@ function CategoryForm() {
                                             className="rounded-[8px] border border-[#C0C0C1] bg-transparent px-[14px] py-[10px] text-[16px] placeholder:text-[#667085] focus:outline-none lg:w-[450px]"
                                         />
                                     </FormControl>
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />

@@ -3,7 +3,7 @@ import { BaseService } from "./base-service";
 
 class CategoryService extends BaseService {
     constructor() {
-        super("/category");
+        super("/categories");
     }
 
     public async getCategoryList() {

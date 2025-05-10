@@ -10,7 +10,7 @@ const OrderSchema = new mongoose.Schema(
             ref: "Customer",
             required: true,
         },
-        laundryItems: [LaundryItemSchema],
+        laundryItems: [{ type: mongoose.Schema.Types.ObjectId, ref: "LaundryItem", required: true }],
         totalAmount: {
             type: Number,
             required: true

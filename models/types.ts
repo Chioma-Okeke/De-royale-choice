@@ -33,9 +33,9 @@ export interface ICategory extends Document {
 }
 
 export interface IItem extends Document{
-  name: string
+  itemName: string
   categoryId: string
-  price: number
+  itemPrice: number
   createdAt: Date
   updatedAt: Date
 }
@@ -126,6 +126,17 @@ export interface ILaundryItem {
   quantity: number
   price: number
   total: number
+}
+
+export interface ILaundryItem extends Document{
+  orderId: string
+  categoryId: string
+  itemId: string
+  quantity: number
+  price: number
+  totalPrice: number
+  createdAt: Date
+  updatedAt: Date
 }
   
 export interface IOrder extends Document {

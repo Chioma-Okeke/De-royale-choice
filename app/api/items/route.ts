@@ -1,7 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "../../../models/db";
-import type { Item } from "../../../models/types";
 import { verifyAuth } from "../utils/auth";
+import connectDb from "@/lib/db-connect";
+import Item from "@/models/item-model";
+import Category from "@/models/categories.model";
 
 // Get all items
 export async function GET(request: NextRequest) {
@@ -15,21 +17,38 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        // Get query parameters
-        const url = new URL(request.url);
-        const categoryId = url.searchParams.get("categoryId");
+        await connectDb();
 
-        let items = Array.from(db.items.values());
+        // Fetch items and categories
+        const [items, categories] = await Promise.all([
+            Item.find().lean(),
+            Category.find().lean(),
+        ]);
 
-        // Filter by category if provided
-        if (categoryId) {
-            items = items.filter((item) => item.categoryId === categoryId);
+        if (!items || items.length === 0) {
+            return NextResponse.json(
+                { message: "No items found." },
+                { status: 404 }
+            );
         }
 
-        // Sort by name
-        items.sort((a, b) => a.name.localeCompare(b.name));
+        // Create a map of categoryId to categoryName
+        const categoryMap = new Map(
+            categories.map((cat) => [String(cat._id), cat.name])
+        );
 
-        return NextResponse.json({ items });
+        // Replace categoryId with categoryName
+        const itemsWithCategoryName = items.map((item) => ({
+            ...item,
+            categoryName: categoryMap.get(String(item.categoryId)) || "Unknown",
+        }));
+
+        // Sort by item name
+        itemsWithCategoryName.sort((a, b) =>
+            a.itemName.localeCompare(b.itemName)
+        );
+
+        return NextResponse.json({ items: itemsWithCategoryName });
     } catch (error) {
         console.error("Error fetching items:", error);
         return NextResponse.json(
@@ -52,26 +71,31 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json();
-        const { name, categoryId, price } = body;
+        const { itemName, categoryId, itemPrice } = body;
 
         // Validate required fields
-        if (!name || !categoryId || price === undefined) {
+        if (!itemName || !categoryId || itemPrice === undefined) {
             return NextResponse.json(
-                { error: "Name, category ID, and price are required" },
+                {
+                    error: "Item name, category ID, and item price are required",
+                },
                 { status: 400 }
             );
         }
 
         // Validate price
-        if (typeof price !== "number" || price <= 0) {
+        if (typeof itemPrice !== "number" || itemPrice <= 0) {
             return NextResponse.json(
                 { error: "Price must be a positive number" },
                 { status: 400 }
             );
         }
 
+        // Connect to DB
+        await connectDb();
+
         // Check if category exists
-        const category = db.categories.get(categoryId);
+        const category = await Category.findById(categoryId);
         if (!category) {
             return NextResponse.json(
                 { error: "Category not found" },
@@ -79,33 +103,27 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Check if item with same name already exists in the category
-        for (const item of db.items.values()) {
-            if (
-                item.categoryId === categoryId &&
-                item.name.toLowerCase() === name.toLowerCase()
-            ) {
-                return NextResponse.json(
-                    {
-                        error: "Item with this name already exists in the category",
-                    },
-                    { status: 409 }
-                );
-            }
+        // Check if item with same name already exists in the same category
+        const existingItem = await Item.findOne({
+            categoryId,
+            itemName,
+        }).collation({ locale: "en", strength: 2 });
+
+        if (existingItem) {
+            return NextResponse.json(
+                { error: "Item with this name already exists in the category" },
+                { status: 409 }
+            );
         }
 
-        // Create new item
-        const id = db.generateId();
-        const newItem: Item = {
-            id,
-            name,
+        // Create and save new item
+        const newItem = new Item({
+            itemName,
+            itemPrice,
             categoryId,
-            price,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        };
+        });
 
-        db.items.set(id, newItem);
+        await newItem.save();
 
         return NextResponse.json(
             {

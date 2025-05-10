@@ -3,7 +3,7 @@ import { BaseService } from './base-service'
 
 class ContactService extends BaseService {
   constructor() {
-    super('/customer')
+    super('/customers')
   }
 
   public async registerCustomer( requestData: IContact) {
