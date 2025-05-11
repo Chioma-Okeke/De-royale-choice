@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Sidebar } from "@/components/dashboard/sidebar";
-import { Header } from "@/components/dashboard/header";
+import { Header } from "@/components/dashboard/header/header";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -119,13 +119,12 @@ export default function ReceiptPrinting() {
     const handlePrint = () => {
         toast({
             title: "Printing Receipt",
-            description: `${
-                printType === "both"
+            description: `${printType === "both"
                     ? "Receipt and tags"
                     : printType === "receipt"
-                    ? "Receipt"
-                    : "Tags"
-            } for ${selectedRegistration.id} are being sent to the printer.`,
+                        ? "Receipt"
+                        : "Tags"
+                } for ${selectedRegistration.id} are being sent to the printer.`,
         });
 
         // In a real app, this would trigger the printing functionality
@@ -271,15 +270,14 @@ export default function ReceiptPrinting() {
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     <span
-                                                                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                                                                            registration.status ===
-                                                                            "Completed"
+                                                                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${registration.status ===
+                                                                                "Completed"
                                                                                 ? "bg-green-100 text-green-800"
                                                                                 : registration.status ===
-                                                                                  "Processing"
-                                                                                ? "bg-blue-100 text-blue-800"
-                                                                                : "bg-yellow-100 text-yellow-800"
-                                                                        }`}
+                                                                                    "Processing"
+                                                                                    ? "bg-blue-100 text-blue-800"
+                                                                                    : "bg-yellow-100 text-yellow-800"
+                                                                            }`}
                                                                     >
                                                                         {
                                                                             registration.status
@@ -413,26 +411,26 @@ export default function ReceiptPrinting() {
                                                 <div className="flex gap-4">
                                                     {(printType === "both" ||
                                                         printType ===
-                                                            "receipt") && (
-                                                        <Button
-                                                            variant="outline"
-                                                            className="flex-1"
-                                                        >
-                                                            <FileText className="mr-2 h-4 w-4" />
-                                                            Preview Receipt
-                                                        </Button>
-                                                    )}
+                                                        "receipt") && (
+                                                            <Button
+                                                                variant="outline"
+                                                                className="flex-1"
+                                                            >
+                                                                <FileText className="mr-2 h-4 w-4" />
+                                                                Preview Receipt
+                                                            </Button>
+                                                        )}
                                                     {(printType === "both" ||
                                                         printType ===
-                                                            "tags") && (
-                                                        <Button
-                                                            variant="outline"
-                                                            className="flex-1"
-                                                        >
-                                                            <Tag className="mr-2 h-4 w-4" />
-                                                            Preview Tags
-                                                        </Button>
-                                                    )}
+                                                        "tags") && (
+                                                            <Button
+                                                                variant="outline"
+                                                                className="flex-1"
+                                                            >
+                                                                <Tag className="mr-2 h-4 w-4" />
+                                                                Preview Tags
+                                                            </Button>
+                                                        )}
                                                 </div>
                                             </div>
                                         </div>
@@ -580,16 +578,16 @@ export default function ReceiptPrinting() {
                                             {getTotalItems(
                                                 selectedRegistration
                                             ) > 4 && (
-                                                <div className="border rounded-lg p-4 text-center flex items-center justify-center">
-                                                    <span className="text-sm text-muted-foreground">
-                                                        +
-                                                        {getTotalItems(
-                                                            selectedRegistration
-                                                        ) - 4}{" "}
-                                                        more tags
-                                                    </span>
-                                                </div>
-                                            )}
+                                                    <div className="border rounded-lg p-4 text-center flex items-center justify-center">
+                                                        <span className="text-sm text-muted-foreground">
+                                                            +
+                                                            {getTotalItems(
+                                                                selectedRegistration
+                                                            ) - 4}{" "}
+                                                            more tags
+                                                        </span>
+                                                    </div>
+                                                )}
                                         </div>
                                     </CardContent>
                                     <CardFooter className="flex justify-between">
@@ -607,8 +605,8 @@ export default function ReceiptPrinting() {
                                             {printType === "both"
                                                 ? "Receipt & Tags"
                                                 : printType === "receipt"
-                                                ? "Receipt"
-                                                : "Tags"}
+                                                    ? "Receipt"
+                                                    : "Tags"}
                                         </Button>
                                     </CardFooter>
                                 </Card>

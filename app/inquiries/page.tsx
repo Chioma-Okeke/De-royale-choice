@@ -1,4 +1,6 @@
-import { Header } from "@/components/dashboard/header";
+'use client'
+
+import { Header } from "@/components/dashboard/header/header";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 import {
@@ -10,18 +12,15 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import React from "react";
-import ContactService from "../services/contact-service";
 import { IGetContactsContent } from "@/models/types";
 import InquiryDetailsModal from "@/components/modals/inquiries-details-modal";
+import { useQuery } from "@tanstack/react-query";
+import { getContactQueryOpts } from "@/lib/query-options";
+import { TableBodySkeleton } from "@/components/shared/table-skeleton";
 
-async function InquiriesPage() {
-    const contactService = new ContactService();
-    let inquiries: IGetContactsContent[] = [];
-    try {
-    inquiries = await contactService.getContacts();
-    } catch (error) {
-    console.error("Failed to fetch inquiries:", error);
-    }
+function InquiriesPage() {
+    const { data: inquiries, isLoading } = useQuery(getContactQueryOpts)
+    const columns = 5
 
     return (
         <div>
@@ -29,8 +28,7 @@ async function InquiriesPage() {
             <MainDashboardContainer>
                 <Header title="Inquires" role="staff" username="staff" />
                 <main className="p-4 md:p-6 space-y-6">
-                    <h1>This is the contact page for the company</h1>
-                    <p>ALl contact message sent will be seen here</p>
+                    <p>All contact information for inquiries made on the landing page.</p>
                     <div className="rounded-md border">
                         <Table>
                             <TableHeader>
@@ -47,10 +45,18 @@ async function InquiriesPage() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {inquiries.map((entry: IGetContactsContent) => (
-                                    <TableRow key={entry.name}>
-                                        <TableCell className="font-medium">
-                                            {entry.name}
+                                {isLoading ? (
+                                    <TableBodySkeleton
+                                        rows={4}
+                                        columns={columns}
+                                    />
+                                ) : (inquiries && inquiries?.length > 0 ? inquiries?.map((entry: IGetContactsContent) => (
+                                    <TableRow key={entry.name} className={!entry.isRead ? "font-bold" : ""}>
+                                        <TableCell>
+                                            <div className="flex items-center gap-2">
+                                                {!entry.isRead && <div className="w-2 h-2 rounded-full bg-primary p-1"></div>}
+                                                {entry.name}
+                                            </div>
                                         </TableCell>
                                         <TableCell>{entry.phoneNumber}</TableCell>
                                         <TableCell className="hidden md:table-cell">
@@ -60,10 +66,17 @@ async function InquiriesPage() {
                                             {entry.message}
                                         </TableCell>
                                         <TableCell>
-                                            <InquiryDetailsModal inquiry={entry}/>
+                                            <InquiryDetailsModal  inquiry={entry} />
                                         </TableCell>
                                     </TableRow>
-                                ))}
+                                )) : (
+                                    <TableRow>
+                                        <TableCell colSpan={columns} className="text-center py-10 text-lg text-muted-foreground">
+                                            No contacts found.
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                                )}
                             </TableBody>
                         </Table>
                     </div>

@@ -124,3 +124,42 @@ export async function GET() {
         );
     }
 }
+
+
+// import { NextRequest, NextResponse } from "next/server";
+// import bcrypt from "bcryptjs";
+// import jwt from "jsonwebtoken";
+// import User from "@/models/user-model";
+// import connectDb from "@/lib/db-connect";
+
+// export async function POST(request: NextRequest) {
+//   const { email, password } = await request.json();
+//   await connectDb()
+
+//   const user = await User.findOne({ email });
+//   if (!user) {
+//     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+//   }
+
+//   const valid = await bcrypt.compare(password, user.password);
+//   if (!valid) {
+//     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+//   }
+
+//   const token = jwt.sign(
+//     { id: user._id, role: user.role },
+//     process.env.JWT_SECRET!,
+//     { expiresIn: "7d" }
+//   );
+
+//   const res = NextResponse.json({ message: "Login successful", user: { email: user.email, role: user.role } });
+//   res.cookies.set("token", token, {
+//     httpOnly: true,
+//     sameSite: "lax",
+//     secure: process.env.NODE_ENV === "production",
+//     path: "/",
+//     maxAge: 7 * 24 * 60 * 60,
+//   });
+
+//   return res;
+// }

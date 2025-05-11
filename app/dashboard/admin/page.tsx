@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sidebar } from "@/components/dashboard/sidebar";
-import { Header } from "@/components/dashboard/header";
+import { Header } from "@/components/dashboard/header/header";
 import {
     BarChart,
     Calendar,
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
 
     return (
         <div className="flex h-screen bg-gray-50 overflow-hidden w-full">
-            <Sidebar role="admin" />
+            {/* <Sidebar role="admin" /> */}
             <MainDashboardContainer>
                 <Header title="Admin Dashboard" role="admin" username="admin" />
                 <main className="p-4 md:p-6 space-y-6 overflow-y-auto">
@@ -193,15 +193,14 @@ export default function AdminDashboard() {
                                                         </TableCell>
                                                         <TableCell>
                                                             <span
-                                                                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                                                                    transaction.status ===
-                                                                    "Completed"
+                                                                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${transaction.status ===
+                                                                        "Completed"
                                                                         ? "bg-green-100 text-green-800"
                                                                         : transaction.status ===
-                                                                          "Processing"
-                                                                        ? "bg-blue-100 text-blue-800"
-                                                                        : "bg-yellow-100 text-yellow-800"
-                                                                }`}
+                                                                            "Processing"
+                                                                            ? "bg-blue-100 text-blue-800"
+                                                                            : "bg-yellow-100 text-yellow-800"
+                                                                    }`}
                                                             >
                                                                 {
                                                                     transaction.status

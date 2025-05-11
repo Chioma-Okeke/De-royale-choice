@@ -114,7 +114,9 @@ export interface IGetContactsResponse {
 }
 
 export interface IGetContactsContent {
+  _id: string
   name: string
+  isRead: string
   phoneNumber: string
   subject: string
   message: string

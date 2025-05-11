@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Sidebar } from "@/components/dashboard/sidebar";
-import { Header } from "@/components/dashboard/header";
+import { Header } from "@/components/dashboard/header/header";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -130,8 +130,8 @@ export default function DailyReports() {
         status === "all"
             ? dailyEntries
             : dailyEntries.filter(
-                  (entry) => entry.status.toLowerCase() === status.toLowerCase()
-              );
+                (entry) => entry.status.toLowerCase() === status.toLowerCase()
+            );
 
     // Calculate totals
     const totalItems = filteredEntries.reduce(
@@ -291,15 +291,14 @@ export default function DailyReports() {
                                                 </TableCell>
                                                 <TableCell>
                                                     <span
-                                                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                                                            entry.status ===
-                                                            "Completed"
+                                                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${entry.status ===
+                                                                "Completed"
                                                                 ? "bg-green-100 text-green-800"
                                                                 : entry.status ===
-                                                                  "Processing"
-                                                                ? "bg-blue-100 text-blue-800"
-                                                                : "bg-yellow-100 text-yellow-800"
-                                                        }`}
+                                                                    "Processing"
+                                                                    ? "bg-blue-100 text-blue-800"
+                                                                    : "bg-yellow-100 text-yellow-800"
+                                                            }`}
                                                     >
                                                         {entry.status}
                                                     </span>

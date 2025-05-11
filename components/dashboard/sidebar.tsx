@@ -86,8 +86,8 @@ export function Sidebar({ role }: SidebarProps) {
         {
             label: "Inquires",
             icon: Phone,
-            href: "/inquires",
-            active: pathname === "/inquires",
+            href: "/inquiries",
+            active: pathname === "/inquiries",
             roles: ["admin", "staff"],
         },
         // {

@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const newContact = new Contact({ name, phoneNumber, subject, message });
+        const newContact = new Contact({ name, phoneNumber, subject, message, isRead: false });
         await newContact.save();
         return NextResponse.json(
             { message: "Message successfully sent." },

@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { Sidebar } from "@/components/dashboard/sidebar";
-import { Header } from "@/components/dashboard/header";
+import { Header } from "@/components/dashboard/header/header";
 import { Button } from "@/components/ui/button";
 import {
     Card,

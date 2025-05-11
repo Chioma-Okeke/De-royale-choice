@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Sidebar } from "@/components/dashboard/sidebar";
-import { Header } from "@/components/dashboard/header";
+import { Header } from "@/components/dashboard/header/header";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -201,8 +201,8 @@ export default function InventoryManagement() {
     };
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
-            <Sidebar role="admin" />
+        <div className="min-h-screen bg-gray-50">
+            {/* <Sidebar role="admin" /> */}
             <MainDashboardContainer className="flex-1">
                 <Header
                     title="Inventory Management"
@@ -225,11 +225,11 @@ export default function InventoryManagement() {
                         </TabsList>
 
                         <TabsContent value="categories">
-                            <CategoriesTabContent/>
+                            <CategoriesTabContent />
                         </TabsContent>
 
                         <TabsContent value="items">
-                            <ItemsTabContent/>
+                            <ItemsTabContent />
                         </TabsContent>
                     </Tabs>
                 </main>

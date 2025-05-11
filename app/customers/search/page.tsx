@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Sidebar } from "@/components/dashboard/sidebar";
-import { Header } from "@/components/dashboard/header";
+import { Header } from "@/components/dashboard/header/header";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -190,13 +190,12 @@ export default function CustomerSearch() {
                                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                                             <Input
                                                 id="search-term"
-                                                placeholder={`Enter ${
-                                                    searchType === "name"
+                                                placeholder={`Enter ${searchType === "name"
                                                         ? "customer name"
                                                         : searchType === "phone"
-                                                        ? "phone number"
-                                                        : "registration ID"
-                                                }`}
+                                                            ? "phone number"
+                                                            : "registration ID"
+                                                    }`}
                                                 className="pl-8"
                                                 value={searchTerm}
                                                 onChange={(e) =>
@@ -271,15 +270,14 @@ export default function CustomerSearch() {
                                                 </TableCell>
                                                 <TableCell>
                                                     <span
-                                                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                                                            result.status ===
-                                                            "Completed"
+                                                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${result.status ===
+                                                                "Completed"
                                                                 ? "bg-green-100 text-green-800"
                                                                 : result.status ===
-                                                                  "Processing"
-                                                                ? "bg-blue-100 text-blue-800"
-                                                                : "bg-yellow-100 text-yellow-800"
-                                                        }`}
+                                                                    "Processing"
+                                                                    ? "bg-blue-100 text-blue-800"
+                                                                    : "bg-yellow-100 text-yellow-800"
+                                                            }`}
                                                     >
                                                         {result.status}
                                                     </span>

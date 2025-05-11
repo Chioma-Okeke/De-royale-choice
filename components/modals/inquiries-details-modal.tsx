@@ -4,7 +4,8 @@ import Link from "next/link"
 import { Button } from "../ui/button"
 import { Dialog, DialogTrigger, DialogTitle, DialogHeader, DialogContent, DialogFooter, DialogClose } from "../ui/dialog"
 import { IGetContactsContent } from "@/models/types"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
+import ContactService from "@/app/services/contact-service"
 
 type InquiryDetailsModalProps = {
     inquiry: IGetContactsContent
@@ -13,12 +14,18 @@ type InquiryDetailsModalProps = {
 const InquiryDetailsModal = ({ inquiry }: InquiryDetailsModalProps) => {
     const [open, setOpen] = useState(false)
 
+    const handleOpenChange = async (value: boolean) => {
+        setOpen(value)
+        if (value && !inquiry.isRead) {
+            const contactService = new ContactService()
+            await contactService.markMessageAsRead(inquiry._id)
+        }
+    }
+
     return (
         <Dialog
             open={open}
-            onOpenChange={(value) => {
-                setOpen(value)
-            }}>
+            onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
                 <Button variant={"default"}>View</Button>
             </DialogTrigger>

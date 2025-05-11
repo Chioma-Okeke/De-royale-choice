@@ -19,6 +19,10 @@ const ContactSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        isRead: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,
