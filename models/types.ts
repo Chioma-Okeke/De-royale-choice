@@ -3,17 +3,10 @@
 import mongoose from "mongoose"
 import { Document } from "mongoose"
 
-export type Role = "admin" | "staff" | "limited"
-
-export interface User {
-  id: string
-  username: string
-  password: string
-  role: Role
-  name: string
-  email?: string
-  createdAt: Date
-  updatedAt: Date
+export interface IUser extends Document {
+    email: string;
+    password: string;
+    role: "staff" | "admin";
 }
 
 export interface Customer {

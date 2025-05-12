@@ -1,11 +1,5 @@
 import { Document } from "mongoose";
 
-export interface IUser extends Document {
-    email: string;
-    password: string;
-    role: "staff" | "admin";
-}
-
 export interface IGetCustomerResponse {
     customer: IGetCustomerContent[];
     message: string;

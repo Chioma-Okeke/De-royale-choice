@@ -1,20 +1,31 @@
-import { deleteAccessRefreshTokens } from '~/actions/util-actions'
-import Logger from '~/utils/logger'
 import { BaseService } from './base-service'
+
+type UserBody = {
+  email: string,
+  password: string
+}
 
 export class AuthService extends BaseService {
   constructor(headers?: Record<string, string>) {
-    super('/auth', 'v1', headers)
+    super('/auth')
   }
 
-  public async logoutUser(): Promise<string> {
-    try {
-      await this.post<string, ''>('/logout')
-      await deleteAccessRefreshTokens()
-      return 'Logged user out successfully'
-    } catch (error) {
-      Logger.error('Logout failed:', error)
-      throw new Error('Failed to log out. Please try again.')
-    }
-  }
+  public async login (userData: UserBody)  {
+    const res = await this.post("/login", userData);
+    return res
+  };
+  
+  public async logout ()  {
+    await this.post("/logout");
+  };
+  
+  public async checkAuth ()  {
+    const res = await fetch("/me");
+  
+    if (!res.ok) return null;
+  
+    const data = await res.json();
+    return data.user;
+  };
+  
 }
