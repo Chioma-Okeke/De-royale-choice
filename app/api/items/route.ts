@@ -9,13 +9,13 @@ import Category from "@/models/categories.model";
 export async function GET(request: NextRequest) {
     try {
         // Verify authentication
-        const authResult = await verifyAuth(request);
-        if (!authResult.success) {
-            return NextResponse.json(
-                { error: authResult.error },
-                { status: authResult.status }
-            );
-        }
+        // const authResult = await verifyAuth(request);
+        // if (!authResult.success) {
+        //     return NextResponse.json(
+        //         { error: authResult.error },
+        //         { status: authResult.status }
+        //     );
+        // }
 
         await connectDb();
 
@@ -24,6 +24,8 @@ export async function GET(request: NextRequest) {
             Item.find().lean(),
             Category.find().lean(),
         ]);
+
+        console.log(items, categories, "here")
 
         if (!items || items.length === 0) {
             return NextResponse.json(
@@ -62,13 +64,13 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         // Verify authentication
-        const authResult = await verifyAuth(request);
-        if (!authResult.success || authResult?.user?.role !== "admin") {
-            return NextResponse.json(
-                { error: "Unauthorized. Only admins can create items" },
-                { status: 403 }
-            );
-        }
+        // const authResult = await verifyAuth(request);
+        // if (!authResult.success || authResult?.user?.role !== "admin") {
+        //     return NextResponse.json(
+        //         { error: "Unauthorized. Only admins can create items" },
+        //         { status: 403 }
+        //     );
+        // }
 
         const body = await request.json();
         const { itemName, categoryId, itemPrice } = body;
@@ -119,16 +121,23 @@ export async function POST(request: NextRequest) {
         // Create and save new item
         const newItem = new Item({
             itemName,
-            itemPrice,
-            categoryId,
+            ItemPrice: itemPrice,
+            CategoryId: categoryId,
         });
 
         await newItem.save();
 
+        const responseItem = {
+            _id: newItem._id,
+            itemName: newItem.itemName,
+            itemPrice: newItem.itemPrice,
+            categoryName: category.name,
+        };
+
         return NextResponse.json(
             {
                 message: "Item created successfully",
-                item: newItem,
+                item: responseItem,
             },
             { status: 201 }
         );

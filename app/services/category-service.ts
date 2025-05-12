@@ -1,4 +1,4 @@
-import { IGetCategoriesResponse } from "@/types";
+import { IGetCategoriesResponse, IGetSingleCategory } from "@/types";
 import { BaseService } from "./base-service";
 
 class CategoryService extends BaseService {
@@ -7,10 +7,10 @@ class CategoryService extends BaseService {
     }
 
     public async getCategoryList() {
-        const res = await this.get<IGetCategoriesResponse[]>(
+        const res = await this.get<IGetCategoriesResponse>(
             ``
         );
-        return res;
+        return res.categories;
     }
 
     public async createCategory(data: {name: string}) {
@@ -21,6 +21,11 @@ class CategoryService extends BaseService {
     public async deleteCategory(id: string) {
         const res = await this.delete<IGetCategoriesResponse>(`/${id}`)
         return res
+    }
+
+    public async getSingleCategoryItem(id: string) {
+        const res = await this.get<IGetSingleCategory>(`/${id}`)
+        return res.category.items
     }
 }
 

@@ -1,7 +1,5 @@
 import mongoose, { Model } from "mongoose"
-import { LaundryItemSchema } from "./laundry-item-model"
 import { IOrder } from "./types";
-import Customer from "./customer-model";
 
 const OrderSchema = new mongoose.Schema(
     {

@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Save } from "lucide-react";
 import { itemSchema } from "@/schema";
-import { ICreateItemRequest, IGetCategoriesResponse, IGetItemsResponse } from "@/types";
+import { ICreateItemRequest, IGetCategoryContent, IGetItemsContent, IGetItemsResponse } from "@/types";
 import CategoryForm from "../categories/category-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ItemsService from "@/app/services/items-service";
@@ -31,8 +31,8 @@ interface ItemDialogProps {
   onOpenChange: (open: boolean) => void;
   // onSubmit: (data: ItemFormValues) => void;
   mode: "create" | "edit";
-  categories: IGetCategoriesResponse[];
-  defaultValues?: IGetItemsResponse | null;
+  categories: IGetCategoryContent[];
+  selectedItem: IGetItemsContent | null;
 }
 
 export function ItemDialog({
@@ -41,23 +41,19 @@ export function ItemDialog({
   // onSubmit,
   mode,
   categories,
-  defaultValues,
+  selectedItem,
 }: ItemDialogProps) {
   const form = useForm<ItemFormValues>({
     resolver: zodResolver(itemSchema),
-    defaultValues: {
-      categoryId: defaultValues?.categoryName ?? "",
-      itemName: defaultValues?.itemName ?? "",
-      itemPrice: defaultValues?.itemPrice ?? 0,
+    values: {
+      categoryId: selectedItem?.categoryName ?? "",
+      itemName: selectedItem?.itemName ?? "",
+      itemPrice: selectedItem?.itemPrice ?? 0,
     },
   });
 
   const { isDirty } = form.formState
   const queryClient = useQueryClient()
-
-  useEffect(() => {
-    console.log(categories, "categories on load")
-  }, [])
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: async (data: z.infer<typeof itemSchema>) => {
@@ -67,34 +63,50 @@ export function ItemDialog({
         return itemsService.createItem(data);
       }
 
-      if (!defaultValues || !defaultValues._id) {
+      if (!selectedItem || !selectedItem._id) {
         throw new Error("Missing item ID for update.");
       }
 
-      return itemsService.updateItem(data, defaultValues._id);
+      return itemsService.updateItem(data, selectedItem._id);
     },
-    onSuccess: (response) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(getItemsQueryOpts);
 
       toast.success(
         mode === "create" ? "Item Created" : "Item Updated",
         {
-          description: `Item "${response.itemName}" has been ${mode === "create" ? "added" : "updated"
+          description: `Item has been ${mode === "create" ? "added" : "updated"
             } successfully.`,
         }
       );
+
+      onOpenChange(false)
+      form.reset()
     },
+    onError: () => {
+      toast.error(
+        mode === "create" ? "Item Creation Failed" : "Item Update Failed",
+        {
+          description: `Error while ${mode === "create" ? "adding" : "updating"
+            } Item.`,
+        }
+      )
+    }
   });
 
   const onSubmit = (values: ICreateItemRequest) => {
     mutate(values)
   }
 
-  return (
-    <Dialog open={open} onOpenChange={(open) => {
-      onOpenChange(open)
+  const handleOpenChange = (value: boolean) => {
+    onOpenChange(value)
+    if (!value) {
       form.reset()
-    }}>
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{mode === "create" ? "Add New Item" : "Edit Item"}</DialogTitle>

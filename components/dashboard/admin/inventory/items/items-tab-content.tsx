@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ConfirmDeleteDialog } from '@/components/modals/delete-modal';
 import { getCategoriesQueryOpts, getItemsQueryOpts } from '@/lib/query-options';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { IGetItemsResponse } from '@/types';
+import { IGetItemsContent } from '@/types';
 import ItemsService from '@/app/services/items-service';
 import { toast } from 'sonner';
 import { TableBodySkeleton } from '@/components/shared/table-skeleton';
@@ -15,7 +15,7 @@ import { TableBodySkeleton } from '@/components/shared/table-skeleton';
 function ItemsTabContent() {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [mode, setMode] = useState<"create" | "edit">("create")
-    const [selectedItem, setSelectedItem] = useState<IGetItemsResponse | null>(null)
+    const [selectedItem, setSelectedItem] = useState<IGetItemsContent | null>(null)
     const [open, setOpen] = useState(false);
     const queryClient = useQueryClient()
     const columns = 4
@@ -24,7 +24,7 @@ function ItemsTabContent() {
     const { data: items, isLoading } = useQuery(getItemsQueryOpts)
 
     const { mutate, isPending } = useMutation({
-        mutationFn: async (item: IGetItemsResponse) => {
+        mutationFn: async (item: IGetItemsContent) => {
             const itemsService = new ItemsService()
             return await itemsService.deleteItem(
                 item._id
@@ -33,7 +33,7 @@ function ItemsTabContent() {
         onSuccess: (response) => {
             queryClient.invalidateQueries(getCategoriesQueryOpts)
             toast.success("Item Deleted", {
-                description: `Item "${response.itemName}" has been deleted successfully.`,
+                description: `Item has been deleted successfully.`,
             });
         },
         onError: (error) => {
@@ -49,11 +49,11 @@ function ItemsTabContent() {
         setOpen(true)
     };
 
-    const handleDelete = (values: IGetItemsResponse) => {
+    const handleDelete = (values: IGetItemsContent) => {
         mutate(values)
     }
 
-    const openEditItemDialog = (item: IGetItemsResponse) => {
+    const openEditItemDialog = (item: IGetItemsContent) => {
         setSelectedItem(item)
         setMode("edit")
         setIsDialogOpen(true)
@@ -112,7 +112,7 @@ function ItemsTabContent() {
                                         {item.categoryName}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        {item.itemPrice.toLocaleString()}
+                                        {item.itemPrice?.toLocaleString()}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <div className="flex justify-end gap-2">
@@ -179,7 +179,7 @@ function ItemsTabContent() {
                 onOpenChange={setIsDialogOpen}
                 mode={mode}
                 categories={categories || []}
-                defaultValues={selectedItem}
+                selectedItem={selectedItem}
             />
 
         </>

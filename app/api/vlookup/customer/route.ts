@@ -16,16 +16,16 @@ export async function GET(req: NextRequest) {
         const query: any = {};
         const isPhone = /^\d+$/.test(term);
         if (isPhone) {
-            query.phoneNumber = term;
+            query.phoneNumber = { $regex: term, $options: "i" }; 
         } else {
-            query.name = term;
+            query.name = { $regex: term, $options: "i" };
         }
 
-        const customer = await Customer.findOne(query);
+        const customer = await Customer.find(query);
 
         if (!customer) {
             return NextResponse.json(
-                { message: "Customer does not exist." },
+                { message: "Customer does not exist.", customer},
                 { status: 404 }
             );
         }
@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
             }
         );
     } catch (error) {
-        console.error(error);
+        console.error("Error when searching for customers",error);
         NextResponse.json(
             { error: `Internal Server Error: ${error}` },
             { status: 500 }

@@ -1,5 +1,5 @@
-import { ICustomer } from "@/types";
 import mongoose, { Model, Schema } from "mongoose";
+import { ICustomer } from "./types";
 
 const CustomerSchema: Schema<ICustomer> = new mongoose.Schema(
     {

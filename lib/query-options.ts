@@ -9,6 +9,15 @@ export const getCategoriesQueryOpts = queryOptions({
     staleTime: 0
 })
 
+export function getSingleCategoryOpts(categoryId: string) {
+    return queryOptions({
+      queryFn: () =>
+        new CategoryService().getSingleCategoryItem(categoryId),
+      queryKey: ['category', categoryId],
+      enabled: !!categoryId,
+    })
+  }
+
 export const getItemsQueryOpts = queryOptions({
     queryFn: () => new ItemsService().getItemsList(),
     queryKey: ['Items'],

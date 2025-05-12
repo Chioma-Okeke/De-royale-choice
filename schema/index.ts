@@ -21,3 +21,21 @@ export const itemSchema = z.object({
     itemName: z.string().min(1, "Item name is required"),
     itemPrice: z.coerce.number().min(0, "Price must be at least 0"),
 });
+
+export const createCustomerSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    phone: z.string().min(10, 'Phone must be at least 10 digits'),
+    address: z.string().optional(),
+});
+
+export const createOrderSchema = z.object({
+    items: z.array(
+      z.object({
+        customerId: z.string(),
+        category: z.string().min(1, "Category is required"),
+        description: z.string().min(1, "Description is required"),
+        quantity: z.number().min(1),
+        price: z.number().min(0),
+      })
+    ),
+});

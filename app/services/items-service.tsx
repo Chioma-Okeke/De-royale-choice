@@ -7,10 +7,10 @@ class ItemsService extends BaseService {
     }
 
     public async getItemsList() {
-        const res = await this.get<IGetItemsResponse[]>(
+        const res = await this.get<IGetItemsResponse>(
             ``
         );
-        return res;
+        return res.items;
     }
 
     public async createItem(data: ICreateItemRequest) {

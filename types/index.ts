@@ -1,46 +1,77 @@
-import mongoose, { Document } from "mongoose";
-
-export interface ICustomer extends Document {
-    name: string
-    phoneNumber: string
-    address: string
-    orders?: mongoose.Schema.Types.ObjectId[]
-}
+import { Document } from "mongoose";
 
 export interface IUser extends Document {
-    email: string
-    password: string
-    role: "staff" | "admin"
+    email: string;
+    password: string;
+    role: "staff" | "admin";
 }
 
 export interface IGetCustomerResponse {
-  name: string
-  phoneNumber: string
-  address: string
-  orders: string[] //array of order IDs
+    customer: IGetCustomerContent[];
+    message: string;
+}
+
+export interface IGetCustomerContent {
+    _id: string;
+    name: string;
+    phoneNumber: string;
+    address: string;
+    orders: string[];
+}
+
+export interface ICreateCustomer {
+    name: string;
+    phone: string;
+    address?: string;
 }
 
 export interface IGetCategoriesResponse {
-  _id: string;
-  name: string;
-  items: number;
+    categories: IGetCategoryContent[];
+}
+
+export interface IGetCategoryContent {
+    _id: string;
+    name: string;
+    items: number;
+}
+
+export interface IGetSingleCategory {
+    category: {
+        _id: string;
+        name: string;
+        items: IGetSingleItem[];
+    };
 }
 
 export interface Category {
-  name: string
-  item: string
-  id: string
+    name: string;
+    item: string;
+    id: string;
 }
 
 export interface IGetItemsResponse {
+    items: IGetItemsContent[];
+}
+export interface IGetItemsContent {
+    _id: string;
+    itemName: string;
+    categoryName: string;
+    itemPrice: number;
+}
+
+export interface IGetSingleItem {
   _id: string
-  itemName: string
-  categoryName: string
-  itemPrice: number
+  itemName: string;
+  itemPrice: string;
 }
 
 export interface ICreateItemRequest {
-  itemName: string
-  categoryId: string
-  itemPrice: number
+    itemName: string;
+    categoryId: string;
+    itemPrice: number;
+}
+
+export interface ITypeaheadProps {
+    label: string;
+    value: string;
 }

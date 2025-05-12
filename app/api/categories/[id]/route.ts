@@ -12,24 +12,29 @@ export async function GET(
 ) {
     try {
         // Verify authentication
-        const authResult = await verifyAuth(request);
-        if (!authResult.success) {
-            return NextResponse.json(
-                { error: authResult.error },
-                { status: authResult.status }
-            );
-        }
+        // const authResult = await verifyAuth(request);
+        // if (!authResult.success) {
+        //     return NextResponse.json(
+        //         { error: authResult.error },
+        //         { status: authResult.status }
+        //     );
+        // }
 
         const { id } = params;
 
         await connectDb()
-        const category = await Category.findById(id);
-
-        if (!category) {
+        const fetchedCategory = await Category.findById(id);
+        
+        if (!fetchedCategory) {
             return NextResponse.json(
                 { error: "Category not found" },
                 { status: 404 }
             );
+        }
+        const items = await Item.find({categoryId: fetchedCategory?._id})
+        const category = {
+            ...fetchedCategory.toObject(),
+            items
         }
 
         return NextResponse.json({ category });

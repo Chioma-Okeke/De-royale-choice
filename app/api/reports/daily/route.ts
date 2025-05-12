@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "../../../../models/db";
 import { verifyAuth } from "../../utils/auth";
+import connectDb from "@/lib/db-connect";
 
 // Get daily reports
 export async function GET(request: NextRequest) {
@@ -18,6 +19,8 @@ export async function GET(request: NextRequest) {
         const url = new URL(request.url);
         const dateFrom = url.searchParams.get("dateFrom");
         const dateTo = url.searchParams.get("dateTo");
+
+        await connectDb()
 
         let reports = Array.from(db.dailyReports.values());
 

@@ -2,7 +2,7 @@ import { ConfirmDeleteDialog } from '@/components/modals/delete-modal';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Category, IGetCategoriesResponse } from '@/types';
+import { IGetCategoryContent } from '@/types';
 import { Trash2 } from 'lucide-react';
 import React, { useState } from 'react'
 import CategoryForm from './category-form';
@@ -14,7 +14,7 @@ import { TableBodySkeleton } from '@/components/shared/table-skeleton';
 
 function CategoriesTabContent() {
     const [open, setOpen] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState<IGetCategoriesResponse | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<IGetCategoryContent | null>(null);
 
     const { data: categories, isLoading } = useQuery(getCategoriesQueryOpts)
     const queryClient = useQueryClient()
@@ -25,26 +25,26 @@ function CategoriesTabContent() {
     };
 
     const { mutate, isPending } = useMutation({
-        mutationFn: async (category: IGetCategoriesResponse) => {
+        mutationFn: async (category: IGetCategoryContent) => {
             const categoryService = new CategoryService()
             return await categoryService.deleteCategory(
                 category._id
             )
         },
-        onSuccess: (response) => {
+        onSuccess: () => {
             queryClient.invalidateQueries(getCategoriesQueryOpts)
             toast.success("Category Deleted", {
-                description: `Category "${response.name}" has been deleted successfully.`,
+                description: `Category has been deleted successfully.`,
             });
         },
-        onError: (response) => {
+        onError: () => {
             toast.error("Category DeletionFailed", {
-                description: `Category "${response.name}" could not be deleted.`
+                description: `Category could not be deleted. Please try again.`
             })
         }
     })
 
-    const handleDeleteCat = (values: IGetCategoriesResponse) => {
+    const handleDeleteCat = (values: IGetCategoryContent) => {
         mutate(values)
         toast.success("Delete Confirmed", {
             description: "Category successfully deleted."

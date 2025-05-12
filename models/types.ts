@@ -1,5 +1,6 @@
 // Define TypeScript types for our models
 
+import mongoose from "mongoose"
 import { Document } from "mongoose"
 
 export type Role = "admin" | "staff" | "limited"
@@ -147,4 +148,11 @@ export interface IOrder extends Document {
   totalAmount: number
   receiptId: string
   createdAt: Date
+}
+
+export interface ICustomer extends Document {
+  name: string
+  phoneNumber: string
+  address: string
+  orders?: mongoose.Schema.Types.ObjectId[]
 }

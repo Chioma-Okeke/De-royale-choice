@@ -27,6 +27,7 @@ export function Typeahead({
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(query, "I ran?")
       if (query.length >= minQueryLength) {
         const data = await onSearch(query)
         setResults(data)

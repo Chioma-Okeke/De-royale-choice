@@ -7,13 +7,12 @@ const ItemSchema = new Schema(
         itemName: {
             type: String,
             required: true,
-            unique: true,
         },
-        ItemPrice: {
+        itemPrice: {
             type: Number,
             required: true
         },
-        CategoryId: {
+        categoryId: {
             type: Schema.Types.ObjectId,
             ref: "Category",
             required: true
@@ -21,7 +20,10 @@ const ItemSchema = new Schema(
     }
 )
 
-ItemSchema.index({ itemName: 1 }, { collation: { locale: "en", strength: 2 } });
+ItemSchema.index(
+    { itemName: 1, categoryId: 1 },
+    { unique: true, collation: { locale: "en", strength: 2 } }
+  );
 
 const Item: Model<IItem> = mongoose.models.Item || mongoose.model("Item", ItemSchema)
 export default Item

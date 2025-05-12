@@ -33,12 +33,18 @@ function CategoryForm() {
                 data
             )
         },
-        onSuccess: (response) => {
+        onSuccess: () => {
             queryClient.invalidateQueries(getCategoriesQueryOpts)
             toast.success("Category Created", {
-                description: `Category "${response.name}" has been added successfully.`,
+                description: `Category has been added successfully.`,
             });
+            setOpen(false)
         },
+        onError: () => {
+            toast.error("Category Creation Failed.", {
+                description: "Category could not be created. Please try again."
+            })
+        }
     })
 
     const handleSubmit = (values: TCreateCategorySchema) => {

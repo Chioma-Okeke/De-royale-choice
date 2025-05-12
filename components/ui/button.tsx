@@ -79,7 +79,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                     {isLoading ? (
                         <LoaderSpinner className="size-4" />
                     ) : (
-                        Icon && <Icon size={iconSize} />
+                        Icon && <Icon size={iconSize} className="currentColor"/>
                     )}
                     {children}
                 </div>

@@ -9,20 +9,22 @@ import Item from "@/models/item-model";
 export async function GET(request: NextRequest) {
     try {
         // Verify authentication
-        const authResult = await verifyAuth(request);
-        if (!authResult.success) {
-            return NextResponse.json(
-                { error: authResult.error },
-                { status: authResult.status }
-            );
-        }
+        // const authResult = await verifyAuth(request);
+        // if (!authResult.success) {
+        //     return NextResponse.json(
+        //         { error: authResult.error },
+        //         { status: authResult.status }
+        //     );
+        // }
+
+        await connectDb()
 
         const categories = await Category.find();
 
         if (!categories || categories.length === 0) {
             return NextResponse.json(
                 { error: "No categories found" },
-                { status: 400 }
+                { status: 404 }
             );
         }
 
@@ -56,17 +58,17 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         // Verify authentication
-        const authResult = await verifyAuth(request);
-        if (
-            !authResult.success ||
-            !authResult.user ||
-            authResult.user.role !== "admin"
-        ) {
-            return NextResponse.json(
-                { error: "Unauthorized. Only admins can create categories" },
-                { status: 403 }
-            );
-        }
+        // const authResult = await verifyAuth(request);
+        // if (
+        //     !authResult.success ||
+        //     !authResult.user ||
+        //     authResult.user.role !== "admin"
+        // ) {
+        //     return NextResponse.json(
+        //         { error: "Unauthorized. Only admins can create categories" },
+        //         { status: 403 }
+        //     );
+        // }
 
         const body = await request.json();
         const name = body.name?.trim();

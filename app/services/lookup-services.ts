@@ -7,10 +7,10 @@ class LookupService extends BaseService {
     }
 
     public async getCustomerList(term: string) {
-        const res = await this.get<IGetCustomerResponse[]>(
+        const res = await this.get<IGetCustomerResponse>(
             `/customer?term=${term}`
         );
-        return res;
+        return res.customer;
     }
 }
 

@@ -32,23 +32,44 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Plus, Minus, Trash2, Printer, Save } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 import { Typeahead } from "@/components/shared/typeahead-input";
 import LookupService from "@/app/services/lookup-services";
+import CustomerService from "@/app/services/customer-services";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useFieldArray, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { toast } from "sonner";
+import { createCustomerSchema, createOrderSchema } from "@/schema";
+import { IGetCustomerContent, ITypeaheadProps } from "@/types";
+import CustomerForm from "@/components/orders/registration/customer-form";
+import OrderForm from "@/components/orders/registration/order-form";
+
+type LaundryItemFormValues = z.infer<typeof createOrderSchema>;
 
 export default function CustomerRegistration() {
-    const { toast } = useToast();
     const [activeTab, setActiveTab] = useState("customer-info");
     const [items, setItems] = useState([
         { id: 1, category: "", description: "", quantity: 1, price: 0 },
     ]);
-    const [totalAmount, setTotalAmount] = useState(0);
-    const [isRegistering, setIsRegistering] = useState(false)
+    // const [totalAmount, setTotalAmount] = useState(0);
+    const defaultItem = { category: "", description: "", quantity: 1, price: 0 };
 
-    const registerCustomer = async () => {
-        setIsRegistering(true)
-    }
+    const form = useForm<LaundryItemFormValues>({
+        resolver: zodResolver(createOrderSchema),
+        defaultValues: { items: [defaultItem] },
+    });
+
+    const { fields, append, remove, update } = useFieldArray({
+        control: form.control,
+        name: "items",
+    });
+
+    const totalAmount = form.watch("items").reduce(
+        (sum, item) => sum + item.quantity * item.price,
+        0
+    );
 
     // Mock categories
     const categories = [
@@ -137,15 +158,6 @@ export default function CustomerRegistration() {
         setTotalAmount(total);
     };
 
-    const getCustomerList = useCallback(
-        async (term: string) => {
-            const lookupService = new LookupService();
-            const response = await lookupService.getCustomerList(term)
-            return response.map((c: any) => ({
-                label: `${c.name} (${c.phoneNumber})`,
-                value: c._id,
-            }))
-        }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -155,8 +167,8 @@ export default function CustomerRegistration() {
             .toString()
             .padStart(4, "0")}`;
 
-        toast({
-            title: "Registration Successful",
+        toast.success(
+            "Registration Successful",{
             description: `Customer registered with ID: ${registrationId}`,
         });
 
@@ -164,7 +176,7 @@ export default function CustomerRegistration() {
         console.log("Registration data:", {
             registrationId,
             customerInfo: {
-                name: e.target.customerName.value,
+                name: e.target.name.value,
                 phone: e.target.phone.value,
                 address: e.target.address.value,
             },
@@ -177,8 +189,8 @@ export default function CustomerRegistration() {
     };
 
     const handlePrint = () => {
-        toast({
-            title: "Printing Receipt",
+        toast.success(
+            "Printing Receipt", {
             description: "Receipt and tags are being sent to the printer.",
         });
 
@@ -210,309 +222,10 @@ export default function CustomerRegistration() {
                         </TabsList>
 
                         <TabsContent value="customer-info">
-                            <form onSubmit={handleSubmit}>
-                                <div className="grid gap-6">
-                                    <Card>
-                                        <CardHeader>
-                                            <CardTitle>
-                                                Customer Details
-                                            </CardTitle>
-                                            <CardDescription>
-                                                Enter the customer's personal
-                                                information
-                                            </CardDescription>
-                                        </CardHeader>
-                                        <CardContent className="space-y-4">
-                                            <div>
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="customerName">
-                                                        Search Customer
-                                                    </Label>
-                                                    <Typeahead
-                                                        placeholder="Search for a customer either by number or name"
-                                                        onSearch={getCustomerList}
-                                                        onSelect={(customer) => {
-                                                            console.log("Selected customer:", customer);
-                                                            // use customer.label or value
-                                                        }}
-                                                    />
-
-                                                </div>
-                                            </div>
-                                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="customerName">
-                                                        Customer Name
-                                                    </Label>
-                                                    <Input
-                                                        id="customerName"
-                                                        name="customerName"
-                                                        placeholder="Enter full name"
-                                                        required
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="phone">
-                                                        Phone Number
-                                                    </Label>
-                                                    <Input
-                                                        id="phone"
-                                                        name="phone"
-                                                        placeholder="Enter phone number"
-                                                        required
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="address">
-                                                    Address (Optional)
-                                                </Label>
-                                                <Textarea
-                                                    id="address"
-                                                    name="address"
-                                                    placeholder="Enter customer address"
-                                                />
-                                            </div>
-                                            <div>
-                                                <Button isLoading={isRegistering} onClick={registerCustomer}>
-                                                    Register User
-                                                </Button>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-
-                                    <Card>
-                                        <CardHeader>
-                                            <CardTitle>Laundry Items</CardTitle>
-                                            <CardDescription>
-                                                Add the items to be laundered
-                                            </CardDescription>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <Table>
-                                                <TableHeader>
-                                                    <TableRow>
-                                                        <TableHead className="w-[180px]">
-                                                            Category
-                                                        </TableHead>
-                                                        <TableHead>
-                                                            Description
-                                                        </TableHead>
-                                                        <TableHead className="w-[100px] text-right">
-                                                            Quantity
-                                                        </TableHead>
-                                                        <TableHead className="w-[100px] text-right">
-                                                            Price (₦)
-                                                        </TableHead>
-                                                        <TableHead className="w-[100px] text-right">
-                                                            Total (₦)
-                                                        </TableHead>
-                                                        <TableHead className="w-[50px]"></TableHead>
-                                                    </TableRow>
-                                                </TableHeader>
-                                                <TableBody>
-                                                    {items.map((item) => (
-                                                        <TableRow key={item.id}>
-                                                            <TableCell>
-                                                                <Select
-                                                                    value={
-                                                                        item.category
-                                                                    }
-                                                                    onValueChange={(
-                                                                        value
-                                                                    ) =>
-                                                                        updateItem(
-                                                                            item.id,
-                                                                            "category",
-                                                                            value
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    <SelectTrigger>
-                                                                        <SelectValue placeholder="Select" />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        {categories.map(
-                                                                            (
-                                                                                category
-                                                                            ) => (
-                                                                                <SelectItem
-                                                                                    key={
-                                                                                        category.id
-                                                                                    }
-                                                                                    value={
-                                                                                        category.id
-                                                                                    }
-                                                                                >
-                                                                                    {
-                                                                                        category.name
-                                                                                    }
-                                                                                </SelectItem>
-                                                                            )
-                                                                        )}
-                                                                    </SelectContent>
-                                                                </Select>
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                <Select
-                                                                    value={
-                                                                        item.description
-                                                                    }
-                                                                    onValueChange={(
-                                                                        value
-                                                                    ) =>
-                                                                        updateItem(
-                                                                            item.id,
-                                                                            "description",
-                                                                            value
-                                                                        )
-                                                                    }
-                                                                    disabled={
-                                                                        !item.category
-                                                                    }
-                                                                >
-                                                                    <SelectTrigger>
-                                                                        <SelectValue placeholder="Select item" />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        {item.category &&
-                                                                            categories
-                                                                                .find(
-                                                                                    (
-                                                                                        c
-                                                                                    ) =>
-                                                                                        c.id ===
-                                                                                        item.category
-                                                                                )
-                                                                                ?.items.map(
-                                                                                    (
-                                                                                        itemName
-                                                                                    ) => (
-                                                                                        <SelectItem
-                                                                                            key={
-                                                                                                itemName
-                                                                                            }
-                                                                                            value={
-                                                                                                itemName
-                                                                                            }
-                                                                                        >
-                                                                                            {
-                                                                                                itemName
-                                                                                            }
-                                                                                        </SelectItem>
-                                                                                    )
-                                                                                )}
-                                                                    </SelectContent>
-                                                                </Select>
-                                                            </TableCell>
-                                                            <TableCell className="text-right">
-                                                                <div className="flex items-center justify-end space-x-2">
-                                                                    <Button
-                                                                        type="button"
-                                                                        variant="outline"
-                                                                        size="icon"
-                                                                        className="h-8 w-8"
-                                                                        onClick={() =>
-                                                                            updateItem(
-                                                                                item.id,
-                                                                                "quantity",
-                                                                                Math.max(
-                                                                                    1,
-                                                                                    item.quantity -
-                                                                                    1
-                                                                                )
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        <Minus className="h-4 w-4" />
-                                                                        <span className="sr-only">
-                                                                            Decrease
-                                                                        </span>
-                                                                    </Button>
-                                                                    <span className="w-8 text-center">
-                                                                        {
-                                                                            item.quantity
-                                                                        }
-                                                                    </span>
-                                                                    <Button
-                                                                        type="button"
-                                                                        variant="outline"
-                                                                        size="icon"
-                                                                        className="h-8 w-8"
-                                                                        onClick={() =>
-                                                                            updateItem(
-                                                                                item.id,
-                                                                                "quantity",
-                                                                                item.quantity +
-                                                                                1
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        <Plus className="h-4 w-4" />
-                                                                        <span className="sr-only">
-                                                                            Increase
-                                                                        </span>
-                                                                    </Button>
-                                                                </div>
-                                                            </TableCell>
-                                                            <TableCell className="text-right">
-                                                                {item.price.toLocaleString()}
-                                                            </TableCell>
-                                                            <TableCell className="text-right font-medium">
-                                                                {(
-                                                                    item.price *
-                                                                    item.quantity
-                                                                ).toLocaleString()}
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                <Button
-                                                                    type="button"
-                                                                    variant="ghost"
-                                                                    size="icon"
-                                                                    onClick={() =>
-                                                                        removeItem(
-                                                                            item.id
-                                                                        )
-                                                                    }
-                                                                    disabled={
-                                                                        items.length ===
-                                                                        1
-                                                                    }
-                                                                >
-                                                                    <Trash2 className="h-4 w-4" />
-                                                                    <span className="sr-only">
-                                                                        Remove
-                                                                    </span>
-                                                                </Button>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                size="sm"
-                                                className="mt-4"
-                                                onClick={addItem}
-                                            >
-                                                <Plus className="mr-2 h-4 w-4" />
-                                                Add Item
-                                            </Button>
-                                        </CardContent>
-                                        <CardFooter className="flex justify-between">
-                                            <div className="text-lg font-semibold">
-                                                Total Amount: ₦
-                                                {totalAmount.toLocaleString()}
-                                            </div>
-                                            <Button type="submit">
-                                                <Save className="mr-2 h-4 w-4" />
-                                                Save Registration
-                                            </Button>
-                                        </CardFooter>
-                                    </Card>
-                                </div>
-                            </form>
+                            <div className="grid gap-6">
+                                <CustomerForm/>
+                                <OrderForm/>
+                            </div>
                         </TabsContent>
 
                         <TabsContent value="print-receipt">
