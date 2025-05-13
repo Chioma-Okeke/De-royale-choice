@@ -121,8 +121,9 @@ function CategoryForm() {
                                 </DialogClose>
                                 <Button
                                     type="submit"
-                                    disabled={!isDirty}
+                                    disabled={!isDirty || isPending}
                                     isLoading={isPending}
+                                    icon={Save}
                                 >
                                     <Save className="mr-2 h-4 w-4" />
                                     {isPending ? 'Saving' : 'Save'} Category

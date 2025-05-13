@@ -51,12 +51,13 @@ export interface IGetItemsContent {
     itemName: string;
     categoryName: string;
     itemPrice: number;
+    categoryId: string;
 }
 
 export interface IGetSingleItem {
-  _id: string
-  itemName: string;
-  itemPrice: string;
+    _id: string;
+    itemName: string;
+    itemPrice: string;
 }
 
 export interface ICreateItemRequest {
@@ -68,4 +69,17 @@ export interface ICreateItemRequest {
 export interface ITypeaheadProps {
     label: string;
     value: string;
+}
+
+export interface UserAuthBody {
+    email: string;
+    password: string;
+}
+
+export interface IGetUser {
+    user: {
+        _id: string;
+        email: string;
+        role: "admin" | "staff";
+    };
 }

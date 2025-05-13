@@ -1,17 +1,13 @@
+import { IGetUser, UserAuthBody } from '@/types';
 import { BaseService } from './base-service'
-
-type UserBody = {
-  email: string,
-  password: string
-}
 
 export class AuthService extends BaseService {
   constructor(headers?: Record<string, string>) {
     super('/auth')
   }
 
-  public async login (userData: UserBody)  {
-    const res = await this.post("/login", userData);
+  public async login (userData: UserAuthBody)  {
+    const res = await this.post<IGetUser, UserAuthBody>("/login", userData);
     return res
   };
   
@@ -20,12 +16,8 @@ export class AuthService extends BaseService {
   };
   
   public async checkAuth ()  {
-    const res = await fetch("/me");
-  
-    if (!res.ok) return null;
-  
-    const data = await res.json();
-    return data.user;
+    const res = await this.get<IGetUser>("/me");
+    return res.user;
   };
   
 }

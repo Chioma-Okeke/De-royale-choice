@@ -1,75 +1,80 @@
-"use client";
+'use client';
 
-import type React from "react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useRouter } from "@bprogress/next";
-import { toast } from "sonner";
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
+import { useRouter } from '@bprogress/next';
+import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/ui/form';
+import { UserAuthBody } from '@/types';
+import { loginFormSchema } from '@/schema';
+import { AuthService } from '@/app/services/auth-service';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+type LoginFormValues = z.infer<typeof loginFormSchema>;
 
 export default function LoginPage() {
     const router = useRouter();
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+    const form = useForm<LoginFormValues>({
+        resolver: zodResolver(loginFormSchema),
+        defaultValues: {
+            email: '',
+            password: '',
+        },
+    })
 
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true);
-
-        try {
-            // Make API call to the login endpoint
-            const response = await fetch("/api/auth", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ username, password }),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.error || "Login failed");
-            }
-
+    const { mutate, isPending } = useMutation({
+        mutationFn: async (data: z.infer<typeof loginFormSchema>) => {
+            const authService = new AuthService()
+            return await authService.login(data)
+        },
+        onSuccess: (data) => {
             const { user } = data;
 
-            if (user.role === "admin") {
-                router.push("/dashboard/admin");
-            } else if (user.role === "staff") {
-                router.push("/dashboard/staff");
+            if (user.role === 'admin') {
+                router.push('/dashboard/admin');
             } else {
-                router.push("/dashboard/staff");
+                router.push('/dashboard/staff');
             }
-            toast.success("Authentication Successful", {
-                description: "You have successfully logged in."
-            })
-        } catch (err) {
-            console.error("Login error:", err);
-            toast.error("Authentication Error", {
-                description: "Invalid username or password."
-            })
-        } finally {
-            setIsLoading(false);
-        }
+
+            toast.success('Authentication Successful', {
+                description: 'You have successfully logged in.',
+            });
+
+            form.reset()
+        },
+        onError: () => {
+            toast.error('Authentication Error', {
+                description: 'Invalid email or password.',
+            });
+        },
+    });
+
+    const onSubmit = (data: UserAuthBody) => {
+        mutate(data);
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center px-4">
             <Card className="w-full max-w-md border-brand-navy/20 shadow-lg rounded-md">
                 <CardHeader className="space-y-1">
-                    {/* <div className="flex justify-center mb-4">
-                        <Logo size="lg" />
-                    </div> */}
                     <CardTitle className="text-2xl text-center text-brand-navy">
                         Staff Portal
                     </CardTitle>
@@ -78,57 +83,58 @@ export default function LoginPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={handleLogin}>
-                        <div className="grid gap-4">
-                            <div className="grid gap-2">
-                                <Label htmlFor="username">
-                                    Username{" "}
-                                    <span className="text-red-500 text-sm">
-                                        *
-                                    </span>
-                                </Label>
-                                <Input
-                                    id="username"
-                                    placeholder="Enter your username"
-                                    value={username}
-                                    onChange={(e) =>
-                                        setUsername(e.target.value)
-                                    }
-                                    required
-                                />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="password">
-                                    Password{" "}
-                                    <span className="text-red-500 text-sm">
-                                        *
-                                    </span>
-                                </Label>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    placeholder="Enter your password"
-                                    value={password}
-                                    onChange={(e) =>
-                                        setPassword(e.target.value)
-                                    }
-                                    required
-                                />
-                            </div>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            Email <span className="text-red-500 text-sm">*</span>
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="email"
+                                                placeholder="Enter your email"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            Password <span className="text-red-500 text-sm">*</span>
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="password"
+                                                placeholder="Enter your password"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
                             <Button
                                 type="submit"
                                 className="w-full bg-brand-navy hover:bg-brand-purple text-white"
-                                isLoading={isLoading}
+                                isLoading={isPending}
+                                disabled={isPending}
                             >
-                                {isLoading ? "Logging in..." : "Login"}
+                                {isPending ? 'Logging in...' : 'Login'}
                             </Button>
-                        </div>
-                    </form>
-                    <div className="mt-4 text-center text-sm text-gray-500">
-                        <p>Demo credentials:</p>
-                        <p>Username: admin or staff</p>
-                        <p>Password: password</p>
-                    </div>
+                        </form>
+                    </Form>
                 </CardContent>
             </Card>
         </div>

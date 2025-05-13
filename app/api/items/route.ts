@@ -121,8 +121,8 @@ export async function POST(request: NextRequest) {
         // Create and save new item
         const newItem = new Item({
             itemName,
-            ItemPrice: itemPrice,
-            CategoryId: categoryId,
+            itemPrice,
+            categoryId,
         });
 
         await newItem.save();
@@ -132,6 +132,7 @@ export async function POST(request: NextRequest) {
             itemName: newItem.itemName,
             itemPrice: newItem.itemPrice,
             categoryName: category.name,
+            categoryId: category._id
         };
 
         return NextResponse.json(

@@ -1,3 +1,4 @@
+import { AuthService } from "@/app/services/auth-service";
 import CategoryService from "@/app/services/category-service";
 import ContactService from "@/app/services/contact-service";
 import ItemsService from "@/app/services/items-service";
@@ -35,4 +36,9 @@ export const getUnreadInquiriesQueryOpts  = queryOptions({
     queryKey: ["UnreadInquiries"],
     staleTime: 30_000,
     refetchInterval: 60_000,
+})
+
+export const getUserQueryOpts = queryOptions({
+  queryFn: () => new AuthService().checkAuth(),
+  queryKey: ['user'],
 })

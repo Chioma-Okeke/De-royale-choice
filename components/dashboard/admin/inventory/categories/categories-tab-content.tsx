@@ -33,6 +33,7 @@ function CategoriesTabContent() {
         },
         onSuccess: () => {
             queryClient.invalidateQueries(getCategoriesQueryOpts)
+            setOpen(false);
             toast.success("Category Deleted", {
                 description: `Category has been deleted successfully.`,
             });
@@ -46,9 +47,6 @@ function CategoriesTabContent() {
 
     const handleDeleteCat = (values: IGetCategoryContent) => {
         mutate(values)
-        toast.success("Delete Confirmed", {
-            description: "Category successfully deleted."
-        })
     };
 
     return (

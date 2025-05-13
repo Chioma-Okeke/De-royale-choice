@@ -21,8 +21,8 @@ const OrderSchema = new mongoose.Schema(
     }
 )
 
-const Contact: Model<IOrder> =
+const Order: Model<IOrder> =
     mongoose.models.Order ||
     mongoose.model<IOrder>("Order", OrderSchema);
 
-export default Contact;
+export default Order;

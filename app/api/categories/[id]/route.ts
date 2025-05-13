@@ -12,13 +12,13 @@ export async function GET(
 ) {
     try {
         // Verify authentication
-        // const authResult = await verifyAuth(request);
-        // if (!authResult.success) {
-        //     return NextResponse.json(
-        //         { error: authResult.error },
-        //         { status: authResult.status }
-        //     );
-        // }
+        const authResult = await verifyAuth(request);
+        if (!authResult.success) {
+            return NextResponse.json(
+                { error: authResult.error },
+                { status: authResult.status }
+            );
+        }
 
         const { id } = params;
 

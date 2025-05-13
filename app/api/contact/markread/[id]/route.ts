@@ -15,7 +15,7 @@ export async function POST(
         );
     }
 
-    const { id } = params;
+    const { id } = await params;
     
     try {
 

@@ -36,6 +36,23 @@ export default function ReceiptPrinting() {
     const [activeTab, setActiveTab] = useState("search");
     const [printType, setPrintType] = useState("both");
 
+    // const handlePrint = async (orderId: string) => {
+    //     const html = await fetchReceiptHTML(orderId);
+    //     const printWindow = window.open('', '_blank');
+    //     if (!printWindow) return;
+      
+    //     printWindow.document.write(html);
+    //     printWindow.document.close();
+    //     printWindow.focus();
+    //   };
+
+    // const handleDownloadPDF = async (orderId: string) => {
+    //     const blob = await fetchReceiptPDF(orderId);
+    //     const url = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+    //     const newWindow = window.open(url, '_blank');
+    //     newWindow?.focus();
+    //   };
+
     // Mock data for search results
     const mockRegistrations = [
         {

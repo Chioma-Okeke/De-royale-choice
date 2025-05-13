@@ -46,7 +46,7 @@ export function ItemDialog({
   const form = useForm<ItemFormValues>({
     resolver: zodResolver(itemSchema),
     values: {
-      categoryId: selectedItem?.categoryName ?? "",
+      categoryId: selectedItem?.categoryId ?? "",
       itemName: selectedItem?.itemName ?? "",
       itemPrice: selectedItem?.itemPrice ?? 0,
     },
@@ -100,6 +100,7 @@ export function ItemDialog({
 
   const handleOpenChange = (value: boolean) => {
     onOpenChange(value)
+    console.log(selectedItem, "selected item")
     if (!value) {
       form.reset()
     }
@@ -186,8 +187,7 @@ export function ItemDialog({
               }}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={!isDirty}>
-                <Save className="mr-2 h-4 w-4" />
+              <Button type="submit" isLoading={isPending} disabled={!isDirty || isPending} icon={Save} iconSize={16}>
                 {mode === "create" ? "Save Item" : "Update Item"}
               </Button>
             </DialogFooter>

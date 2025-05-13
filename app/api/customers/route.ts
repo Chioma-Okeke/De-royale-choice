@@ -1,5 +1,4 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { db } from "../../../models/db";
 import { verifyAuth } from "../utils/auth";
 import Customer from "@/models/customer-model";
 import connectDb from "@/lib/db-connect";
@@ -56,14 +55,14 @@ export async function GET(request: NextRequest) {
 // Create a new customer
 export async function POST(request: NextRequest) {
     try {
-        // Verify authentication
-        // const authResult = await verifyAuth(request);
-        // if (!authResult.success) {
-        //     return NextResponse.json(
-        //         { error: authResult.error },
-        //         { status: authResult.status }
-        //     );
-        // }
+        //Verify authentication
+        const authResult = await verifyAuth(request);
+        if (!authResult.success) {
+            return NextResponse.json(
+                { error: authResult.error },
+                { status: authResult.status }
+            );
+        }
 
         const body = await request.json();
         const { name, phone, address } = body;
