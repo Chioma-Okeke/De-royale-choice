@@ -18,7 +18,12 @@ import { z } from 'zod';
 
 type CustomerFormValues = z.infer<typeof createCustomerSchema>;
 
-function CustomerForm() {
+interface OrderFormProps {
+    selectedCustomer: IGetCustomerContent | null;
+    setSelectedCustomer: (customer: IGetCustomerContent | null) => void;
+}
+
+function CustomerForm({selectedCustomer, setSelectedCustomer}: OrderFormProps) {
     const [isRegistering, setIsRegistering] = useState(false)
 
     const customerCreationForm = useForm<CustomerFormValues>({
@@ -48,6 +53,7 @@ function CustomerForm() {
             const customerService = new CustomerService()
             const res = await customerService.registerCustomer(data)
             console.log(res, "response")
+            setSelectedCustomer(res)
             toast.success("Customer Created", {
                 description: "Customer has been successfully created."
             })

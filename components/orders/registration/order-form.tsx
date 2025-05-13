@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -17,15 +17,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Minus, Plus, Save, Trash2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { getCategoriesQueryOpts, getSingleCategoryOpts } from '@/lib/query-options';
-import { IGetSingleCategory, IGetSingleItem } from '@/types';
+import { IGetCustomerContent, IGetSingleCategory, IGetSingleItem } from '@/types';
 import OrderFormRow from './order-form-row';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 type LaundryItemFormValues = z.infer<typeof createOrderSchema>;
 
-function OrderForm() {
+interface OrderFormProps {
+    selectedCustomer: IGetCustomerContent | null;
+    setSelectedCustomer: (customer: IGetCustomerContent | null) => void;
+}
+
+function OrderForm({selectedCustomer, setSelectedCustomer}: OrderFormProps) {
+    // const [selectedCustomer, setSelectedCustomer] = useState<IGetCustomerContent | null>(null)
     const { data: categories } = useQuery(getCategoriesQueryOpts)
-    const defaultItem = { customerId: "", category: "", description: "", quantity: 1, price: 0 };
+    const defaultItem = { customerId: "", category: "", description: "", quantity: 1, price: 0, totalPrice: 0 };
 
     const form = useForm<LaundryItemFormValues>({
         resolver: zodResolver(createOrderSchema),
@@ -45,6 +51,14 @@ function OrderForm() {
     const sendOrder = (data: z.infer<typeof createOrderSchema>) => {
         console.log("I ran in submission")
         console.log(data)
+        const extraData = {
+            totalAmount: totalAmount
+        }
+        const payload = {
+            customer: selectedCustomer,
+            laundryItems: data,
+            ...extraData
+        }
 
     }
     return (

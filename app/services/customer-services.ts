@@ -1,6 +1,6 @@
 import { IContact, IContactResponse, IGetContactsResponse } from '@/models/types'
 import { BaseService } from './base-service'
-import { ICreateCustomer, IGetCustomerResponse } from '@/types'
+import { ICreateCustomer, IGetCustomerContent, IGetCustomerResponse } from '@/types'
 
 class CustomerService extends BaseService {
   constructor() {
@@ -8,7 +8,7 @@ class CustomerService extends BaseService {
   }
 
   public async registerCustomer( requestData: ICreateCustomer) {
-    const res = await this.post<IGetCustomerResponse, ICreateCustomer>('', requestData)
+    const res = await this.post<IGetCustomerContent, ICreateCustomer>('', requestData)
     return res
   }
 }

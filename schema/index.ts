@@ -36,6 +36,7 @@ export const createOrderSchema = z.object({
         description: z.string().min(1, "Description is required"),
         quantity: z.number().min(1),
         price: z.number().min(0),
+        totalPrice: z.number().min(0)
       })
     ),
 });

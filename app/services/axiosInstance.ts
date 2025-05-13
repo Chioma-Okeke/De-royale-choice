@@ -2,16 +2,22 @@ import axios, { AxiosInstance, RawAxiosRequestHeaders } from 'axios'
 
 export const createAxiosInstance = (
   clientUrl: string,
-  // version: 'v1' | 'v2' = 'v1',
   headers?: RawAxiosRequestHeaders
-): AxiosInstance => { const isServer = typeof window === 'undefined'
+): AxiosInstance => {
+  const isServer = typeof window === 'undefined'
+  const isProd = process.env.NODE_ENV === 'production'
+
+  // Determine base domain
+  const productionDomain = process.env.NEXT_PUBLIC_PROD_DOMAIN
+  const localDomain = 'http://localhost:3000'
 
   const baseURL = isServer
-    ? `${process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:3000'}/api${clientUrl}`
+    ? `${isProd ? productionDomain : localDomain}/api${clientUrl}`
     : `/api${clientUrl}`
+
   return axios.create({
     timeout: 60000,
-    baseURL: baseURL,
+    baseURL,
     withCredentials: true,
     headers: {
       'Content-Type': 'application/json',

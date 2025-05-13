@@ -53,7 +53,7 @@ export default function CustomerRegistration() {
     const [items, setItems] = useState([
         { id: 1, category: "", description: "", quantity: 1, price: 0 },
     ]);
-    // const [totalAmount, setTotalAmount] = useState(0);
+    const [selectedCustomer, setSelectedCustomer] = useState<IGetCustomerContent | null>(null)
     const defaultItem = { category: "", description: "", quantity: 1, price: 0 };
 
     const form = useForm<LaundryItemFormValues>({
@@ -61,132 +61,10 @@ export default function CustomerRegistration() {
         defaultValues: { items: [defaultItem] },
     });
 
-    const { fields, append, remove, update } = useFieldArray({
-        control: form.control,
-        name: "items",
-    });
-
     const totalAmount = form.watch("items").reduce(
         (sum, item) => sum + item.quantity * item.price,
         0
     );
-
-    // Mock categories
-    const categories = [
-        {
-            id: "clothes",
-            name: "Clothes",
-            items: ["Shirt", "Trousers", "Dress", "Jacket"],
-        },
-        {
-            id: "bedding",
-            name: "Bedding",
-            items: ["Bedsheet", "Duvet Cover", "Pillowcase"],
-        },
-        {
-            id: "curtains",
-            name: "Curtains",
-            items: ["Window Curtain", "Door Curtain"],
-        },
-        {
-            id: "others",
-            name: "Others",
-            items: ["Towel", "Tablecloth", "Napkin"],
-        },
-    ];
-
-    // Mock prices
-    const prices = {
-        Shirt: 500,
-        Trousers: 700,
-        Dress: 800,
-        Jacket: 1000,
-        Bedsheet: 1200,
-        "Duvet Cover": 1500,
-        Pillowcase: 300,
-        "Window Curtain": 1800,
-        "Door Curtain": 2000,
-        Towel: 400,
-        Tablecloth: 900,
-        Napkin: 200,
-    };
-
-    const addItem = () => {
-        setItems([
-            ...items,
-            {
-                id: items.length + 1,
-                category: "",
-                description: "",
-                quantity: 1,
-                price: 0,
-            },
-        ]);
-    };
-
-    const removeItem = (id: number) => {
-        if (items.length > 1) {
-            const updatedItems = items.filter((item) => item.id !== id);
-            setItems(updatedItems);
-            calculateTotal(updatedItems);
-        }
-    };
-
-    const updateItem = (id: number, field: string, value: number) => {
-        const updatedItems = items.map((item) => {
-            if (item.id === id) {
-                const updatedItem = { ...item, [field]: value };
-
-                // Auto-update price if description changes
-                if (field === "description" && prices[value]) {
-                    updatedItem.price = prices[value];
-                }
-
-                return updatedItem;
-            }
-            return item;
-        });
-
-        setItems(updatedItems);
-        calculateTotal(updatedItems);
-    };
-
-    const calculateTotal = (itemsList) => {
-        const total = itemsList.reduce((sum, item) => {
-            return sum + item.price * item.quantity;
-        }, 0);
-        setTotalAmount(total);
-    };
-
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        // Generate a unique registration ID
-        const registrationId = `REG-${Math.floor(Math.random() * 10000)
-            .toString()
-            .padStart(4, "0")}`;
-
-        toast.success(
-            "Registration Successful",{
-            description: `Customer registered with ID: ${registrationId}`,
-        });
-
-        // In a real app, this would save the data to a database
-        console.log("Registration data:", {
-            registrationId,
-            customerInfo: {
-                name: e.target.name.value,
-                phone: e.target.phone.value,
-                address: e.target.address.value,
-            },
-            items,
-            totalAmount,
-        });
-
-        // Move to the next tab to print receipt
-        setActiveTab("print-receipt");
-    };
 
     const handlePrint = () => {
         toast.success(
@@ -223,8 +101,8 @@ export default function CustomerRegistration() {
 
                         <TabsContent value="customer-info">
                             <div className="grid gap-6">
-                                <CustomerForm/>
-                                <OrderForm/>
+                                <CustomerForm selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer}/>
+                                <OrderForm selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer}/>
                             </div>
                         </TabsContent>
 
