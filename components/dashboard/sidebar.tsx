@@ -21,15 +21,18 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/use-toast";
 import { Logo } from "@/components/Logo/logo";
+import { useAuth } from "@/hooks/use-auth";
 
 interface SidebarProps {
     role: "admin" | "staff" | "limited";
 }
 
-export function Sidebar({ role }: SidebarProps) {
+export function Sidebar() {
+    const {user} = useAuth()
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
     const { toast } = useToast();
+    const role = user?.role
 
     const handleLogout = () => {
         toast({
@@ -122,8 +125,11 @@ export function Sidebar({ role }: SidebarProps) {
                             <div className="p-4">
                                 <nav className="grid gap-2">
                                     {routes
-                                        .filter((route) =>
-                                            route.roles.includes(role)
+                                        .filter((route) => {
+                                            if (role) {
+                                                route.roles.includes(role)
+                                            }
+                                        }
                                         )
                                         .map((route) => (
                                             <Link
@@ -166,7 +172,11 @@ export function Sidebar({ role }: SidebarProps) {
                 <ScrollArea className="flex-1 p-4">
                     <nav className="grid gap-2">
                         {routes
-                            .filter((route) => route.roles.includes(role))
+                            .filter((route) => {
+                                if (role) {
+                                    route.roles.includes(role)
+                                }
+                            })
                             .map((route) => (
                                 <Link
                                     key={route.href}
