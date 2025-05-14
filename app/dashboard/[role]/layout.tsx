@@ -13,7 +13,7 @@ async function Layout({
     console.log(role, "in layout")
     return (
         <MediaQuery breakpoint="lg" mediaQuery="min">
-            <div className="flex h-screen bg-gray-50 overflow-hidden w-full">
+            <div className="flex min-h-screen bg-gray-50 overflow-hidden w-full">
                 <Sidebar role={role as 'admin' | 'staff' | 'limited'} />
                 <div className="flex-1 w-full">
                     {children}

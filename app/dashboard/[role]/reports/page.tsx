@@ -133,7 +133,9 @@ export default function DailyReports() {
                 (entry) => entry.status.toLowerCase() === status.toLowerCase()
             );
 
-    // Calculate totals
+    
+            // Calculate totals
+console.log(filteredEntries, "enteries")
     const totalItems = filteredEntries.reduce(
         (sum, entry) => sum + entry.items,
         0
@@ -181,7 +183,7 @@ export default function DailyReports() {
     };
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50">
             <MainDashboardContainer>
                 <Header title="Daily Reports" role="admin" username="admin" />
                 <main className="p-4 md:p-6 space-y-6">

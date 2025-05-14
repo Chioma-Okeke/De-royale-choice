@@ -28,7 +28,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ role }: SidebarProps) {
-    const { user } = useAuth()
+    const { user, logoutUser } = useAuth()
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
     const { toast } = useToast();
@@ -38,12 +38,7 @@ export function Sidebar({ role }: SidebarProps) {
     const baseDashboardPath = `/dashboard/${role}`;
 
     const handleLogout = () => {
-        toast({
-            title: "Logged out successfully",
-            description: "You have been logged out of the system.",
-        });
-        // In a real app, this would handle the logout logic
-        window.location.href = "/auth/login";
+        logoutUser()
     };
 
     const routes = [
