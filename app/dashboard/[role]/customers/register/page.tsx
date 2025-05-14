@@ -80,8 +80,6 @@ export default function CustomerRegistration() {
             <MainDashboardContainer>
                 <Header
                     title="Register Customer"
-                    role="staff"
-                    username="staff"
                 />
                 <main className="p-4 md:p-6 ">
                     <Tabs

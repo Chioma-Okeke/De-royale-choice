@@ -13,20 +13,19 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { useAuth } from '@/hooks/use-auth'
 
-interface UserProfileCardProps {
-    role: string
-    username: string
-}
+function UserProfileCard() {
+    const {logoutUser, user} = useAuth()
+    const role = user?.role
 
-function UserProfileCard({ role, username }: UserProfileCardProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild className='border-0 outline-none ring-0'>
                 <Button variant="ghost" size="icon" className="relative rounded-full border-0 outline-none focus:ring-0">
                     <Avatar>
                         <AvatarFallback className="bg-brand-navy text-white">
-                            {username.substring(0, 2).toUpperCase()}
+                            {role?.substring(0, 2).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
                 </Button>
@@ -40,13 +39,13 @@ function UserProfileCard({ role, username }: UserProfileCardProps) {
                 </DropdownMenuItem>}
                 <DropdownMenuItem>
                     <Badge variant="outline" className="mr-2">
-                        {role.charAt(0).toUpperCase() + role.slice(1)}
+                        {role ? role.charAt(0).toUpperCase() + role.slice(1) : ""}
                     </Badge>
                     <span>Role</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className='py-0'>
-                    <Button containerClass='w-full' className='w-full px-4 py-1' variant="ghost">
+                    <Button onClick={() => logoutUser()} containerClass='w-full' className='w-full px-4 py-1' variant="ghost">
                         Log out
                     </Button>
                 </DropdownMenuItem>

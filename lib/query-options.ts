@@ -45,10 +45,11 @@ export const getUserQueryOpts = queryOptions({
   queryKey: ['user'],
 })
 
-export function getOrdersQueryOpts(params: IGetOrdersParams) {
+export function getOrdersQueryOpts(params: IGetOrdersParams, enabled?: boolean) {
   return queryOptions({
     queryFn: () => new OrderService().getOrders(params),
-    queryKey: ['orders'], 
-    staleTime: 0
+    queryKey: ['orders', params], 
+    staleTime: 0,
+    enabled: enabled !== false
   })
 } 

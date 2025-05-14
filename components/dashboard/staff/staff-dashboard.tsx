@@ -22,13 +22,11 @@ export default function StaffDashboard() {
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar role="staff" />
             <MainDashboardContainer>
-                <Header title="Staff Dashboard" role="staff" username="staff" />
+                <Header title="Staff Dashboard" />
                 <main className="p-4 md:p-6 space-y-6">
                     <HeaderCard/>
-
                     <RecentReports/>
-
-                    <Card>
+                    {/* <Card>
                         <CardHeader>
                             <CardTitle>Daily Summary</CardTitle>
                             <CardDescription>
@@ -71,7 +69,7 @@ export default function StaffDashboard() {
                                 </Link>
                             </Button>
                         </CardFooter>
-                    </Card>
+                    </Card> */}
                 </main>
             </MainDashboardContainer>
         </div>

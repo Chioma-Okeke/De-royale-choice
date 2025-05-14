@@ -6,11 +6,9 @@ import UserProfileCard from "./user-profile-card"
 
 interface HeaderProps {
   title: string
-  role: "admin" | "staff" | "limited"
-  username: string
 }
 
-export function Header({ title, role, username }: HeaderProps) {
+export function Header({ title}: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-10 w-full border-b bg-white">
@@ -19,7 +17,7 @@ export function Header({ title, role, username }: HeaderProps) {
         <div className="flex items-center gap-4">
           <NotificationDropdown/>
 
-          <UserProfileCard role={role} username={username}/>
+          <UserProfileCard/>
         </div>
       </div>
     </header>
