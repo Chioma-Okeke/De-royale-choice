@@ -20,7 +20,7 @@ export default function StaffDashboard() {
 
     return (
         <div className="flex min-h-screen bg-gray-50">
-            <Sidebar role="staff" />
+            {/* <Sidebar role="staff" /> */}
             <MainDashboardContainer>
                 <Header title="Staff Dashboard" />
                 <main className="p-4 md:p-6 space-y-6">

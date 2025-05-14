@@ -21,7 +21,7 @@ function Hero() {
                     </div>
                     <div className="flex items-center justify-center max-w-lg">
                         <Image
-                            src="/images/hero-image.jpg"
+                            src="https://res.cloudinary.com/djrp3aaq9/image/upload/t_Gradient%20fade/v1747241404/de-royale-choice-1_xd42sl.jpg"
                             alt="Laundry Service"
                             width={500}
                             height={500}

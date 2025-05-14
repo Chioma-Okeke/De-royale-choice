@@ -1,11 +1,17 @@
 import mongoose from "mongoose";
 import { isConnectionString } from "./utils";
 
-const connectDb = async () => {
+let isConnected: boolean = false;
+
+export const connectDb = async () => {
+    if (isConnected) {
+        return;
+    }
+
     const mongoURI = isConnectionString();
 
     if (mongoose.connection.readyState === 1) {
-        console.log("Connection exists", mongoose.connection.name);
+        isConnected = true;
         return;
     }
 
@@ -13,9 +19,11 @@ const connectDb = async () => {
         await mongoose.connect(mongoURI, {
             dbName: "de-royale-choice",
         });
-        console.log("connected to db", mongoose.connection.name);
+
+        isConnected = true;
+        console.log("✅ Connected to DB:", mongoose.connection.name);
     } catch (error) {
-        console.error(error);
+        console.error("❌ DB connection error:", error);
     }
 };
 

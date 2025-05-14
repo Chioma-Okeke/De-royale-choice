@@ -104,10 +104,10 @@ export default function AdminDashboard() {
     ];
 
     return (
-        <div className="flex h-screen bg-gray-50 overflow-hidden w-full">
+        <div className="flex min-h-screen bg-gray-50">
             {/* <Sidebar role="admin" /> */}
             <MainDashboardContainer>
-                <Header title="Admin Dashboard" role="admin" username="admin" />
+                <Header title="Admin Dashboard" />
                 <main className="p-4 md:p-6 space-y-6 overflow-y-auto">
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                         {stats.map((stat, index) => (

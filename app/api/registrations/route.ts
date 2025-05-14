@@ -6,6 +6,7 @@ import Order from "@/models/order-model";
 import connectDb from "@/lib/db-connect";
 import LaundryItem from "@/models/laundry-item-model";
 import Counter from "@/models/counter-model";
+import Customer from "@/models/customer-model";
 
 async function getNextOrderSequence() {
     const result = await Counter.findOneAndUpdate(
@@ -60,7 +61,7 @@ export async function GET(request: NextRequest) {
         }
 
         const orders = await Order.find(query)
-            .populate("customerId", "name phoneNumber")
+            .populate("customerId")
             .populate("laundryItems")
             .sort({ createdAt: -1 })
             .skip(offset)
