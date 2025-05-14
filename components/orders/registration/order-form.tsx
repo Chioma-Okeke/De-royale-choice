@@ -31,7 +31,7 @@ interface OrderFormProps {
 function OrderForm({selectedCustomer, setSelectedCustomer}: OrderFormProps) {
     // const [selectedCustomer, setSelectedCustomer] = useState<IGetCustomerContent | null>(null)
     const { data: categories } = useQuery(getCategoriesQueryOpts)
-    const defaultItem = { customerId: "", category: "", description: "", quantity: 1, price: 0, totalPrice: 0 };
+    const defaultItem = { categoryId: "", itemId: "", quantity: 1, price: 0, totalPrice: 0 };
 
     const form = useForm<LaundryItemFormValues>({
         resolver: zodResolver(createOrderSchema),
@@ -55,8 +55,8 @@ function OrderForm({selectedCustomer, setSelectedCustomer}: OrderFormProps) {
             totalAmount: totalAmount
         }
         const payload = {
-            customer: selectedCustomer,
-            laundryItems: data,
+            customerId: selectedCustomer?._id,
+            items: data.items,
             ...extraData
         }
         console.log(payload, "payload")

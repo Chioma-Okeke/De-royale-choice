@@ -23,7 +23,7 @@ import { Button } from '@/components/ui/button';
 function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
     const category = useWatch({
         control: form.control,
-        name: `items.${index}.category`,
+        name: `items.${index}.categoryId`,
     });
     const description = useWatch({
         control: form.control,
@@ -55,6 +55,7 @@ function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
         }
     }, [description, category, categoryItems, form, index]);
 
+    
     const quantity = useWatch({
         control: form.control,
         name: `items.${index}.quantity`,
@@ -63,13 +64,19 @@ function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
         control: form.control,
         name: `items.${index}.price`,
     });
+    useEffect(() => {
+        if (typeof price === 'number' && typeof quantity === 'number') {
+            const total = price * quantity;
+            form.setValue(`items.${index}.totalPrice`, total);
+        }
+        }, [price, quantity, form, index]);
 
     return (
         <TableRow key={field.id}>
             <TableCell>
                 <FormField
                     control={form.control}
-                    name={`items.${index}.category`}
+                    name={`items.${index}.categoryId`}
                     render={({ field }) => (
                         <FormItem>
                             <Select
@@ -100,7 +107,7 @@ function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
             <TableCell>
                 <FormField
                     control={form.control}
-                    name={`items.${index}.description`}
+                    name={`items.${index}.itemId`}
                     render={({ field }) => (
                         <FormItem>
                             <Select
@@ -118,7 +125,7 @@ function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
                                         (item: IGetSingleItem) => (
                                             <SelectItem
                                                 key={item._id}
-                                                value={item.itemName}
+                                                value={item._id}
                                             >
                                                 {item.itemName}
                                             </SelectItem>

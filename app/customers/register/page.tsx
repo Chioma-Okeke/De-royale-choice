@@ -101,8 +101,8 @@ export default function CustomerRegistration() {
 
                         <TabsContent value="customer-info">
                             <div className="grid gap-6">
-                                <CustomerForm selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer}/>
-                                <OrderForm selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer}/>
+                                <CustomerForm selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer} />
+                                <OrderForm selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer} />
                             </div>
                         </TabsContent>
 

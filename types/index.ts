@@ -19,6 +19,40 @@ export interface ICreateCustomer {
     address?: string;
 }
 
+export interface ICreateOrder {
+    customerId: string;
+    items: {
+        categoryId: string;
+        itemId: string;
+        quantity: number;
+        price: number;
+        totalPrice: number;
+    }[];
+    totalAmount: number;
+}
+
+export interface IGetOrders {
+    registrations: {
+        receiptId: string;
+        customer: string;
+        phone: string;
+        date: Date;
+        items: number;
+        status: string;
+        amount: number;
+    }[];
+    total: number;
+}
+
+export interface IGetOrdersParams {
+    search: string;
+    status: string;
+    dateFrom: string;
+    dateTo: string;
+    limit: number;
+    offset: number;
+}
+
 export interface IGetCategoriesResponse {
     categories: IGetCategoryContent[];
 }

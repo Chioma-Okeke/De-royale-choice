@@ -31,9 +31,8 @@ export const createCustomerSchema = z.object({
 export const createOrderSchema = z.object({
     items: z.array(
       z.object({
-        customerId: z.string(),
-        category: z.string().min(1, "Category is required"),
-        description: z.string().min(1, "Description is required"),
+        categoryId: z.string().min(1, "Category is required"),
+        itemId: z.string().min(1, "Description is required"),
         quantity: z.number().min(1),
         price: z.number().min(0),
         totalPrice: z.number().min(0)

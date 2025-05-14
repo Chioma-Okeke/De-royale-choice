@@ -1,14 +1,18 @@
-import { IContact, IContactResponse, IGetContactsResponse } from '@/models/types'
 import { BaseService } from './base-service'
-import { ICreateCustomer, IGetCustomerResponse } from '@/types'
+import { ICreateOrder, IGetOrders, IGetOrdersParams } from '@/types'
 
 class OrderService extends BaseService {
   constructor() {
     super('/registrations')
   }
 
-  public async placeOrder( orderData: ICreateCustomer) {
-    const res = await this.post<IGetCustomerResponse, ICreateCustomer>('', orderData)
+  public async placeOrder( orderData: ICreateOrder) {
+    const res = await this.post<IGetOrders, ICreateOrder>('', orderData)
+    return res
+  }
+
+  public async getOrders (params: IGetOrdersParams) {
+    const res = await this.get<IGetOrders>("", { ...params } as Record<string, unknown>)
     return res
   }
 }
