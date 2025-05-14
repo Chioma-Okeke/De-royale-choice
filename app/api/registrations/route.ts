@@ -9,13 +9,13 @@ import Counter from "@/models/counter-model";
 
 async function getNextOrderSequence() {
     const result = await Counter.findOneAndUpdate(
-      { name: "order" },
-      { $inc: { seq: 1 } },
-      { new: true, upsert: true } // create if it doesn't exist
+        { name: "order" },
+        { $inc: { seq: 1 } },
+        { new: true, upsert: true } // create if it doesn't exist
     );
-  
+
     return result.seq;
-  }
+}
 
 export async function GET(request: NextRequest) {
     try {
@@ -42,8 +42,17 @@ export async function GET(request: NextRequest) {
 
         if (dateFrom || dateTo) {
             query.createdAt = {};
-            if (dateFrom) query.createdAt.$gte = new Date(dateFrom);
-            if (dateTo) query.createdAt.$lte = new Date(dateTo);
+            if (dateFrom) {
+                const start = new Date(dateFrom);
+                start.setUTCHours(0, 0, 0, 0);
+                query.createdAt.$gte = start;
+            }
+
+            if (dateTo) {
+                const end = new Date(dateTo);
+                end.setUTCHours(23, 59, 59, 999);
+                query.createdAt.$lte = end;
+            }
         }
 
         if (statusFilter) {
@@ -53,7 +62,7 @@ export async function GET(request: NextRequest) {
         const orders = await Order.find(query)
             .populate("customerId", "name phoneNumber")
             .populate("laundryItems")
-            .sort({ createdAt: -1 }) 
+            .sort({ createdAt: -1 })
             .skip(offset)
             .limit(limit);
 
@@ -113,7 +122,7 @@ export async function POST(req: Request) {
 
         const sequenceNumber = await getNextOrderSequence();
         const receiptId = `115${sequenceNumber}`;
-        
+
         const newOrder = await Order.create({
             customerId,
             laundryItems: [],

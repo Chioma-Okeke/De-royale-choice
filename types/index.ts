@@ -36,7 +36,7 @@ export interface IGetOrders {
         receiptId: string;
         customer: string;
         phone: string;
-        date: Date;
+        date: string;
         items: number;
         status: string;
         amount: number;
@@ -45,12 +45,12 @@ export interface IGetOrders {
 }
 
 export interface IGetOrdersParams {
-    search: string;
-    status: string;
-    dateFrom: string;
-    dateTo: string;
-    limit: number;
-    offset: number;
+    search?: string;
+    status?: string;
+    dateFrom?: string;
+    dateTo?: string;
+    limit?: number;
+    offset?: number;
 }
 
 export interface IGetCategoriesResponse {

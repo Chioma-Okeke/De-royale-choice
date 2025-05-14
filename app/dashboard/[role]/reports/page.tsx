@@ -41,6 +41,7 @@ import { Calendar, Download, Printer } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { format } from "date-fns";
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
+import { ReportCard } from "@/components/dashboard/reports/report-card";
 
 export default function DailyReports() {
     const { toast } = useToast();
@@ -187,193 +188,9 @@ console.log(filteredEntries, "enteries")
             <MainDashboardContainer>
                 <Header title="Daily Reports" role="admin" username="admin" />
                 <main className="p-4 md:p-6 space-y-6">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Daily Entries</CardTitle>
-                            <CardDescription>
-                                View and manage daily laundry entries
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                                <div className="flex-1">
-                                    <Label htmlFor="date">Date</Label>
-                                    <div className="relative">
-                                        <Calendar className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                                        <Input
-                                            id="date"
-                                            type="date"
-                                            className="pl-8"
-                                            value={date}
-                                            onChange={handleDateChange}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="flex-1">
-                                    <Label htmlFor="status">Status</Label>
-                                    <Select
-                                        value={status}
-                                        onValueChange={handleStatusChange}
-                                    >
-                                        <SelectTrigger id="status">
-                                            <SelectValue placeholder="Select status" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="all">
-                                                All Statuses
-                                            </SelectItem>
-                                            <SelectItem value="completed">
-                                                Completed
-                                            </SelectItem>
-                                            <SelectItem value="processing">
-                                                Processing
-                                            </SelectItem>
-                                            <SelectItem value="pending">
-                                                Pending
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="flex items-end space-x-2">
-                                    <Button
-                                        variant="outline"
-                                        onClick={handlePrint}
-                                    >
-                                        <Printer className="mr-2 h-4 w-4" />
-                                        Print
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        onClick={handleExport}
-                                        disabled={isExporting}
-                                    >
-                                        <Download className="mr-2 h-4 w-4" />
-                                        {isExporting
-                                            ? "Exporting..."
-                                            : "Export"}
-                                    </Button>
-                                </div>
-                            </div>
+                    <ReportCard/>
 
-                            <div className="rounded-md border">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>Reg ID</TableHead>
-                                            <TableHead>Customer</TableHead>
-                                            <TableHead className="hidden md:table-cell">
-                                                Phone
-                                            </TableHead>
-                                            <TableHead className="hidden md:table-cell">
-                                                Time
-                                            </TableHead>
-                                            <TableHead>Items</TableHead>
-                                            <TableHead>Status</TableHead>
-                                            <TableHead>Amount</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {filteredEntries.map((entry) => (
-                                            <TableRow key={entry.id}>
-                                                <TableCell className="font-medium">
-                                                    {entry.id}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {entry.customer}
-                                                </TableCell>
-                                                <TableCell className="hidden md:table-cell">
-                                                    {entry.phone}
-                                                </TableCell>
-                                                <TableCell className="hidden md:table-cell">
-                                                    {entry.time}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {entry.items}
-                                                </TableCell>
-                                                <TableCell>
-                                                    <span
-                                                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${entry.status ===
-                                                                "Completed"
-                                                                ? "bg-green-100 text-green-800"
-                                                                : entry.status ===
-                                                                    "Processing"
-                                                                    ? "bg-blue-100 text-blue-800"
-                                                                    : "bg-yellow-100 text-yellow-800"
-                                                            }`}
-                                                    >
-                                                        {entry.status}
-                                                    </span>
-                                                </TableCell>
-                                                <TableCell>
-                                                    {entry.amount}
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </div>
-
-                            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                                <div className="flex flex-col md:flex-row gap-4 md:gap-8">
-                                    <div>
-                                        <span className="text-sm font-medium text-muted-foreground">
-                                            Total Entries:
-                                        </span>
-                                        <span className="ml-2 font-medium">
-                                            {filteredEntries.length}
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <span className="text-sm font-medium text-muted-foreground">
-                                            Total Items:
-                                        </span>
-                                        <span className="ml-2 font-medium">
-                                            {totalItems}
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <span className="text-sm font-medium text-muted-foreground">
-                                            Total Amount:
-                                        </span>
-                                        <span className="ml-2 font-medium">
-                                            ₦{totalAmount.toLocaleString()}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <Pagination>
-                                    <PaginationContent>
-                                        <PaginationItem>
-                                            <PaginationPrevious href="#" />
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationLink href="#" isActive>
-                                                1
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationLink href="#">
-                                                2
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationLink href="#">
-                                                3
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationEllipsis />
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationNext href="#" />
-                                        </PaginationItem>
-                                    </PaginationContent>
-                                </Pagination>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    <Card>
+                    {/* <Card>
                         <CardHeader>
                             <CardTitle>Daily Summary</CardTitle>
                             <CardDescription>
@@ -429,7 +246,7 @@ console.log(filteredEntries, "enteries")
                                 </div>
                             </div>
                         </CardContent>
-                    </Card>
+                    </Card> */}
                 </main>
             </MainDashboardContainer>
         </div>

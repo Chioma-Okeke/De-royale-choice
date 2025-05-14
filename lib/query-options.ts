@@ -2,6 +2,8 @@ import { AuthService } from "@/app/services/auth-service";
 import CategoryService from "@/app/services/category-service";
 import ContactService from "@/app/services/contact-service";
 import ItemsService from "@/app/services/items-service";
+import OrderService from "@/app/services/order-service";
+import { IGetOrdersParams } from "@/types";
 import { queryOptions } from "@tanstack/react-query";
 
 export const getCategoriesQueryOpts = queryOptions({
@@ -42,3 +44,11 @@ export const getUserQueryOpts = queryOptions({
   queryFn: () => new AuthService().checkAuth(),
   queryKey: ['user'],
 })
+
+export function getOrdersQueryOpts(params: IGetOrdersParams) {
+  return queryOptions({
+    queryFn: () => new OrderService().getOrders(params),
+    queryKey: ['orders'], 
+    staleTime: 0
+  })
+} 

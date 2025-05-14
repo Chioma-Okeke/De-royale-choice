@@ -11,7 +11,7 @@ class OrderService extends BaseService {
     return res
   }
 
-  public async getOrders (params: IGetOrdersParams) {
+  public async getOrders (params?: IGetOrdersParams) {
     const res = await this.get<IGetOrders>("", { ...params } as Record<string, unknown>)
     return res
   }

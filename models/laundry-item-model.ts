@@ -22,6 +22,6 @@ export const LaundryItemSchema = new Schema({
 });
 
 const LaundryItem: Model<ILaundryItem> =
-    mongoose.models.Item || mongoose.model("LaundryItem", LaundryItemSchema);
+    mongoose.models.LaundryItem || mongoose.model("LaundryItem", LaundryItemSchema);
 
 export default LaundryItem;

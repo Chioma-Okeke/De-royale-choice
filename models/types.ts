@@ -116,13 +116,13 @@ export interface IGetContactsContent {
   message: string
 }
 
-export interface ILaundryItem {
-  category: string
-  description: string
-  quantity: number
-  price: number
-  total: number
-}
+// export interface ILaundryItem {
+//   category: string
+//   description: string
+//   quantity: number
+//   price: number
+//   total: number
+// }
 
 export interface ILaundryItem extends Document{
   orderId: string
@@ -137,7 +137,7 @@ export interface ILaundryItem extends Document{
   
 export interface IOrder extends Document {
   customerId: string
-  laundryItems: ILaundryItem[]
+  laundryItems: string[]
   totalAmount: number
   receiptId: string
   createdAt: Date

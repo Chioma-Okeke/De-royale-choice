@@ -50,7 +50,7 @@ export function Sidebar({ role }: SidebarProps) {
             roles: ["admin", "staff", "limited"],
         },
         {
-            label: "Register Customer",
+            label: "Take order",
             icon: Users,
             href: `${baseDashboardPath}/customers/register`,
             active: pathname === `${baseDashboardPath}/customers/register`,

@@ -20,7 +20,7 @@ export async function GET(
             );
         }
 
-        const { id } = params;
+        const { id } = await params;
 
         await connectDb()
         const fetchedCategory = await Category.findById(id);

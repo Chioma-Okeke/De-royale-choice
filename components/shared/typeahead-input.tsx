@@ -89,7 +89,7 @@ export function Typeahead({
 
       {open && results.length === 0 && (
         <div className="absolute z-50 mt-1 w-full border border-gray-200 rounded-md bg-white shadow-lg p-2 text-gray-500">
-          No customers found.
+          No customers found. Please register customer.
         </div>
       )}
     </div>

@@ -15,11 +15,13 @@ import { createOrderSchema } from '@/schema';
 import { z } from 'zod';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Minus, Plus, Save, Trash2 } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { getCategoriesQueryOpts, getSingleCategoryOpts } from '@/lib/query-options';
-import { IGetCustomerContent, IGetSingleCategory, IGetSingleItem } from '@/types';
+import { ICreateOrder, IGetCustomerContent, IGetSingleCategory, IGetSingleItem } from '@/types';
 import OrderFormRow from './order-form-row';
 import { useFieldArray, useForm } from 'react-hook-form';
+import OrderService from '@/app/services/order-service';
+import { toast } from 'sonner';
 
 type LaundryItemFormValues = z.infer<typeof createOrderSchema>;
 
@@ -28,8 +30,7 @@ interface OrderFormProps {
     setSelectedCustomer: (customer: IGetCustomerContent | null) => void;
 }
 
-function OrderForm({selectedCustomer, setSelectedCustomer}: OrderFormProps) {
-    // const [selectedCustomer, setSelectedCustomer] = useState<IGetCustomerContent | null>(null)
+function OrderForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps) {
     const { data: categories } = useQuery(getCategoriesQueryOpts)
     const defaultItem = { categoryId: "", itemId: "", quantity: 1, price: 0, totalPrice: 0 };
 
@@ -37,6 +38,9 @@ function OrderForm({selectedCustomer, setSelectedCustomer}: OrderFormProps) {
         resolver: zodResolver(createOrderSchema),
         defaultValues: { items: [defaultItem] },
     });
+
+    const { reset } = form
+    const { isDirty } = form.formState
 
     const { fields, append, remove, update } = useFieldArray({
         control: form.control,
@@ -48,18 +52,39 @@ function OrderForm({selectedCustomer, setSelectedCustomer}: OrderFormProps) {
         0
     );
 
+    const { mutate, isPending } = useMutation({
+        mutationFn: (payload: ICreateOrder) => new OrderService().placeOrder(payload),
+        mutationKey: ['orderCreation'],
+        onSuccess: () => {
+            toast.success("Order Creation Successfull", {
+                description: "Order was successfully created."
+            })
+
+        },
+        onError: (response) => {
+            console.error(response)
+            toast.error("Order Creation Failed.", {
+                description: "Order could not be created. Please try again."
+            })
+        }
+    })
+
     const sendOrder = (data: z.infer<typeof createOrderSchema>) => {
-        console.log("I ran in submission")
         console.log(data)
         const extraData = {
             totalAmount: totalAmount
         }
-        const payload = {
+        if (!selectedCustomer) {
+            throw new Error("Customer must be selected before creating an order.");
+        }
+
+        const payload: ICreateOrder = {
             customerId: selectedCustomer?._id,
             items: data.items,
             ...extraData
         }
         console.log(payload, "payload")
+        mutate(payload)
 
     }
     return (
@@ -113,7 +138,7 @@ function OrderForm({selectedCustomer, setSelectedCustomer}: OrderFormProps) {
                         <div className="text-lg font-semibold">
                             Total Amount: ₦{totalAmount.toLocaleString()}
                         </div>
-                        <Button type="submit" icon={Save} iconSize={16}>
+                        <Button type="submit" isLoading={isPending} disabled={!isDirty || isPending} icon={Save} iconSize={16}>
                             Save Registration
                         </Button>
                     </CardFooter>

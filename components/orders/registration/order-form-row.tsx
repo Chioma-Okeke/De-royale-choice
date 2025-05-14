@@ -27,7 +27,7 @@ function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
     });
     const description = useWatch({
         control: form.control,
-        name: `items.${index}.description`,
+        name: `items.${index}.itemId`,
     });
 
     const queryOptions = useMemo(() => {
@@ -45,9 +45,8 @@ function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
         if (!description || !category) return;
 
         const selectedItem = categoryItems.find(
-            (item: IGetSingleItem) => item.itemName === description
+            (item: IGetSingleItem) => item._id === description
         );
-        console.log(selectedItem, "here")
         if (selectedItem?.itemPrice != null) {
             form.setValue(
                 `items.${index}.price`,

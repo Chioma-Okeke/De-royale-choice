@@ -57,7 +57,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             children,
             isLoading,
             icon: Icon,
-            iconSize,
+            iconSize = 16,
             containerClass,
             ...props
         },
