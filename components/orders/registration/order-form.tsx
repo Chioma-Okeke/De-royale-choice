@@ -59,6 +59,7 @@ function OrderForm({selectedCustomer, setSelectedCustomer}: OrderFormProps) {
             laundryItems: data,
             ...extraData
         }
+        console.log(payload, "payload")
 
     }
     return (

@@ -4,8 +4,10 @@ import Link from "next/link"
 import { Button } from "../ui/button"
 import { Dialog, DialogTrigger, DialogTitle, DialogHeader, DialogContent, DialogFooter, DialogClose } from "../ui/dialog"
 import { IGetContactsContent } from "@/models/types"
-import { useCallback, useEffect, useState } from "react"
+import { useState } from "react"
 import ContactService from "@/app/services/contact-service"
+import { useQueryClient } from "@tanstack/react-query"
+import { getContactQueryOpts } from "@/lib/query-options"
 
 type InquiryDetailsModalProps = {
     inquiry: IGetContactsContent
@@ -13,12 +15,14 @@ type InquiryDetailsModalProps = {
 
 const InquiryDetailsModal = ({ inquiry }: InquiryDetailsModalProps) => {
     const [open, setOpen] = useState(false)
+    const queryClient = useQueryClient()
 
     const handleOpenChange = async (value: boolean) => {
         setOpen(value)
         if (value && !inquiry.isRead) {
             const contactService = new ContactService()
             await contactService.markMessageAsRead(inquiry._id)
+            queryClient.invalidateQueries(getContactQueryOpts)
         }
     }
 
