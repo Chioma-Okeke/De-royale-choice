@@ -22,6 +22,8 @@ import { useToast } from "@/components/ui/use-toast";
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 import { useQuery } from "@tanstack/react-query";
 import { getOrdersQueryOpts } from "@/lib/query-options";
+import { useRouter } from "@bprogress/next";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function CustomerSearch() {
     const { toast } = useToast();
@@ -30,6 +32,7 @@ export default function CustomerSearch() {
     const pageSize = 10;
     const [currentPage, setCurrentPage] = useState(1);
     const offset = (currentPage - 1) * pageSize;
+    const {user} = useAuth()
 
     const {
         data: filteredEntries,
@@ -53,6 +56,8 @@ export default function CustomerSearch() {
     const totalCount = filteredEntries?.total || 0;
     const totalPages = Math.ceil(totalCount / pageSize);
 
+    const router = useRouter()
+
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         setCurrentPage(1); // Reset to first page
@@ -71,6 +76,7 @@ export default function CustomerSearch() {
             title: "Printing Receipt",
             description: `Printing receipt for registration ${id}`,
         });
+        router.push(`/dashboard/${user?.role}/receipts/${id}`)
     };
 
     return (
@@ -156,7 +162,7 @@ export default function CustomerSearch() {
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
-                                                            onClick={() => printReceipt(result.receiptId)}
+                                                            onClick={() => printReceipt(result.orderId)}
                                                         >
                                                             <Printer className="h-4 w-4" />
                                                         </Button>

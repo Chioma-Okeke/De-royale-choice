@@ -15,6 +15,11 @@ class OrderService extends BaseService {
     const res = await this.get<IGetOrders>("", { ...params } as Record<string, unknown>)
     return res
   }
+
+  public async getSingleOrder(id:string) {
+    const res = await this.get(`/${id}`)
+    console.log(res)
+  }
 }
 
 export default OrderService

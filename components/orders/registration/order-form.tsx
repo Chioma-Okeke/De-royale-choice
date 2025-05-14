@@ -32,7 +32,7 @@ interface OrderFormProps {
 
 function OrderForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps) {
     const { data: categories } = useQuery(getCategoriesQueryOpts)
-    const defaultItem = { categoryId: "", itemId: "", quantity: 1, price: 0, totalPrice: 0 };
+    const defaultItem = { categoryId: "", itemId: "", itemName: "", quantity: 1, price: 0, totalPrice: 0 };
 
     const form = useForm<LaundryItemFormValues>({
         resolver: zodResolver(createOrderSchema),

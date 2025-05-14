@@ -33,6 +33,7 @@ export const createOrderSchema = z.object({
       z.object({
         categoryId: z.string().min(1, "Category is required"),
         itemId: z.string().min(1, "Description is required"),
+        itemName: z.string().min(1, "Item name is required"),
         quantity: z.number().min(1),
         price: z.number().min(0),
         totalPrice: z.number().min(0)

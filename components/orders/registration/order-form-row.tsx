@@ -47,11 +47,15 @@ function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
         const selectedItem = categoryItems.find(
             (item: IGetSingleItem) => item._id === description
         );
-        if (selectedItem?.itemPrice != null) {
+        if (selectedItem?.itemPrice != null && selectedItem.itemName !== null) {
             form.setValue(
                 `items.${index}.price`,
                 Number(selectedItem.itemPrice)
             );
+            form.setValue(
+                `items.${index}.itemName`,
+                selectedItem.itemName
+            )
         }
     }, [description, category, categoryItems, form, index]);
 

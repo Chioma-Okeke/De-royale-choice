@@ -1,6 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "../../../../models/db";
 import { verifyAuth } from "../../utils/auth";
+import Order from "@/models/order-model";
+import connectDb from "@/lib/db-connect";
 
 // Get registration by ID
 export async function GET(
@@ -17,27 +19,22 @@ export async function GET(
             );
         }
 
-        const { id } = params;
-        const registration = db.registrations.get(id);
+        await connectDb();
 
-        if (!registration) {
-            return NextResponse.json(
-                { error: "Registration not found" },
-                { status: 404 }
-            );
+        const { id } = params;
+
+        // Populate customer and laundry items
+        const order = await Order.findById(id)
+            .populate("customerId")
+            .populate("laundryItems");
+
+        if (!order) {
+            return NextResponse.json({ error: "Order not found" }, { status: 404 });
         }
 
-        // Get tags for this registration
-        const tags = Array.from(db.tags.values()).filter(
-            (tag) => tag.registrationId === id
-        );
-
-        return NextResponse.json({
-            registration,
-            tags,
-        });
+        return NextResponse.json(order);
     } catch (error) {
-        console.error("Error fetching registration:", error);
+        console.error("Error fetching order:", error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }

@@ -13,6 +13,10 @@ export const LaundryItemSchema = new Schema({
         ref: "Item",
         required: true,
     },
+    itemName: {
+        type: String,
+        required: true
+    },
     quantity: {
         type: Number,
         required: true,

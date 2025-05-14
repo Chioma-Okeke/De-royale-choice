@@ -33,6 +33,7 @@ export interface ICreateOrder {
 
 export interface IGetOrders {
     registrations: {
+        orderId: string
         receiptId: string;
         customer: string;
         phone: string;
@@ -42,6 +43,20 @@ export interface IGetOrders {
         amount: number;
     }[];
     total: number;
+}
+
+export interface IGetSingleOrder {
+    customer: IGetCustomerContent
+    items: {
+        itemName: string;
+        itemId: string;
+        quantity: number;
+        itemPrice: number;
+        totalPrice: number;
+    }[];
+    receiptId: string
+    date: string
+    totalAmount: number
 }
 
 export interface IGetOrdersParams {

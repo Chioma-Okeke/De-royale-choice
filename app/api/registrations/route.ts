@@ -79,6 +79,7 @@ export async function GET(request: NextRequest) {
         const formatted = filteredOrders.map((order) => {
             const customer = order.customerId as any;
             return {
+                orderId: order._id,
                 receiptId: order.receiptId,
                 customer: customer.name,
                 phone: customer.phoneNumber,
@@ -136,6 +137,7 @@ export async function POST(req: Request) {
                     orderId: newOrder._id,
                     categoryId: item.categoryId,
                     itemId: item.itemId,
+                    itemName: item.itemName,
                     quantity: item.quantity,
                     price: item.price,
                     totalPrice: item.totalPrice,

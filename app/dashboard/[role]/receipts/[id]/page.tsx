@@ -26,6 +26,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Printer, Search, FileText, Tag } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
+import { useQuery } from "@tanstack/react-query";
+import OrderService from "@/app/services/order-service";
+import { useParams } from "next/navigation";
 
 export default function ReceiptPrinting() {
     const { toast } = useToast();
@@ -35,12 +38,27 @@ export default function ReceiptPrinting() {
     const [selectedRegistration, setSelectedRegistration] = useState(null);
     const [activeTab, setActiveTab] = useState("search");
     const [printType, setPrintType] = useState("both");
+    const params = useParams()
+    const id = params?.id as string
+
+    const {
+        data,
+        isLoading,
+        isError,
+        error,
+    } = useQuery({
+        queryFn: () => new OrderService().getSingleOrder(id),
+        queryKey: ['singleOrder', id],
+        enabled: !!id,
+    })
+
+    console.log(data)
 
     // const handlePrint = async (orderId: string) => {
     //     const html = await fetchReceiptHTML(orderId);
     //     const printWindow = window.open('', '_blank');
     //     if (!printWindow) return;
-      
+
     //     printWindow.document.write(html);
     //     printWindow.document.close();
     //     printWindow.focus();
@@ -137,10 +155,10 @@ export default function ReceiptPrinting() {
         toast({
             title: "Printing Receipt",
             description: `${printType === "both"
-                    ? "Receipt and tags"
-                    : printType === "receipt"
-                        ? "Receipt"
-                        : "Tags"
+                ? "Receipt and tags"
+                : printType === "receipt"
+                    ? "Receipt"
+                    : "Tags"
                 } for ${selectedRegistration.id} are being sent to the printer.`,
         });
 
@@ -287,12 +305,12 @@ export default function ReceiptPrinting() {
                                                                 <TableCell>
                                                                     <span
                                                                         className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${registration.status ===
-                                                                                "Completed"
-                                                                                ? "bg-green-100 text-green-800"
-                                                                                : registration.status ===
-                                                                                    "Processing"
-                                                                                    ? "bg-blue-100 text-blue-800"
-                                                                                    : "bg-yellow-100 text-yellow-800"
+                                                                            "Completed"
+                                                                            ? "bg-green-100 text-green-800"
+                                                                            : registration.status ===
+                                                                                "Processing"
+                                                                                ? "bg-blue-100 text-blue-800"
+                                                                                : "bg-yellow-100 text-yellow-800"
                                                                             }`}
                                                                     >
                                                                         {

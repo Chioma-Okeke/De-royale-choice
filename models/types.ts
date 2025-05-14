@@ -128,6 +128,7 @@ export interface ILaundryItem extends Document{
   orderId: string
   categoryId: string
   itemId: string
+  itemName: string
   quantity: number
   price: number
   totalPrice: number
