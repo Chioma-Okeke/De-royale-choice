@@ -182,7 +182,6 @@ export default function DailyReports() {
 
     return (
         <div className="flex min-h-screen bg-gray-50">
-            <Sidebar role="admin" />
             <MainDashboardContainer>
                 <Header title="Daily Reports" role="admin" username="admin" />
                 <main className="p-4 md:p-6 space-y-6">

@@ -202,7 +202,6 @@ export default function InventoryManagement() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* <Sidebar role="admin" /> */}
             <MainDashboardContainer className="flex-1">
                 <Header
                     title="Inventory Management"

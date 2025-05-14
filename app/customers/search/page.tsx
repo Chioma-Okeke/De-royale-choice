@@ -143,7 +143,6 @@ export default function CustomerSearch() {
 
     return (
         <div className="flex min-h-screen bg-gray-50">
-            <Sidebar role="staff" />
             <MainDashboardContainer>
                 <Header title="Search Records" role="staff" username="staff" />
                 <main className="p-4 md:p-6 space-y-6">

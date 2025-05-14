@@ -24,7 +24,6 @@ function InquiriesPage() {
 
     return (
         <div>
-            <Sidebar role="staff" />
             <MainDashboardContainer>
                 <Header title="Inquires" role="staff" username="staff" />
                 <main className="p-4 md:p-6 space-y-6">

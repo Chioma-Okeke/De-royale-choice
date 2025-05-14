@@ -27,12 +27,15 @@ interface SidebarProps {
     role: "admin" | "staff" | "limited";
 }
 
-export function Sidebar() {
-    const {user} = useAuth()
+export function Sidebar({ role }: SidebarProps) {
+    const { user } = useAuth()
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
     const { toast } = useToast();
-    const role = user?.role
+    // const role = user?.role
+    console.log(user)
+    console.log(role)
+    const baseDashboardPath = `/dashboard/${role}`;
 
     const handleLogout = () => {
         toast({
@@ -47,50 +50,50 @@ export function Sidebar() {
         {
             label: "Dashboard",
             icon: LayoutDashboard,
-            href: role === "admin" ? "/dashboard/admin" : "/dashboard/staff",
-            active: pathname === `/dashboard/${role}`,
+            href: baseDashboardPath,
+            active: pathname === baseDashboardPath,
             roles: ["admin", "staff", "limited"],
         },
         {
             label: "Register Customer",
             icon: Users,
-            href: "/customers/register",
-            active: pathname === "/customers/register",
+            href: `${baseDashboardPath}/customers/register`,
+            active: pathname === `${baseDashboardPath}/customers/register`,
             roles: ["staff", "limited"],
         },
         {
             label: "Search",
             icon: Search,
-            href: "/customers/search",
-            active: pathname === "/customers/search",
+            href: `${baseDashboardPath}/customers/search`,
+            active: pathname === `${baseDashboardPath}/customers/search`,
             roles: ["admin", "staff"],
         },
         {
             label: "Print Receipts",
             icon: Printer,
-            href: "/receipts",
-            active: pathname === "/receipts",
+            href: `${baseDashboardPath}/receipts`,
+            active: pathname === `${baseDashboardPath}/receipts`,
             roles: ["staff", "limited"],
         },
         {
             label: "Daily Entries",
             icon: ClipboardList,
-            href: "/reports",
-            active: pathname === "/reports",
+            href: `${baseDashboardPath}/reports`,
+            active: pathname === `${baseDashboardPath}/reports`,
             roles: ["admin", "staff"],
         },
         {
             label: "Inventory",
             icon: ShoppingBag,
-            href: "/dashboard/admin/inventory",
-            active: pathname === "/dashboard/admin/inventory",
+            href: `${baseDashboardPath}/inventory`,
+            active: pathname === `${baseDashboardPath}/inventory`,
             roles: ["admin"],
         },
         {
             label: "Inquires",
             icon: Phone,
-            href: "/inquiries",
-            active: pathname === "/inquiries",
+            href: `${baseDashboardPath}/inquiries`,
+            active: pathname === `${baseDashboardPath}/inquiries`,
             roles: ["admin", "staff"],
         },
         // {
@@ -173,9 +176,7 @@ export function Sidebar() {
                     <nav className="grid gap-2">
                         {routes
                             .filter((route) => {
-                                if (role) {
-                                    route.roles.includes(role)
-                                }
+                                return role ? route.roles.includes(role) : false;
                             })
                             .map((route) => (
                                 <Link

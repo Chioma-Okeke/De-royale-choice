@@ -77,7 +77,6 @@ export default function CustomerRegistration() {
 
     return (
         <div className="flex min-h-screen bg-gray-50 ">
-            <Sidebar role="staff" />
             <MainDashboardContainer>
                 <Header
                     title="Register Customer"

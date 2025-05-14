@@ -47,6 +47,7 @@ function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
         const selectedItem = categoryItems.find(
             (item: IGetSingleItem) => item.itemName === description
         );
+        console.log(selectedItem, "here")
         if (selectedItem?.itemPrice != null) {
             form.setValue(
                 `items.${index}.price`,

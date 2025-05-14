@@ -153,7 +153,6 @@ export default function ReceiptPrinting() {
 
     return (
         <div className="flex min-h-screen bg-gray-50">
-            <Sidebar role="staff" />
             <MainDashboardContainer>
                 <Header title="Print Receipts" role="staff" username="staff" />
                 <main className="p-4 md:p-6">
