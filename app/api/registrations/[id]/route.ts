@@ -21,7 +21,7 @@ export async function GET(
 
         await connectDb();
 
-        const { id } = params;
+        const { id } = await params;
 
         // Populate customer and laundry items
         const order = await Order.findById(id)

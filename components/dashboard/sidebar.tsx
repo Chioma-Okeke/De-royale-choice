@@ -64,13 +64,6 @@ export function Sidebar({ role }: SidebarProps) {
             roles: ["admin", "staff"],
         },
         {
-            label: "Print Receipts",
-            icon: Printer,
-            href: `${baseDashboardPath}/receipts`,
-            active: pathname === `${baseDashboardPath}/receipts`,
-            roles: ["staff", "limited"],
-        },
-        {
             label: "Daily Entries",
             icon: ClipboardList,
             href: `${baseDashboardPath}/reports`,

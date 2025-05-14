@@ -1,5 +1,5 @@
 import { BaseService } from './base-service'
-import { ICreateOrder, IGetOrders, IGetOrdersParams } from '@/types'
+import { ICreateOrder, ICreateOrderResponse, IGetOrders, IGetOrdersParams, ISingleOrderResponse } from '@/types'
 
 class OrderService extends BaseService {
   constructor() {
@@ -7,7 +7,7 @@ class OrderService extends BaseService {
   }
 
   public async placeOrder( orderData: ICreateOrder) {
-    const res = await this.post<IGetOrders, ICreateOrder>('', orderData)
+    const res = await this.post<ICreateOrderResponse, ICreateOrder>('', orderData)
     return res
   }
 
@@ -17,8 +17,8 @@ class OrderService extends BaseService {
   }
 
   public async getSingleOrder(id:string) {
-    const res = await this.get(`/${id}`)
-    console.log(res)
+    const res = await this.get<ISingleOrderResponse>(`/${id}`)
+    return res
   }
 }
 

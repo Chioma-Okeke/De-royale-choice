@@ -9,11 +9,13 @@ import {
     CardFooter,
 } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
+import { useRouter } from "@bprogress/next";
 import { Printer, Search, Users } from "lucide-react";
 import Link from "next/link";
 
 export function HeaderCard() {
     const { user } = useAuth()
+    const router = useRouter()
     return (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Card className="bg-emerald-50 border-emerald-200">
@@ -29,11 +31,10 @@ export function HeaderCard() {
                         </p>
                         <Button
                             asChild
-                            className="mt-4 bg-emerald-600 hover:bg-emerald-700"
+                            className="mt-4 bg-emerald-600 hover:bg-emerald-700 cursor-pointer"
+                            onClick={() => router.push(`/dashboard/${user?.role}/customers/register`)}
                         >
-                            <Link href={`/dashboard/${user?.role}/customers/register`}>
-                                Take order
-                            </Link>
+                            Take order
                         </Button>
                     </div>
                 </CardContent>

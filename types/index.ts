@@ -24,6 +24,7 @@ export interface ICreateOrder {
     items: {
         categoryId: string;
         itemId: string;
+        itemName: string;
         quantity: number;
         price: number;
         totalPrice: number;
@@ -45,6 +46,18 @@ export interface IGetOrders {
     total: number;
 }
 
+export interface ICreateOrderResponse {
+    message: string
+    order: {
+        customerId: string
+        laundryItems: string[]
+        receiptId: string
+        totalAmount: number
+        _id: string
+    }
+    success: boolean
+}
+
 export interface IGetSingleOrder {
     customer: IGetCustomerContent
     items: {
@@ -58,6 +71,37 @@ export interface IGetSingleOrder {
     date: string
     totalAmount: number
 }
+
+export interface ISingleOrderResponse {
+    _id: string;
+    customerId: {
+      _id: string;
+      name: string;
+      phoneNumber: string;
+      email: string;
+      address: string;
+      createdAt: string;
+      updatedAt: string;
+      __v: number;
+    };
+    laundryItems: {
+      _id: string;
+      orderId: string;
+      itemName: string;
+      quantity: number;
+      categoryId: string;
+      price: number;
+      totalPrice: number;
+      createdAt: string;
+      updatedAt: string;
+      __v: number;
+    }[];
+    totalAmount: number;
+    receiptId: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  }
 
 export interface IGetOrdersParams {
     search?: string;

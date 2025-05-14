@@ -14,10 +14,12 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
 import moment from "moment";
+import { useRouter } from "@bprogress/next";
 
 export function RecentReports() {
     const { user } = useAuth()
     const column = 6;
+    const router = useRouter()
 
     const { data: recentRegistrations, isLoading } = useQuery(
         getOrdersQueryOpts({
@@ -79,6 +81,8 @@ export function RecentReports() {
                                     <Button
                                         variant="ghost"
                                         size="sm"
+                                        onClick={() => 
+                                            router.push(`/dashboard/${user?.role}/receipts/${registration.orderId}`)}
                                     >
                                         <ArrowRight className="h-4 w-4" />
                                         <span className="sr-only">

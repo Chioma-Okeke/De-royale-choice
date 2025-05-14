@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -40,7 +40,7 @@ function CustomerForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps)
     },
   })
 
-  const { setValue, handleSubmit, control } = form
+  const { setValue, handleSubmit, control, reset } = form
 
   const getCustomerList = useCallback(async (term: string) => {
     const lookupService = new LookupService()
@@ -70,7 +70,9 @@ function CustomerForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps)
       const service = new CustomerService()
       const newCustomer = await service.registerCustomer(data)
 
-      setSelectedCustomer(newCustomer)
+      console.log("newly created customer", newCustomer)
+
+      setSelectedCustomer(newCustomer.customer)
       toast.success('Customer Created', {
         description: 'Customer has been successfully created.',
       })
