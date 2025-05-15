@@ -13,7 +13,7 @@ export default function NotAuthorized() {
         if (user) {
             logoutUser()
         } else {
-            router.push("/")
+            router.push("/internal")
         }
     }
 
@@ -25,7 +25,7 @@ export default function NotAuthorized() {
           Access Denied
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          You do not have permission to view this page.
+          {user?.role === "admin" ? "You do not have permission to view this page." : "You need to be logged in to access this page"}
         </p>
         <Button
           onClick={navigateUser}

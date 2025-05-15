@@ -1,26 +1,13 @@
-import { Sidebar } from '@/components/dashboard/sidebar'
-import { MediaQuery } from '@/components/shared/media-query';
-import React from 'react'
+import ClientLayout from './client-layout';
 
-async function Layout({
-    children,
-    params
-}: Readonly<{
-    children: React.ReactNode;
-    params: { role: string }
-}>) {
-    const { role } = await params
-    console.log(role, "in layout")
-    return (
-        <MediaQuery breakpoint="lg" mediaQuery="min">
-            <div className="flex min-h-screen bg-gray-50 overflow-hidden w-full">
-                <Sidebar role={role as 'admin' | 'staff' | 'limited'} />
-                <div className="flex-1 w-full">
-                    {children}
-                </div>
-            </div>
-        </MediaQuery>
-    )
+export default function Layout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: { role: string };
+}) {
+  const role = params.role as 'admin' | 'staff' | 'limited';
+
+  return <ClientLayout role={role}>{children}</ClientLayout>;
 }
-
-export default Layout

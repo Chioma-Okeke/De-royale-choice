@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { useRouter } from '@bprogress/next';
 import { useForm } from 'react-hook-form';
@@ -47,22 +46,17 @@ export default function LoginPage() {
         },
         onSuccess: (data) => {
             const { user } = data;
-
-            if (user.role === 'admin') {
-                router.push('/dashboard/admin');
-            } else {
-                router.push('/dashboard/staff');
-            }
-
+            router.push(`/dashboard/${user?.role}`);
+            
             toast.success('Authentication Successful', {
                 description: 'You have successfully logged in.',
             });
 
             form.reset()
         },
-        onError: () => {
+        onError: (response) => {
             toast.error('Authentication Error', {
-                description: 'Invalid email or password.',
+                description: response.message,
             });
         },
     });
