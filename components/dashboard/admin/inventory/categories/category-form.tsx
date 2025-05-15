@@ -125,7 +125,6 @@ function CategoryForm() {
                                     isLoading={isPending}
                                     icon={Save}
                                 >
-                                    <Save className="mr-2 h-4 w-4" />
                                     {isPending ? 'Saving' : 'Save'} Category
                                 </Button>
                             </div>

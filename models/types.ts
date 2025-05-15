@@ -4,9 +4,9 @@ import mongoose from "mongoose"
 import { Document } from "mongoose"
 
 export interface IUser extends Document {
-    email: string;
-    password: string;
-    role: "staff" | "admin";
+  email: string;
+  password: string;
+  role: "staff" | "admin";
 }
 
 export interface Customer {
@@ -26,7 +26,7 @@ export interface ICategory extends Document {
   updatedAt: Date
 }
 
-export interface IItem extends Document{
+export interface IItem extends Document {
   itemName: string
   categoryId: string
   itemPrice: number
@@ -124,7 +124,7 @@ export interface IGetContactsContent {
 //   total: number
 // }
 
-export interface ILaundryItem extends Document{
+export interface ILaundryItem extends Document {
   orderId: string
   categoryId: string
   itemId: string
@@ -135,7 +135,7 @@ export interface ILaundryItem extends Document{
   createdAt: Date
   updatedAt: Date
 }
-  
+
 export interface IOrder extends Document {
   customerId: string
   laundryItems: string[]

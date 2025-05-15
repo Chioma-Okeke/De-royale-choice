@@ -176,3 +176,24 @@ export interface IGetUser {
         role: "admin" | "staff";
     };
 }
+
+export interface IGetBusinessStats {
+    stats: {
+      customersCount: number
+      ordersCount: number
+      totalRevenue: number
+      totalItemsProcessed: number
+    }
+}
+
+export interface IGetDailyStats {
+    title: string
+    subtitle: string
+    stats: IDailyStats[]
+}
+
+export interface IDailyStats {
+    label: string
+    value: number
+    currency: string
+}

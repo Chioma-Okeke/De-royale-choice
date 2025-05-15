@@ -1,34 +1,21 @@
-import { IContact, IContactResponse, IGetContactsContent, IGetContactsResponse } from '@/models/types'
 import { BaseService } from './base-service'
+import { IGetBusinessStats, IGetDailyStats } from '@/types'
 
 class StatsService extends BaseService {
   constructor() {
-    super('/contact')
+    super('/stats')
   }
 
-  public async sendContactMessage( requestData: IContact) {
-    const res = await this.post<IContactResponse, IContact>('', requestData)
+  public async getBusinessStats() {
+    const res = await this.get<IGetBusinessStats>('/business-stats')
+    return res.stats
+  }
+
+  public async getDailyStats() {
+    const res = await this.get<IGetDailyStats>('/daily-stats')
     return res
   }
 
-  public async getContacts() {
-    const res = await this.get<IGetContactsResponse>('')
-    return res.data
-  }
-
-  public async getUnreadInquiries() {
-    const res = await this.get<IGetContactsContent[]>("/unread")
-    return res
-  }
-
-  public async markUnReadMessages() {
-    const res = await this.post("/markread", undefined)
-
-  }
-
-  public async markMessageAsRead(id: string) {
-    const res = await this.post(`/markread/${id}`)
-  }
 }
 
 export default StatsService
