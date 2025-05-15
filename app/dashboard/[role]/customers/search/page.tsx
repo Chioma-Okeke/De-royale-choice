@@ -53,8 +53,9 @@ export default function CustomerSearch() {
           }
     }, [currentPage]);
 
-    const totalCount = filteredEntries?.total || 0;
+    const totalCount = filteredEntries?.registrations.length || 0;
     const totalPages = Math.ceil(totalCount / pageSize);
+    console.log(totalPages, "pages total")
 
     const router = useRouter()
 
@@ -62,13 +63,6 @@ export default function CustomerSearch() {
         e.preventDefault();
         setCurrentPage(1); // Reset to first page
         refetch();
-    };
-
-    const viewDetails = (id: string) => {
-        toast({
-            title: "Viewing Details",
-            description: `Viewing details for registration ${id}`,
-        });
     };
 
     const printReceipt = (id: string) => {
@@ -155,13 +149,6 @@ export default function CustomerSearch() {
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
-                                                            onClick={() => viewDetails(result.receiptId)}
-                                                        >
-                                                            <Eye className="h-4 w-4" />
-                                                        </Button>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
                                                             onClick={() => printReceipt(result.orderId)}
                                                         >
                                                             <Printer className="h-4 w-4" />
@@ -218,10 +205,6 @@ export default function CustomerSearch() {
                                 <div className="text-sm text-muted-foreground">
                                     Showing page {currentPage} of {totalPages}
                                 </div>
-                                <Button variant="outline" size="sm">
-                                    <Filter className="mr-2 h-4 w-4" />
-                                    Filter Results
-                                </Button>
                             </CardFooter>
                         </Card>
                     )}

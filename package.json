@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "ts-node migrateChangeFieldChange.ts"
+    "migrate": "ts-node migrateChangeFieldChange.ts",
+    "migrate:item-names": "ts-node migrations/migrate-item-names.ts"
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",

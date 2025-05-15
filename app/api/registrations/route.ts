@@ -1,6 +1,4 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { db } from "../../../models/db";
-import type { Registration, Tag } from "../../../models/types";
 import { verifyAuth } from "../utils/auth";
 import Order from "@/models/order-model";
 import connectDb from "@/lib/db-connect";
@@ -151,14 +149,18 @@ export async function POST(req: Request) {
         newOrder.laundryItems = laundryItemDocs;
         await newOrder.save();
 
+        await Customer.findByIdAndUpdate(customerId, {
+            $push: { orders: newOrder._id },
+        });
+
         return NextResponse.json(
             { success: true, message: "Order created", order: newOrder },
             { status: 201 }
         );
     } catch (error: any) {
-        console.error("Order creation failed:", error);
+        console.error("Error fetching orders:", error);
         return NextResponse.json(
-            { success: false, message: "Server error", error: error.message },
+            { error: "Error fetching orders: " + (error as Error).message },
             { status: 500 }
         );
     }

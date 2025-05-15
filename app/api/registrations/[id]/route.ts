@@ -3,6 +3,8 @@ import { db } from "../../../../models/db";
 import { verifyAuth } from "../../utils/auth";
 import Order from "@/models/order-model";
 import connectDb from "@/lib/db-connect";
+import LaundryItem from '@/models/laundry-item-model';
+import Customer from '@/models/customer-model';
 
 // Get registration by ID
 export async function GET(

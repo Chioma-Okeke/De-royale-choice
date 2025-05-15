@@ -18,11 +18,16 @@ export const useAuth = () => {
     mutationFn: () => new AuthService().logout(),
     onSuccess: () => {
       queryClient.removeQueries(getUserQueryOpts)
-      toast("Logged out successfully", {
+      toast.success("Logged out successfully", {
         description: "You have been logged out of the system.",
       });
       router.push("/auth/login")
     },
+    onError: () => {
+      toast.error("Logout Unsuccessful.", {
+        description: "Error when logging out. Please try again."
+      })
+    }
   })
 
   return {

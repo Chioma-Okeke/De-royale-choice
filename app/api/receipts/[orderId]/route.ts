@@ -1,4 +1,6 @@
 export const runtime = 'nodejs';
+import LaundryItem from '@/models/laundry-item-model';
+import Customer from '@/models/customer-model';
 
 import { NextRequest, NextResponse } from 'next/server';
 // import { generatePDF } from '@/lib/utils/pdf';

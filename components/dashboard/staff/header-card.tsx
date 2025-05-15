@@ -19,8 +19,8 @@ export function HeaderCard() {
     return (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Card className="bg-emerald-50 border-emerald-200">
-                <CardContent className="p-6">
-                    <div className="flex flex-col space-y-2">
+                <CardContent className="p-6 h-full">
+                    <div className="flex flex-col space-y-2 justify-between h-full">
                         <Users className="h-12 w-12 text-emerald-600" />
                         <h3 className="text-2xl font-bold">
                             Take new order
@@ -41,8 +41,8 @@ export function HeaderCard() {
             </Card>
 
             <Card>
-                <CardContent className="p-6">
-                    <div className="flex flex-col space-y-2">
+                <CardContent className="p-6 h-full">
+                    <div className="flex flex-col space-y-2 justify-between h-full">
                         <Printer className="h-12 w-12 text-emerald-600" />
                         <h3 className="text-2xl font-bold">
                             Print Receipts
@@ -64,8 +64,8 @@ export function HeaderCard() {
             </Card>
 
             <Card>
-                <CardContent className="p-6">
-                    <div className="flex flex-col space-y-2">
+                <CardContent className="p-6 h-full">
+                    <div className="flex flex-col space-y-2 justify-between h-full">
                         <Search className="h-12 w-12 text-emerald-600" />
                         <h3 className="text-2xl font-bold">
                             Search
