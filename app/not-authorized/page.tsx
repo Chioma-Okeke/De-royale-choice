@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "@bprogress/next";
 
-export default function NotAuthorized() {
+export default function NotAuthorized({role}: {role?: "admin" | "staff"}) {
     const {user, logoutUser} = useAuth()
     const router = useRouter()
 
@@ -25,7 +25,7 @@ export default function NotAuthorized() {
           Access Denied
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          {user?.role === "admin" ? "You do not have permission to view this page." : "You need to be logged in to access this page"}
+          {role !== "admin" ? "You do not have permission to view this page." : "You need to be logged in to access this page"}
         </p>
         <Button
           onClick={navigateUser}

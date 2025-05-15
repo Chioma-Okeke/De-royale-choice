@@ -5,6 +5,7 @@ import NotAuthorized from '@/app/not-authorized/page';
 import { Sidebar } from '@/components/dashboard/sidebar'
 import { MediaQuery } from '@/components/shared/media-query';
 import DashboardLoading from './loading';
+import { usePathname } from 'next/navigation';
 
 export default function ClientLayout({
   children,
@@ -14,6 +15,7 @@ export default function ClientLayout({
   role: 'admin' | 'staff' | 'limited';
 }) {
   const { user, isPending } = useAuth();
+  const pathName = usePathname()
 
   if (isPending) {
     return <DashboardLoading/>
@@ -21,6 +23,10 @@ export default function ClientLayout({
   
   if (!user) {
     return <NotAuthorized />;
+  }
+
+  if (pathName.includes(`/dashboard/admin`) && user.role !== "admin") {
+    return <NotAuthorized role={role as "admin"}/>
   }
 
   return (
