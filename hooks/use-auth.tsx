@@ -19,7 +19,7 @@ export const useAuth = () => {
     onSuccess: () => {
       queryClient.removeQueries(getUserQueryOpts)
       toast.success("Logged out successfully", {
-        description: "You have been logged out of the system.",
+        description: "You have successfully logged out of the system.",
       });
       router.push("/auth/login")
     },
