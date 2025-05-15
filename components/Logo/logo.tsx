@@ -26,8 +26,8 @@ export function Logo({ size = "md", withText = true, className = "" }: LogoProps
       </div> */}
       {withText && (
         <div className="flex flex-col">
-          <span className="font-bold text-brand-purple leading-tight">DE UNIQUE ROYAL CHOICE</span>
-          <span className="font-bold text-brand-yellow leading-tight tracking-wider">DRY CLEANERS</span>
+          <span className="max-sm:text-sm font-bold text-brand-purple leading-tight">DE UNIQUE ROYAL CHOICE</span>
+          <span className="max-sm:text-sm font-bold text-brand-yellow leading-tight tracking-wider">DRY CLEANERS</span>
         </div>
       )}
     </div>

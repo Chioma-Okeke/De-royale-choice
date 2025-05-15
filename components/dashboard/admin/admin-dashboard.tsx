@@ -29,6 +29,8 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
+import { RecentReports } from "../reports/recent-reports";
+import { InventorySummaryCard } from "./inventory/inventory-summary-card";
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState("overview");
@@ -152,122 +154,11 @@ export default function AdminDashboard() {
                             <TabsTrigger value="reports">Reports</TabsTrigger>
                         </TabsList>
                         <TabsContent value="overview" className="space-y-4">
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>Recent Transactions</CardTitle>
-                                    <CardDescription>
-                                        Overview of the latest customer
-                                        transactions
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow>
-                                                <TableHead>Invoice</TableHead>
-                                                <TableHead>Customer</TableHead>
-                                                <TableHead>Date</TableHead>
-                                                <TableHead>Amount</TableHead>
-                                                <TableHead>Status</TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {recentTransactions.map(
-                                                (transaction) => (
-                                                    <TableRow
-                                                        key={transaction.id}
-                                                    >
-                                                        <TableCell className="font-medium">
-                                                            {transaction.id}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {
-                                                                transaction.customer
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {transaction.date}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {transaction.amount}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <span
-                                                                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${transaction.status ===
-                                                                        "Completed"
-                                                                        ? "bg-green-100 text-green-800"
-                                                                        : transaction.status ===
-                                                                            "Processing"
-                                                                            ? "bg-blue-100 text-blue-800"
-                                                                            : "bg-yellow-100 text-yellow-800"
-                                                                    }`}
-                                                            >
-                                                                {
-                                                                    transaction.status
-                                                                }
-                                                            </span>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                )
-                                            )}
-                                        </TableBody>
-                                    </Table>
-                                </CardContent>
-                            </Card>
+
+                            <RecentReports />
 
                             <div className="grid gap-4 md:grid-cols-2">
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle>Inventory Status</CardTitle>
-                                        <CardDescription>
-                                            Current inventory categories and
-                                            items
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="space-y-4">
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-sm font-medium">
-                                                    Clothes
-                                                </span>
-                                                <span className="text-sm">
-                                                    24 items
-                                                </span>
-                                            </div>
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-sm font-medium">
-                                                    Bedding
-                                                </span>
-                                                <span className="text-sm">
-                                                    12 items
-                                                </span>
-                                            </div>
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-sm font-medium">
-                                                    Curtains
-                                                </span>
-                                                <span className="text-sm">
-                                                    8 items
-                                                </span>
-                                            </div>
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-sm font-medium">
-                                                    Others
-                                                </span>
-                                                <span className="text-sm">
-                                                    15 items
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <Button
-                                            variant="outline"
-                                            className="w-full mt-4"
-                                        >
-                                            <ShoppingBag className="mr-2 h-4 w-4" />
-                                            Manage Inventory
-                                        </Button>
-                                    </CardContent>
-                                </Card>
+                                <InventorySummaryCard/>
 
                                 <Card>
                                     <CardHeader>

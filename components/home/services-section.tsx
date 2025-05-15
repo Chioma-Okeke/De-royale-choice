@@ -1,6 +1,13 @@
 import React from "react";
 import { Card, CardContent } from "../ui/card";
 import { Bed, Shirt, WashingMachine } from "lucide-react";
+import FadeInWrapper from "../animations/fade-in-wrapper";
+
+const services = [
+    { title: "Regular Laundry", Icon: WashingMachine, desc: "Our standard laundry service includes washing, drying, and folding of your everyday clothes." },
+    { title: "Dry Cleaning", Icon: Shirt, desc: "Professional dry cleaning for your delicate garments, suits, dresses, and special fabrics." },
+    { title: "Bedding & Curtains", Icon: Bed, desc: "We clean all types of bedding, curtains, and household textiles with care and attention." },
+];
 
 function ServicesSection() {
     return (
@@ -18,48 +25,25 @@ function ServicesSection() {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-                    <Card className="border-none shadow-md">
-                        <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
-                            <div className="p-3 rounded-full bg-brand-lightblue">
-                                <WashingMachine/>
-                            </div>
-                            <h3 className="text-xl font-bold text-brand-navy">
-                                Regular Laundry
-                            </h3>
-                            <p className="text-gray-500">
-                                Our standard laundry service includes washing,
-                                drying, and folding of your everyday clothes.
-                            </p>
-                        </CardContent>
-                    </Card>
-                    <Card className="border-none shadow-md">
-                        <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
-                            <div className="p-3 rounded-full bg-brand-lightblue">
-                                <Shirt/>
-                            </div>
-                            <h3 className="text-xl font-bold text-brand-navy">
-                                Dry Cleaning
-                            </h3>
-                            <p className="text-gray-500">
-                                Professional dry cleaning for your delicate
-                                garments, suits, dresses, and special fabrics.
-                            </p>
-                        </CardContent>
-                    </Card>
-                    <Card className="border-none shadow-md">
-                        <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
-                            <div className="p-3 rounded-full bg-brand-lightblue">
-                                <Bed />
-                            </div>
-                            <h3 className="text-xl font-bold text-brand-navy">
-                                Bedding & Curtains
-                            </h3>
-                            <p className="text-gray-500">
-                                We clean all types of bedding, curtains, and
-                                household textiles with care and attention.
-                            </p>
-                        </CardContent>
-                    </Card>
+                    {services.map(({ Icon, title, desc }, index) => {
+                        return (
+                            <FadeInWrapper key={index} delay={index * 0.2}>
+                                <Card className="border-none shadow-md ">
+                                    <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
+                                        <div className="p-3 rounded-full bg-brand-lightblue">
+                                            <Icon />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-brand-navy">
+                                            {title}
+                                        </h3>
+                                        <p className="text-gray-500">
+                                            {desc}
+                                        </p>
+                                    </CardContent>
+                                </Card>
+                            </FadeInWrapper>
+                        )
+                    })}
                 </div>
             </div>
         </section>

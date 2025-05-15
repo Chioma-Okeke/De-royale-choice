@@ -7,7 +7,7 @@ import { PhoneCall } from "lucide-react";
 function NavBar() {
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-white">
-            <div className="container flex h-16 items-center justify-between">
+            <div className="px-4 flex h-16 items-center justify-between">
                 <Link href="/" className="flex items-center gap-2">
                     <Logo />
                 </Link>
@@ -31,10 +31,10 @@ function NavBar() {
                         Contact
                     </Link>
                 </nav>
-                <Button className="bg-brand-navy hover:bg-brand-purple">
-                    <PhoneCall className="mr-2 h-4 w-4" />
+                <Link href={"tel:"} className="hidden sm:flex text-white items-center gap-2 px-3 py-2 rounded-lg bg-brand-navy hover:bg-brand-purple">
+                    <PhoneCall className="mr-2 size-3 md:size-4" />
                     Contact Us
-                </Button>
+                </Link >
             </div>
         </header>
     );

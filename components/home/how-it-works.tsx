@@ -1,6 +1,26 @@
 import React from "react";
+import FadeInWrapper from "../animations/fade-in-wrapper";
+import { CheckCircle, Sparkles, Truck } from "lucide-react";
 
 function HowItWorks() {
+    const steps = [
+        {
+            title: "Drop-off or Pickup",
+            description: "Bring your laundry to our shop or request a convenient pickup from your location.",
+            icon: Truck,
+        },
+        {
+            title: "We Clean with Care",
+            description: "Your items are sorted, treated, and cleaned with professional-grade equipment and care.",
+            icon: Sparkles,
+        },
+        {
+            title: "Ready for Collection",
+            description: "Receive your clean, fresh laundry — folded and ready for use.",
+            icon: CheckCircle,
+        },
+    ];
+
     return (
         <section
             id="process"
@@ -18,48 +38,15 @@ function HowItWorks() {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-                    <div className="flex flex-col items-center text-center space-y-4">
-                        <div className="relative">
-                            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand-navy text-white text-2xl font-bold">
-                                1
+                    {steps.map((step, index) => (
+                        <FadeInWrapper key={index} delay={index * 0.2}>
+                            <div className="flex flex-col items-center text-center space-y-4">
+                                <step.icon className="w-8 h-8 text-primary" />
+                                <h3 className="text-xl font-semibold">{step.title}</h3>
+                                <p className="text-sm text-muted-foreground">{step.description}</p>
                             </div>
-                            <div className="hidden md:block absolute top-8 left-16 w-full h-0.5 bg-brand-teal"></div>
-                        </div>
-                        <h3 className="text-xl font-bold text-brand-navy">
-                            Drop Off
-                        </h3>
-                        <p className="text-gray-500">
-                            Bring your laundry to our location or schedule a
-                            pickup at your convenience.
-                        </p>
-                    </div>
-                    <div className="flex flex-col items-center text-center space-y-4">
-                        <div className="relative">
-                            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand-navy text-white text-2xl font-bold">
-                                2
-                            </div>
-                            <div className="hidden md:block absolute top-8 left-16 w-full h-0.5 bg-brand-teal"></div>
-                        </div>
-                        <h3 className="text-xl font-bold text-brand-navy">
-                            We Clean
-                        </h3>
-                        <p className="text-gray-500">
-                            Our professionals clean your items with care using
-                            high-quality products and equipment.
-                        </p>
-                    </div>
-                    <div className="flex flex-col items-center text-center space-y-4">
-                        <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand-navy text-white text-2xl font-bold">
-                            3
-                        </div>
-                        <h3 className="text-xl font-bold text-brand-navy">
-                            Pick Up
-                        </h3>
-                        <p className="text-gray-500">
-                            Collect your fresh, clean laundry or have it
-                            delivered right to your doorstep.
-                        </p>
-                    </div>
+                        </FadeInWrapper>
+                    ))}
                 </div>
             </div>
         </section>

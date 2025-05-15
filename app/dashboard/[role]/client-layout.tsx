@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/use-auth';
 import NotAuthorized from '@/app/not-authorized/page';
 import { Sidebar } from '@/components/dashboard/sidebar'
 import { MediaQuery } from '@/components/shared/media-query';
+import DashboardLoading from './loading';
 
 export default function ClientLayout({
   children,
@@ -12,8 +13,12 @@ export default function ClientLayout({
   children: React.ReactNode;
   role: 'admin' | 'staff' | 'limited';
 }) {
-  const { user } = useAuth();
+  const { user, isPending } = useAuth();
 
+  if (isPending) {
+    return <DashboardLoading/>
+  }
+  
   if (!user) {
     return <NotAuthorized />;
   }
