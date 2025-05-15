@@ -4,15 +4,19 @@ export function renderReceiptHTML(order: any, copy: string): string {
     0
   );
 
-  const tagsHTML = order.laundryItems.flatMap((item: any, index: number) => {
+  let counter = 1
+
+  const tagsHTML = order.laundryItems.flatMap((item: any) => {
     return Array.from({ length: item.quantity }, (_, i) => {
-      return `<div class="tag">
+      const html = `<div class="tag">
         <p class="m-0"><strong>${order.customerId.name}</strong></p>
         <p class="m-0">${order.receiptId}</p>
         <p class="m-0"><strong>Dropped of at:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
         <p class="m-0"> <strong>Total items:</strong> ${totalQuantities}</p>
-        <p class="m-0"> <strong>${index}</strong> ${totalQuantities}</p>
+        <p class="m-0"> <strong>${counter}</strong> ${totalQuantities}</p>
       </div>`;
+      counter++
+      return html
     });
   });
 

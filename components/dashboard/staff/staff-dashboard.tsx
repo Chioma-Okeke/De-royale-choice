@@ -1,26 +1,14 @@
 "use client";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-    CardFooter,
-} from "@/components/ui/card";
-import { Sidebar } from "@/components/dashboard/sidebar";
-import { Header } from "@/components/dashboard/header/header";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 import { RecentReports } from "../reports/recent-reports";
 import { HeaderCard } from "./header-card";
-import { ClipboardList } from "lucide-react";
+import { Header } from "../header/header";
 
 export default function StaffDashboard() {
 
     return (
         <div className="flex min-h-screen bg-gray-50">
-            {/* <Sidebar role="staff" /> */}
             <MainDashboardContainer>
                 <Header title="Staff Dashboard" />
                 <main className="p-4 md:p-6 space-y-6">
