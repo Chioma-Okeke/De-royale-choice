@@ -30,6 +30,7 @@ export interface IItem extends Document {
   itemName: string
   categoryId: string
   itemPrice: number
+  piecePerItem: number;
   createdAt: Date
   updatedAt: Date
 }

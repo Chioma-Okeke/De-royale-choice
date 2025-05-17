@@ -12,6 +12,11 @@ const ItemSchema = new Schema(
             type: Number,
             required: true
         },
+        piecePerItem: {
+            type: Number,
+            rquired: true,
+            default: 1
+        },
         categoryId: {
             type: Schema.Types.ObjectId,
             ref: "Category",

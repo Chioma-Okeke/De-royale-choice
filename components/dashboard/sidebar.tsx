@@ -22,12 +22,22 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/use-toast";
 import { Logo } from "@/components/Logo/logo";
 import { useAuth } from "@/hooks/use-auth";
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarGroupLabel,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+} from "../ui/sidebar";
 
 interface SidebarProps {
     role: "admin" | "staff" | "limited";
 }
 
-export function Sidebar({ role }: SidebarProps) {
+export function SidebarNav({ role }: SidebarProps) {
     const { user, logoutUser } = useAuth()
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
@@ -93,6 +103,66 @@ export function Sidebar({ role }: SidebarProps) {
         // },
     ];
 
+    const groupedRoutes = [
+        {
+            title: "General",
+            routes: [
+                {
+                    label: "Dashboard",
+                    icon: LayoutDashboard,
+                    href: baseDashboardPath,
+                    active: pathname === baseDashboardPath,
+                    roles: ["admin", "staff", "limited"],
+                },
+            ],
+        },
+        {
+            title: "Orders",
+            routes: [
+                {
+                    label: "Register Order",
+                    icon: Users,
+                    active: pathname === `${baseDashboardPath}/customers/register`,
+                    href: `${baseDashboardPath}/customers/register`,
+                    roles: ["staff", "limited"],
+                },
+                {
+                    label: "Search Orders",
+                    icon: Search,
+                    href: `${baseDashboardPath}/customers/search`,
+                    active: pathname === `${baseDashboardPath}/customers/search`,
+                    roles: ["admin"],
+                },
+                {
+                    label: "Daily Entries",
+                    icon: ClipboardList,
+                    href: `${baseDashboardPath}/reports`,
+                    active: pathname === `${baseDashboardPath}/reports`,
+                    roles: ["admin", "staff"],
+                },
+            ],
+        },
+        {
+            title: "Management",
+            routes: [
+                {
+                    label: "Inventory",
+                    icon: ShoppingBag,
+                    href: `${baseDashboardPath}/inventory`,
+                    active: pathname === `${baseDashboardPath}/inventory`,
+                    roles: ["admin"],
+                },
+                {
+                    label: "Inquiries",
+                    icon: Phone,
+                    href: `${baseDashboardPath}/inquiries`,
+                    active: pathname === `${baseDashboardPath}/inquiries`,
+                    roles: ["admin", "staff"],
+                },
+            ],
+        },
+    ];
+
     return (
         <div className="fixed top-0 h-screen bg-white z-30">
             <Sheet open={open} onOpenChange={setOpen}>
@@ -154,7 +224,7 @@ export function Sidebar({ role }: SidebarProps) {
                     </div>
                 </SheetContent>
             </Sheet>
-            <div className="hidden lg:flex h-screen border-r bg-white flex-col w-64">
+            {/* <div className="hidden lg:flex h-screen border-r bg-white flex-col w-64">
                 <div className="p-6 border-b">
                     <div className="flex items-center gap-2">
                         <Logo size="sm" />
@@ -193,7 +263,39 @@ export function Sidebar({ role }: SidebarProps) {
                         Logout
                     </Button>
                 </div>
-            </div>
+            </div> */}
+            <Sidebar>
+                <SidebarContent>
+                    {groupedRoutes.map((groupRoute) => {
+                        return (
+                            <SidebarGroup>
+                                <SidebarGroupLabel>{groupRoute.title}</SidebarGroupLabel>
+                                <SidebarGroupContent>
+                                    <SidebarMenu>
+                                        {groupRoute.routes.filter((route) => {
+                                            return role ? route.roles.includes(role) : false;
+                                        }).map((route) => (
+                                            <SidebarMenuItem className={cn(
+                                                "flex items-center gap-2 px-3 py-2 text-sm rounded-md",
+                                                route.active
+                                                    ? "bg-brand-navy text-white font-medium"
+                                                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+                                            )} key={route.label}>
+                                                <SidebarMenuButton asChild>
+                                                    <a href={route.href}>
+                                                        <route.icon />
+                                                        <span>{route.label}</span>
+                                                    </a>
+                                                </SidebarMenuButton>
+                                            </SidebarMenuItem>
+                                        ))}
+                                    </SidebarMenu>
+                                </SidebarGroupContent>
+                            </SidebarGroup>
+                        )
+                    })}
+                </SidebarContent>
+            </Sidebar>
         </div>
     );
 }

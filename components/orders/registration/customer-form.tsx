@@ -55,7 +55,6 @@ function CustomerForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps)
 
   const handleCustomerSelect = (selected: Option) => {
     const customer = selected.raw
-    console.log("Selected customer:", customer)
 
     setSelectedCustomer(customer)
 
@@ -69,8 +68,6 @@ function CustomerForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps)
     try {
       const service = new CustomerService()
       const newCustomer = await service.registerCustomer(data)
-
-      console.log("newly created customer", newCustomer)
 
       setSelectedCustomer(newCustomer.customer)
       toast.success('Customer Created', {

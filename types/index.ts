@@ -144,6 +144,7 @@ export interface IGetItemsContent {
     itemName: string;
     categoryName: string;
     itemPrice: number;
+    piecePerItem: number;
     categoryId: string;
 }
 
@@ -157,6 +158,7 @@ export interface ICreateItemRequest {
     itemName: string;
     categoryId: string;
     itemPrice: number;
+    piecePerItem: number
 }
 
 export interface ITypeaheadProps {
@@ -167,6 +169,12 @@ export interface ITypeaheadProps {
 export interface UserAuthBody {
     email: string;
     password: string;
+}
+
+export interface IcreateUser {
+    email: string;
+    password: string;
+    role: string
 }
 
 export interface IGetUser {

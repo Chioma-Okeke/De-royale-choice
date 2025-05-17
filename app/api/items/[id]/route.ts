@@ -73,13 +73,13 @@ export async function PUT(
         }
 
         const body = await request.json();
-        const { itemName, categoryId, itemPrice } = body;
+        const { itemName, categoryId, itemPrice, piecePerItem } = body;
 
         // Validate required fields
-        if (!itemName || !categoryId || itemPrice === undefined) {
+        if (!itemName || !categoryId || itemPrice === undefined || piecePerItem === undefined) {
             return NextResponse.json(
                 {
-                    error: "item name, category ID, and item price are required",
+                    error: "All fields are required",
                 },
                 { status: 400 }
             );
@@ -122,6 +122,7 @@ export async function PUT(
         item.itemName = itemName;
         item.itemPrice = itemPrice;
         item.categoryId = categoryId;
+        item.piecePerItem  = piecePerItem;
         item.updatedAt = new Date();
 
         await item.save();

@@ -18,7 +18,7 @@ function ItemsTabContent() {
     const [selectedItem, setSelectedItem] = useState<IGetItemsContent | null>(null)
     const [open, setOpen] = useState(false);
     const queryClient = useQueryClient()
-    const columns = 4
+    const columns = 5
 
     const { data: categories } = useQuery(getCategoriesQueryOpts)
     const { data: items, isLoading } = useQuery(getItemsQueryOpts)
@@ -30,11 +30,12 @@ function ItemsTabContent() {
                 item._id
             )
         },
-        onSuccess: (response) => {
-            queryClient.invalidateQueries(getCategoriesQueryOpts)
+        onSuccess: () => {
+            queryClient.invalidateQueries(getItemsQueryOpts)
             toast.success("Item Deleted", {
                 description: `Item has been deleted successfully.`,
             });
+            setOpen(false)
         },
         onError: (error) => {
             console.error("Error deleting item:", error);
@@ -89,8 +90,11 @@ function ItemsTabContent() {
                             <TableRow>
                                 <TableHead>Item Name</TableHead>
                                 <TableHead>Category</TableHead>
-                                <TableHead className="text-right">
+                                <TableHead>
                                     Price (₦)
+                                </TableHead>
+                                <TableHead>
+                                    Piece per Item
                                 </TableHead>
                                 <TableHead className="text-right">
                                     Actions
@@ -111,8 +115,11 @@ function ItemsTabContent() {
                                     <TableCell>
                                         {item.categoryName}
                                     </TableCell>
-                                    <TableCell className="text-right">
+                                    <TableCell>
                                         {item.itemPrice?.toLocaleString()}
+                                    </TableCell>
+                                    <TableCell>
+                                        {item.piecePerItem?.toLocaleString()}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <div className="flex justify-end gap-2">

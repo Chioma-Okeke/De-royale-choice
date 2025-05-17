@@ -14,10 +14,12 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { useAuth } from '@/hooks/use-auth'
+import { useRouter } from '@bprogress/next'
 
 function UserProfileCard() {
-    const {logoutUser, user} = useAuth()
+    const { logoutUser, user } = useAuth()
     const role = user?.role
+    const router = useRouter()
 
     return (
         <DropdownMenu>
@@ -33,15 +35,14 @@ function UserProfileCard() {
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {role === "admin" && <DropdownMenuItem>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
-                </DropdownMenuItem>}
                 <DropdownMenuItem>
                     <Badge variant="outline" className="mr-2">
                         {role ? role.charAt(0).toUpperCase() + role.slice(1) : ""}
                     </Badge>
                     <span>Role</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/dashboard/admin/settings")}>
+                    <span>Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className='py-0'>

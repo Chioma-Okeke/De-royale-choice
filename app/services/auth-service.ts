@@ -1,9 +1,14 @@
-import { IGetUser, UserAuthBody } from '@/types';
+import { IcreateUser, IGetUser, UserAuthBody } from '@/types';
 import { BaseService } from './base-service'
 
 export class AuthService extends BaseService {
   constructor(headers?: Record<string, string>) {
     super('/auth')
+  }
+
+  public async registerUser (userData: IcreateUser) {
+    const res = this.post<IGetUser, IcreateUser>("/register", userData)
+    return res;
   }
 
   public async login (userData: UserAuthBody)  {

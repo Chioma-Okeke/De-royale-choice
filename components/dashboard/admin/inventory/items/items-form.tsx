@@ -10,12 +10,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Save } from "lucide-react";
 import { itemSchema } from "@/schema";
-import { ICreateItemRequest, IGetCategoryContent, IGetItemsContent, IGetItemsResponse } from "@/types";
+import { ICreateItemRequest, IGetCategoryContent, IGetItemsContent } from "@/types";
 import CategoryForm from "../categories/category-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ItemsService from "@/app/services/items-service";
@@ -49,6 +48,7 @@ export function ItemDialog({
       categoryId: selectedItem?.categoryId ?? "",
       itemName: selectedItem?.itemName ?? "",
       itemPrice: selectedItem?.itemPrice ?? 0,
+      piecePerItem: selectedItem?.piecePerItem ?? 1
     },
   });
 
@@ -70,7 +70,7 @@ export function ItemDialog({
       return itemsService.updateItem(data, selectedItem._id);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(getItemsQueryOpts);
+      queryClient.invalidateQueries(getItemsQueryOpts); 
 
       toast.success(
         mode === "create" ? "Item Created" : "Item Updated",
@@ -79,7 +79,6 @@ export function ItemDialog({
             } successfully.`,
         }
       );
-
       onOpenChange(false)
       form.reset()
     },
@@ -100,7 +99,6 @@ export function ItemDialog({
 
   const handleOpenChange = (value: boolean) => {
     onOpenChange(value)
-    console.log(selectedItem, "selected item")
     if (!value) {
       form.reset()
     }
@@ -174,6 +172,31 @@ export function ItemDialog({
                   <FormLabel>Price (₦)</FormLabel>
                   <FormControl>
                     <Input type="number" min={0} step={50} placeholder="Enter price" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="piecePerItem"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Piece per Item</FormLabel>
+                  <FormControl>
+                    <select
+                      {...field}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    >
+                      <option value="">Select the pieces number</option>
+                      {[1, 2, 3].map((num, i) => (
+                        <option key={i} value={num}>
+                          {num}
+                        </option>
+                      ))}
+                    </select>
+
                   </FormControl>
                   <FormMessage />
                 </FormItem>

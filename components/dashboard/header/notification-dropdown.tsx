@@ -4,6 +4,7 @@ import ContactService from '@/app/services/contact-service'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { useAuth } from '@/hooks/use-auth'
 import { getUnreadInquiriesQueryOpts } from '@/lib/query-options'
 import { useRouter } from '@bprogress/next'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -14,6 +15,7 @@ function NotificationDropdown() {
     const router = useRouter()
     const { data: inquiries, isLoading, error } = useQuery(getUnreadInquiriesQueryOpts)
     const queryClient = useQueryClient()
+    const {user} = useAuth()
 
     const markAllAsRead = async () => {
         const contactService = new ContactService()
@@ -22,7 +24,7 @@ function NotificationDropdown() {
     }
 
     const navigateToInquiriesPage = () => {
-        router.push("/inquiries")
+        router.push(`/dashboard/${user?.role}/inquiries`)
     }
 
     return (

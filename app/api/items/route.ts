@@ -9,13 +9,13 @@ import Category from "@/models/categories.model";
 export async function GET(request: NextRequest) {
     try {
         // Verify authentication
-        // const authResult = await verifyAuth(request);
-        // if (!authResult.success) {
-        //     return NextResponse.json(
-        //         { error: authResult.error },
-        //         { status: authResult.status }
-        //     );
-        // }
+        const authResult = await verifyAuth(request);
+        if (!authResult.success) {
+            return NextResponse.json(
+                { error: authResult.error },
+                { status: authResult.status }
+            );
+        }
 
         await connectDb();
 
@@ -64,22 +64,23 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         // Verify authentication
-        // const authResult = await verifyAuth(request);
-        // if (!authResult.success || authResult?.user?.role !== "admin") {
-        //     return NextResponse.json(
-        //         { error: "Unauthorized. Only admins can create items" },
-        //         { status: 403 }
-        //     );
-        // }
+        const authResult = await verifyAuth(request);
+        if (!authResult.success || authResult?.user?.role !== "admin") {
+            return NextResponse.json(
+                { error: "Unauthorized. Only admins can create items" },
+                { status: 403 }
+            );
+        }
 
         const body = await request.json();
-        const { itemName, categoryId, itemPrice } = body;
+        console.log(body, "in items")
+        const { itemName, categoryId, itemPrice, piecePerItem } = body;
 
         // Validate required fields
-        if (!itemName || !categoryId || itemPrice === undefined) {
+        if (!itemName || !categoryId || itemPrice === undefined || piecePerItem === undefined) {
             return NextResponse.json(
                 {
-                    error: "Item name, category ID, and item price are required",
+                    error: "All fields are required",
                 },
                 { status: 400 }
             );
@@ -123,6 +124,7 @@ export async function POST(request: NextRequest) {
             itemName,
             itemPrice,
             categoryId,
+            piecePerItem
         });
 
         await newItem.save();
@@ -132,7 +134,8 @@ export async function POST(request: NextRequest) {
             itemName: newItem.itemName,
             itemPrice: newItem.itemPrice,
             categoryName: category.name,
-            categoryId: category._id
+            categoryId: category._id,
+            piecePerItem: newItem.piecePerItem ?? 1
         };
 
         return NextResponse.json(

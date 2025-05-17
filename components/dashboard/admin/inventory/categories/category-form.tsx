@@ -60,6 +60,9 @@ function CategoryForm() {
             open={open}
             onOpenChange={(open) => {
                 setOpen(open)
+                if (!open) {
+                    form.reset()
+                }
             }}
         >
             <DialogTrigger asChild>

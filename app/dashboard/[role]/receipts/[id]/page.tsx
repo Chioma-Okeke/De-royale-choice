@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Sidebar } from "@/components/dashboard/sidebar";
 import { Header } from "@/components/dashboard/header/header";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,7 +22,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Printer, Search, FileText, Tag } from "lucide-react";
+import { Printer, Search, FileText, Tag, ChevronLeft } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 import { useQuery } from "@tanstack/react-query";
@@ -31,9 +30,10 @@ import OrderService from "@/app/services/order-service";
 import { useParams } from "next/navigation";
 import ReceiptPageSkeleton from "../loading";
 import ReceiptService from "@/app/services/receipt-service";
+import { useRouter } from "@bprogress/next";
 
 export default function ReceiptPrinting() {
-    const { toast } = useToast();
+    const router = useRouter()
     const [printType, setPrintType] = useState<"customer" | "company">("customer");
     const params = useParams()
     const id = params?.id as string
@@ -62,28 +62,6 @@ export default function ReceiptPrinting() {
         printWindow.document.close();
         printWindow.focus();
       };
-
-    // const handleDownloadPDF = async (orderId: string) => {
-    //     const blob = await fetchReceiptPDF(orderId);
-    //     const url = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
-    //     const newWindow = window.open(url, '_blank');
-    //     newWindow?.focus();
-    //   };
-
-
-    // const handlePrint = () => {
-    //     toast({
-    //         title: "Printing Receipt",
-    //         description: `${printType === "both"
-    //             ? "Receipt and tags"
-    //             : printType === "receipt"
-    //                 ? "Receipt"
-    //                 : "Tags"
-    //             } for ${orderDetails?._id} are being sent to the printer.`,
-    //     });
-
-    //     // In a real app, this would trigger the printing functionality
-    // };
 
     if (isLoading) return <ReceiptPageSkeleton/>
     if (isError) return <p>Error: {(error as Error).message}</p>
@@ -321,6 +299,10 @@ export default function ReceiptPrinting() {
 
                         </CardContent>
                         <CardFooter className="flex justify-between">
+                            <Button onClick={() => router.back()} variant={"outline"}>
+                                <ChevronLeft/>
+                                <p>Back</p>
+                            </Button>
                             {orderDetails && <Button onClick={() => handlePrint(orderDetails?._id)}>
                                 <Printer className="mr-2 h-4 w-4" />
                                 Print{" "}

@@ -46,7 +46,12 @@ export default function LoginPage() {
         },
         onSuccess: (data) => {
             const { user } = data;
-            router.push(`/dashboard/${user?.role}`);
+
+            if (user.role === "admin") {
+                router.push("/select-portal")
+            } else {
+                router.push(`/dashboard/${user?.role}`);
+            }
             
             toast.success('Authentication Successful', {
                 description: 'You have successfully logged in.',
