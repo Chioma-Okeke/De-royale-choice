@@ -92,3 +92,8 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.scroll-bar {
+  scrollbar-color:red;
+  /* scrollbar-width: thin; */
+} 

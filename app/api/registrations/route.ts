@@ -77,15 +77,18 @@ export async function GET(request: NextRequest) {
 
         const formatted = filteredOrders.map((order) => {
             const customer = order.customerId as any;
+            const balance = order.totalAmount - order.deposit
             return {
                 orderId: order._id,
                 receiptId: order.receiptId,
                 customer: customer.name,
                 phone: customer.phoneNumber,
-                date: order.createdAt.toISOString().split("T")[0], // YYYY-MM-DD
+                date: order.createdAt.toISOString().split("T")[0],
                 items: order.laundryItems.length,
-                status: "pending", // or order.status if you implement it
+                status: order.status, 
                 amount: order.totalAmount,
+                deposit: order.deposit,
+                balance,
             };
         });
 
@@ -111,9 +114,9 @@ export async function POST(req: Request) {
         await connectDb();
 
         const body = await req.json();
-        const { customerId, items, totalAmount } = body;
+        const { customerId, items, totalAmount, deposit } = body;
 
-        if (!customerId || !items?.length || !totalAmount) {
+        if (!customerId || !items?.length || !totalAmount || !deposit) {
             return NextResponse.json(
                 { success: false, message: "Missing required fields" },
                 { status: 400 }
@@ -122,12 +125,15 @@ export async function POST(req: Request) {
 
         const sequenceNumber = await getNextOrderSequence();
         const receiptId = `115${sequenceNumber}`;
+        const status = totalAmount !== deposit ? "Pending" : "Completed"
 
         const newOrder = await Order.create({
             customerId,
             laundryItems: [],
             totalAmount,
             receiptId,
+            deposit,
+            status,
         });
 
         const laundryItemDocs = await Promise.all(

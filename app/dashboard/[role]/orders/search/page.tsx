@@ -17,7 +17,7 @@ import {
     Table, TableBody, TableCell, TableHead,
     TableHeader, TableRow,
 } from "@/components/ui/table";
-import { Search, Eye, Printer, Filter, Pen } from "lucide-react";
+import { Search, Eye, Printer, Filter } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 import { useQuery } from "@tanstack/react-query";
@@ -65,13 +65,6 @@ export default function CustomerSearch() {
         refetch();
     };
 
-    const editOrder = (id: string) => {
-        toast({
-            title: "Printing Receipt",
-            description: `Printing receipt for registration ${id}`,
-        });
-        router.push(`/dashboard/admin/orders/${id}`)
-    };
     const printReceipt = (id: string) => {
         toast({
             title: "Printing Receipt",
@@ -87,9 +80,9 @@ export default function CustomerSearch() {
                 <main className="p-4 md:p-6 space-y-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Search Customer Records</CardTitle>
+                            <CardTitle>Search Orders Records</CardTitle>
                             <CardDescription>
-                                Find customer records by name, phone number, or registration ID.
+                                Find orders by receipt ID.
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -101,7 +94,7 @@ export default function CustomerSearch() {
                                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                                             <Input
                                                 id="search-term"
-                                                placeholder="Search by either customer name, phone Number or receiptId"
+                                                placeholder="Search by receipt Id"
                                                 className="pl-8"
                                                 value={searchTerm}
                                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -121,15 +114,16 @@ export default function CustomerSearch() {
                         </CardContent>
                     </Card>
 
-                    {filteredEntries?.registrations && filteredEntries?.registrations.length > 0 && (
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Search Results</CardTitle>
-                                <CardDescription>
-                                    Found {filteredEntries?.total} matching records
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
+                    {/* /{filteredEntries?.registrations && filteredEntries?.registrations.length > 0 && ( */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Search Results</CardTitle>
+                            <CardDescription>
+                                Found {filteredEntries ? filteredEntries?.total : 0} matching records
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            {filteredEntries && filteredEntries.registrations.length > 0 ?
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
@@ -146,7 +140,7 @@ export default function CustomerSearch() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {filteredEntries.registrations.length > 0 && filteredEntries.registrations.map((result) => (
+                                        {filteredEntries && filteredEntries.registrations.length > 0 && filteredEntries.registrations.map((result) => (
                                             <TableRow key={result.receiptId}>
                                                 <TableCell className="font-medium">{result.receiptId}</TableCell>
                                                 <TableCell>{result.customer}</TableCell>
@@ -159,13 +153,6 @@ export default function CustomerSearch() {
                                                 <TableCell>{result.status}</TableCell>
                                                 <TableCell className="text-right">
                                                     <div className="flex justify-end gap-2">
-                                                        {user?.role === "admin" && <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            onClick={() => editOrder(result.orderId)}
-                                                        >
-                                                            <Pen className="h-4 w-4" />
-                                                        </Button>}
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
@@ -178,56 +165,60 @@ export default function CustomerSearch() {
                                             </TableRow>
                                         ))}
                                     </TableBody>
-                                </Table>
+                                </Table> : (
+                                    <div className="text-center py-10 text-lg text-muted-foreground">
+                                        No Orders found.
+                                    </div>
+                                )}
 
-                                <Pagination>
-                                    <PaginationContent>
-                                        <PaginationItem>
-                                            <PaginationPrevious
+                            <Pagination>
+                                <PaginationContent>
+                                    <PaginationItem>
+                                        <PaginationPrevious
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setCurrentPage((prev) => Math.max(prev - 1, 1));
+                                            }}
+                                        />
+                                    </PaginationItem>
+
+                                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                                        <PaginationItem key={page}>
+                                            <PaginationLink
                                                 href="#"
+                                                isActive={currentPage === page}
                                                 onClick={(e) => {
                                                     e.preventDefault();
-                                                    setCurrentPage((prev) => Math.max(prev - 1, 1));
+                                                    setCurrentPage(page);
                                                 }}
-                                            />
+                                            >
+                                                {page}
+                                            </PaginationLink>
                                         </PaginationItem>
+                                    ))}
 
-                                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                                            <PaginationItem key={page}>
-                                                <PaginationLink
-                                                    href="#"
-                                                    isActive={currentPage === page}
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        setCurrentPage(page);
-                                                    }}
-                                                >
-                                                    {page}
-                                                </PaginationLink>
-                                            </PaginationItem>
-                                        ))}
+                                    {totalPages > 3 && <PaginationItem><PaginationEllipsis /></PaginationItem>}
 
-                                        {totalPages > 3 && <PaginationItem><PaginationEllipsis /></PaginationItem>}
-
-                                        <PaginationItem>
-                                            <PaginationNext
-                                                href="#"
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-                                                }}
-                                            />
-                                        </PaginationItem>
-                                    </PaginationContent>
-                                </Pagination>
-                            </CardContent>
-                            <CardFooter className="flex justify-between">
-                                <div className="text-sm text-muted-foreground">
-                                    Showing page {currentPage} of {totalPages}
-                                </div>
-                            </CardFooter>
-                        </Card>
-                    )}
+                                    <PaginationItem>
+                                        <PaginationNext
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+                                            }}
+                                        />
+                                    </PaginationItem>
+                                </PaginationContent>
+                            </Pagination>
+                        </CardContent>
+                        <CardFooter className="flex justify-between">
+                            <div className="text-sm text-muted-foreground">
+                                Showing page {currentPage} of {totalPages}
+                            </div>
+                        </CardFooter>
+                    </Card>
+                    {/* )} */}
                 </main>
             </MainDashboardContainer>
         </div>

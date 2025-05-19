@@ -14,7 +14,9 @@ const OrderSchema = new mongoose.Schema(
             required: true
         },
         receiptId: {type: String, required: true, unique: true},
-
+        completedAt: { type: Date },
+        deposit: {type: Number, required: true},
+        status: {type: String, default: "Pending"},
     },
     {
         timestamps: true

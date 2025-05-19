@@ -9,5 +9,5 @@ export default async function Layout({
 }) {
     const { role } = await params;
 
-    return <ClientLayout role={role as 'admin' | 'staff' | 'limited'}>{children}</ClientLayout>;
+    return <ClientLayout role={role as 'admin' | 'staff'}>{children}</ClientLayout>;
 }

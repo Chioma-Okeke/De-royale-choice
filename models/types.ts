@@ -142,6 +142,8 @@ export interface IOrder extends Document {
   laundryItems: string[]
   totalAmount: number
   receiptId: string
+  deposit: number
+  status: string
   createdAt: Date
 }
 
@@ -150,4 +152,5 @@ export interface ICustomer extends Document {
   phoneNumber: string
   address: string
   orders?: mongoose.Schema.Types.ObjectId[]
+  createdAt: Date
 }

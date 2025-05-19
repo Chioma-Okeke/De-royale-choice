@@ -20,6 +20,11 @@ class OrderService extends BaseService {
     const res = await this.get<ISingleOrderResponse>(`/${id}`)
     return res
   }
+
+  public async updateOrderDeposit(id: string, deposit: number) {
+    const res = await this.put<ICreateOrderResponse, {deposit: number}>(`/${id}`, {deposit})
+    return res;
+  }
 }
 
 export default OrderService

@@ -3,6 +3,7 @@
 import { useWindowWidth } from '@/hooks/use-window-width'
 import { BREAKPOINT_VALUES, BREAKPOINTS } from '@/lib/constants'
 import { type ReactNode } from 'react'
+import MobileViewBlock from './mobile-view-block'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const BreakpointsArray = Object.values(BREAKPOINTS)
@@ -25,7 +26,7 @@ export const MediaQuery = ({
       : width > BREAKPOINT_VALUES[breakpoint]
 
   if (!showChildren) {
-    return null
+    return <MobileViewBlock />
   }
 
   return children

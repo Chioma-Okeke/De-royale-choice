@@ -1,4 +1,4 @@
-import { IcreateUser, IGetUser, UserAuthBody } from '@/types';
+import { IcreateUser, IGetUser, IPasswordResetData, IPasswordResetResponse, UserAuthBody } from '@/types';
 import { BaseService } from './base-service'
 
 export class AuthService extends BaseService {
@@ -24,5 +24,10 @@ export class AuthService extends BaseService {
     const res = await this.get<IGetUser>("/me");
     return res.user;
   };
+
+  public async resetPassword (data: IPasswordResetData) {
+    const res = await this.patch<IPasswordResetResponse, IPasswordResetData>('/reset-password', data)
+    return res
+  }
   
 }

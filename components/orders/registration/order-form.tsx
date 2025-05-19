@@ -19,11 +19,12 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { getCategoriesQueryOpts, getSingleCategoryOpts } from '@/lib/query-options';
 import { ICreateOrder, IGetCustomerContent, IGetSingleCategory, IGetSingleItem } from '@/types';
 import OrderFormRow from './order-form-row';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import OrderService from '@/app/services/order-service';
 import { toast } from 'sonner';
 import { useRouter } from '@bprogress/next';
 import { useAuth } from '@/hooks/use-auth';
+import { Input } from '@/components/ui/input'
 
 type LaundryItemFormValues = z.infer<typeof createOrderSchema>;
 
@@ -35,8 +36,12 @@ interface OrderFormProps {
 function OrderForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps) {
     const { data: categories } = useQuery(getCategoriesQueryOpts)
     const router = useRouter()
-    const {user} = useAuth()
-    const defaultItem = { categoryId: "", itemId: "", itemName: "", quantity: 1, price: 0, totalPrice: 0 };
+    const { user } = useAuth()
+    const defaultItem = { categoryId: "", itemId: "", itemName: "", quantity: 1, price: 0, totalPrice: 0, };
+    const defaultValues = {
+        items: [defaultItem],
+        deposit: 0
+    }
 
     const form = useForm<LaundryItemFormValues>({
         resolver: zodResolver(createOrderSchema),
@@ -49,6 +54,11 @@ function OrderForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps) {
     const { fields, append, remove, update } = useFieldArray({
         control: form.control,
         name: "items",
+    });
+
+    const items = useWatch({
+        control: form.control,
+        name: `items`,
     });
 
     const totalAmount = form.watch("items").reduce(
@@ -75,9 +85,14 @@ function OrderForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps) {
 
     const sendOrder = (data: z.infer<typeof createOrderSchema>) => {
         console.log(data)
-        const extraData = {
-            totalAmount: totalAmount
+        if (data.deposit > totalAmount) {
+            form.setError("deposit", {
+                type: "manual",
+                message: "Deposit cannot be more than the total amount (₦" + totalAmount.toLocaleString() + ")"
+            })
+            return;
         }
+
         if (!selectedCustomer) {
             throw new Error("Customer must be selected before creating an order.");
         }
@@ -85,7 +100,8 @@ function OrderForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps) {
         const payload: ICreateOrder = {
             customerId: selectedCustomer?._id,
             items: data.items,
-            ...extraData
+            deposit: data.deposit,
+            totalAmount
         }
         console.log(payload, "payload")
         mutate(payload)
@@ -138,6 +154,29 @@ function OrderForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps) {
                             <Plus className="mr-2 h-4 w-4" />
                             Add Item
                         </Button>
+                        <FormField
+                            control={form.control}
+                            name="deposit"
+                            render={({ field }) => (
+                                <FormItem className="mt-6 max-w-xs">
+                                    <FormLabel>Deposit Amount (₦)</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="number"
+                                            disabled={items.length === 0}
+                                            placeholder="Enter deposit amount"
+                                            {...field}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                field.onChange(Number(value));
+                                            }}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
                     </CardContent>
                     <CardFooter className="flex justify-between">
                         <div className="text-lg font-semibold">

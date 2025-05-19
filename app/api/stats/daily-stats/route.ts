@@ -15,7 +15,7 @@ export async function GET() {
     tomorrow.setDate(todayStart.getDate() + 1);
 
     const [newRegistrations, itemsProcessed, completedOrders, revenueData] = await Promise.all([
-      Customer.countDocuments({
+      Order.countDocuments({
         createdAt: { $gte: todayStart, $lt: tomorrow },
       }),
 
@@ -24,14 +24,12 @@ export async function GET() {
       }),
 
       Order.countDocuments({
-        status: "completed",
         completedAt: { $gte: todayStart, $lt: tomorrow },
       }),
 
       Order.aggregate([
         {
           $match: {
-            status: "completed",
             completedAt: { $gte: todayStart, $lt: tomorrow },
           },
         },
@@ -46,7 +44,7 @@ export async function GET() {
 
     const revenueToday = revenueData[0]?.totalRevenue || 0;
 
-    return NextResponse.json({
+    const data = {
       title: "Daily Activity",
       subtitle: "Today's laundry activity summary",
       stats: [
@@ -55,7 +53,11 @@ export async function GET() {
         { label: "Completed Orders", value: completedOrders },
         { label: "Revenue Today", value: revenueToday, currency: "NGN" },
       ],
-    });
+    }
+
+    console.log(data, "stats daily")
+
+    return NextResponse.json(data, {status: 200});
   } catch (error) {
     console.error("Daily Activity Error:", error);
     return NextResponse.json({ error: "Failed to load daily activity" }, { status: 500 });

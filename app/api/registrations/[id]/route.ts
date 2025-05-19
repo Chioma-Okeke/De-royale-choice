@@ -3,8 +3,8 @@ import { db } from "../../../../models/db";
 import { verifyAuth } from "../../utils/auth";
 import Order from "@/models/order-model";
 import connectDb from "@/lib/db-connect";
-import LaundryItem from '@/models/laundry-item-model';
-import Customer from '@/models/customer-model';
+import LaundryItem from "@/models/laundry-item-model";
+import Customer from "@/models/customer-model";
 
 // Get registration by ID
 export async function GET(
@@ -31,7 +31,10 @@ export async function GET(
             .populate("laundryItems");
 
         if (!order) {
-            return NextResponse.json({ error: "Order not found" }, { status: 404 });
+            return NextResponse.json(
+                { error: "Order not found" },
+                { status: 404 }
+            );
         }
 
         return NextResponse.json(order);
@@ -60,17 +63,23 @@ export async function PATCH(
     try {
         // Verify authentication
         const authResult = await verifyAuth(request);
-        if (!authResult.success) {
+        if (
+            !authResult.success ||
+            !authResult.user ||
+            authResult.user.role !== "admin"
+        ) {
             return NextResponse.json(
-                { error: authResult.error },
-                { status: authResult.status }
+                { error: "Unauthorized. Only admins can update orders" },
+                { status: 403 }
             );
         }
 
-        const { id } = params;
-        const registration = db.registrations.get(id);
+        await connectDb();
 
-        if (!registration) {
+        const { id } = params;
+        const order = await Order.findById(id);
+
+        if (!order) {
             return NextResponse.json(
                 { error: "Registration not found" },
                 { status: 404 }
@@ -78,40 +87,22 @@ export async function PATCH(
         }
 
         const body = await request.json();
-        const { status, notes } = body;
+        const { deposit } = body;
 
-        // Validate status
-        if (
-            status &&
-            ![
-                "registered",
-                "processing",
-                "completed",
-                "delivered",
-                "cancelled",
-            ].includes(status)
-        ) {
-            return NextResponse.json(
-                { error: "Invalid status value" },
-                { status: 400 }
-            );
-        }
+        const status = order.totalAmount === deposit ? "Completed" : "Pending";
+        const balance = order.totalAmount - deposit;
 
-        // Update registration
-        const updatedRegistration = {
-            ...registration,
-            status: status || registration.status,
-            notes: notes !== undefined ? notes : registration.notes,
-            updatedAt: new Date(),
-            // If status is 'delivered', set pickup date
-            ...(status === "delivered" ? { pickupDate: new Date() } : {}),
-        };
+        order.deposit = deposit;
 
-        db.registrations.set(id, updatedRegistration);
+        await order.save();
 
         return NextResponse.json({
             message: "Registration updated successfully",
-            registration: updatedRegistration,
+            order: {
+                ...order,
+                status,
+                balance,
+            },
         });
     } catch (error) {
         console.error("Error updating registration:", error);
@@ -130,7 +121,11 @@ export async function DELETE(
     try {
         // Verify authentication
         const authResult = await verifyAuth(request);
-        if (!authResult.success || !authResult.user || authResult.user.role !== "admin") {
+        if (
+            !authResult.success ||
+            !authResult.user ||
+            authResult.user.role !== "admin"
+        ) {
             return NextResponse.json(
                 { error: "Unauthorized. Only admins can delete registrations" },
                 { status: 403 }

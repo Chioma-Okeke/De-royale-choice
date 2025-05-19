@@ -1,7 +1,7 @@
 'use client'
 
 import { Header } from "@/components/dashboard/header/header";
-import { Sidebar } from "@/components/dashboard/sidebar";
+import { Sidebar } from "@/components/dashboard/sidebar/sidebar";
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 import {
     Table,
@@ -65,7 +65,7 @@ function InquiriesPage() {
                                             {entry.message}
                                         </TableCell>
                                         <TableCell>
-                                            <InquiryDetailsModal  inquiry={entry} />
+                                            <InquiryDetailsModal inquiry={entry} />
                                         </TableCell>
                                     </TableRow>
                                 )) : (

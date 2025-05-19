@@ -23,6 +23,8 @@ export const LaundryItemSchema = new Schema({
     },
     price: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
+}, {
+    timestamps: true
 });
 
 const LaundryItem: Model<ILaundryItem> =

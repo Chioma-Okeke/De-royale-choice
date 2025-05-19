@@ -14,8 +14,8 @@ export default function AdminDashboard() {
     const role = user?.role
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
-            <MainDashboardContainer>
+        <div className="flex min-h-screen bg-gray-50 scroll-bar">
+            <MainDashboardContainer className="scroll-bar">
                 <Header title="Admin Dashboard" />
                 <main className="p-4 md:p-6 space-y-6 overflow-y-auto">
                     <BusinessStatsCard />
@@ -24,10 +24,10 @@ export default function AdminDashboard() {
                         className="space-y-4"
                     >
                         <RecentReports />
-                        <div className="grid gap-4 md:grid-cols-2">
+                        {/* <div className="grid gap-4 md:grid-cols-2">
                             <InventorySummaryCard role={role as "admin" | "staff"} />
                             <DailyStatsCard role={role as "admin" | "staff"} />
-                        </div>
+                        </div> */}
                     </Tabs>
                 </main>
             </MainDashboardContainer>

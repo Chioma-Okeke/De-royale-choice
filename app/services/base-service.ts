@@ -54,6 +54,14 @@ export abstract class BaseService {
     return this.handleRequest(this.apiInstance.put(url, data, { params }))
   }
 
+  public async patch<TResponse, TData>(
+    url: string,
+    data?: TData,
+    params?: Record<string, unknown>
+  ): Promise<TResponse> {
+    return this.handleRequest(this.apiInstance.patch(url, data, { params }))
+  }
+
   public async delete<TData>(
     url: string,
     params?: Record<string, unknown>

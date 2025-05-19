@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
 import moment from "moment";
 import { useRouter } from "@bprogress/next";
+import { OrderStatusPill } from "@/components/shared/order-status-pill";
 
 export function RecentReports() {
     const { user } = useAuth()
@@ -52,6 +53,10 @@ export function RecentReports() {
                             <TableHead className="hidden md:table-cell">
                                 Date
                             </TableHead>
+                                <TableHead>Amount</TableHead>
+                                                            <TableHead>Deposit</TableHead>
+                                                            <TableHead>Balance</TableHead>
+                                                            <TableHead>Status</TableHead>
                             <TableHead className="text-right">
                                 Actions
                             </TableHead>
@@ -77,6 +82,10 @@ export function RecentReports() {
                                 <TableCell className="hidden md:table-cell">
                                     {registration.date}
                                 </TableCell>
+                                                                        <TableCell>₦{registration.amount.toLocaleString()}</TableCell>
+                                                                        <TableCell>{registration.deposit?.toLocaleString() ? `₦${registration.deposit?.toLocaleString()}` : "N/A"}</TableCell>
+                                                                        <TableCell>{registration.balance?.toLocaleString() ? `₦${registration.balance?.toLocaleString()}` : "N/A"}</TableCell>
+                                                                        <TableCell><OrderStatusPill status={registration.status}/></TableCell>
                                 <TableCell className="text-right">
                                     <Button
                                         variant="ghost"
@@ -103,7 +112,7 @@ export function RecentReports() {
             </CardContent>
             <CardFooter className="flex justify-end">
                 <Button variant="outline" size="sm" asChild>
-                    <Link href={`/dashboard/${user?.role}/reports`}>View All Entries</Link>
+                    <Link href={`/dashboard/${user?.role}/reports`}>View All Orders</Link>
                 </Button>
             </CardFooter>
         </Card>

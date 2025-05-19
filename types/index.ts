@@ -30,6 +30,7 @@ export interface ICreateOrder {
         totalPrice: number;
     }[];
     totalAmount: number;
+    deposit: number
 }
 
 export interface IGetOrders {
@@ -42,6 +43,8 @@ export interface IGetOrders {
         items: number;
         status: string;
         amount: number;
+        deposit: number;
+        balance: number;
     }[];
     total: number;
 }
@@ -97,6 +100,8 @@ export interface ISingleOrderResponse {
       __v: number;
     }[];
     totalAmount: number;
+    deposit: number;
+    status: string;
     receiptId: string;
     createdAt: string;
     updatedAt: string;
@@ -204,4 +209,14 @@ export interface IDailyStats {
     label: string
     value: number
     currency: string
+}
+
+export interface IPasswordResetData {
+    targetedUserId: string
+    newPassword: string
+}
+
+export interface IPasswordResetResponse{
+    message: string
+    logout: boolean
 }

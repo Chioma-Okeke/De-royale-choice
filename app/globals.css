@@ -96,3 +96,8 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.scroll-bar {
+  scrollbar-width: thin; /* "auto" | "thin" | "none" */
+  scrollbar-color: #0A3B5C transparent; /* thumb color | track color */
+}

@@ -18,6 +18,7 @@ import { getOrdersQueryOpts } from "@/lib/query-options";
 import { useState, useEffect } from "react";
 import { TableBodySkeleton } from "@/components/shared/table-skeleton";
 import { Button } from "@/components/ui/button";
+import { OrderStatusPill } from "@/components/shared/order-status-pill";
 
 export function ReportCard() {
     const [startDate, setStartDate] = useState("");
@@ -68,23 +69,22 @@ export function ReportCard() {
         }))
     }
 
-    const column = 6;
+    const column = 9;
 
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Daily Entries</CardTitle>
-                <CardDescription>View and manage daily laundry entries</CardDescription>
+                <CardTitle>All Orders</CardTitle>
+                <CardDescription>View, manage and filter all orders </CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 overflow-x-auto w-full">
                 {/* Date Filter */}
                 <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                     <div className="flex-1">
-                        <Label htmlFor="date-range">Date Range</Label>
                         <div className="flex gap-4">
-                            <div className="relative flex-1">
-                                <Calendar className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <div className="relative flex-1 flex items-center gap-3">
+                                <span className="w-[50%]">Start Date</span>
                                 <Input
                                     id="start-date"
                                     type="date"
@@ -93,8 +93,8 @@ export function ReportCard() {
                                     onChange={(e) => setStartDate(e.target.value)}
                                 />
                             </div>
-                            <div className="relative flex-1">
-                                <Calendar className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <div className="relative flex-1 flex items-center gap-3">
+                                <span className="w-[50%]">End Date</span>
                                 <Input
                                     id="end-date"
                                     type="date"
@@ -114,7 +114,7 @@ export function ReportCard() {
                 </div>
 
                 {/* Table */}
-                <div className="rounded-md border">
+                <div className="overflow-x-auto w-full rounded-md border">
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -124,9 +124,12 @@ export function ReportCard() {
                                 <TableHead className="hidden md:table-cell">Time</TableHead>
                                 <TableHead>Items</TableHead>
                                 <TableHead>Amount</TableHead>
+                                <TableHead>Deposit</TableHead>
+                                <TableHead>Balance</TableHead>
+                                <TableHead>Status</TableHead>
                             </TableRow>
                         </TableHeader>
-                        <TableBody>
+                        <TableBody className="overflow-x-auto">
                             {isLoading || isFetching ? (
                                 <TableBodySkeleton rows={8} columns={column} />
                             ) : filteredEntries && filteredEntries.registrations.length > 0 ? (
@@ -138,6 +141,9 @@ export function ReportCard() {
                                         <TableCell className="hidden md:table-cell">{entry.date}</TableCell>
                                         <TableCell>{entry.items}</TableCell>
                                         <TableCell>₦{entry.amount.toLocaleString()}</TableCell>
+                                        <TableCell>{entry.deposit?.toLocaleString() ? `₦${entry.deposit?.toLocaleString()}` : "N/A"}</TableCell>
+                                        <TableCell>{entry.balance?.toLocaleString() ? `₦${entry.balance?.toLocaleString()}` : "N/A"}</TableCell>
+                                        <TableCell><OrderStatusPill status={entry.status}/></TableCell>
                                     </TableRow>
                                 ))
                             ) : (

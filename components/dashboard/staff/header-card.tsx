@@ -17,7 +17,7 @@ export function HeaderCard() {
     const { user } = useAuth()
     const router = useRouter()
     return (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 grid-cols-2">
             <Card className="bg-emerald-50 border-emerald-200">
                 <CardContent className="p-6 h-full">
                     <div className="flex flex-col space-y-2 justify-between h-full">
@@ -32,7 +32,7 @@ export function HeaderCard() {
                         <Button
                             asChild
                             className="mt-4 bg-emerald-600 hover:bg-emerald-700 cursor-pointer"
-                            onClick={() => router.push(`/dashboard/${user?.role}/customers/register`)}
+                            onClick={() => router.push(`/dashboard/${user?.role}/orders/register`)}
                         >
                             Take order
                         </Button>
@@ -55,7 +55,7 @@ export function HeaderCard() {
                             variant="outline"
                             className="mt-4"
                         >
-                            <Link href={`/dashboard/${user?.role}/receipts`}>
+                            <Link href={`/dashboard/${user?.role}/orders/search`}>
                                 Go to Printing
                             </Link>
                         </Button>
@@ -63,7 +63,7 @@ export function HeaderCard() {
                 </CardContent>
             </Card>
 
-            <Card>
+            {/* <Card>
                 <CardContent className="p-6 h-full">
                     <div className="flex flex-col space-y-2 justify-between h-full">
                         <Search className="h-12 w-12 text-emerald-600" />
@@ -84,7 +84,7 @@ export function HeaderCard() {
                         </Button>
                     </div>
                 </CardContent>
-            </Card>
+            </Card> */}
         </div>
     )
 }

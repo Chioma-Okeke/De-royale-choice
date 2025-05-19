@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
         }
 
         const token = jwt.sign({ id: user._id, role: user.role }, isKeyAvailable(), {
-            expiresIn: "1d",
+            expiresIn: "12h",
         });
 
         const response = NextResponse.json({
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
             httpOnly: true,
             sameSite: "lax",
             secure: process.env.NODE_ENV === "production",
-            maxAge: 60 * 60 * 24,
+            maxAge: 60 * 60 * 12,
         });
 
         return response;
