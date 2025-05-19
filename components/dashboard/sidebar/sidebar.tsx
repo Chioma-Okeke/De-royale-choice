@@ -91,7 +91,7 @@ export function SidebarNav({ role }: SidebarProps) {
                     roles: ["staff", "admin"],
                 },
                 {
-                    label: "Receipts & Tags",
+                    label: "Receipts",
                     icon: Search,
                     href: `${baseDashboardPath}/orders/search`,
                     active: pathname === `${baseDashboardPath}/orders/search`,

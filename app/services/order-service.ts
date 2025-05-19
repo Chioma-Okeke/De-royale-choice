@@ -22,7 +22,7 @@ class OrderService extends BaseService {
   }
 
   public async updateOrderDeposit(id: string, deposit: number) {
-    const res = await this.put<ICreateOrderResponse, {deposit: number}>(`/${id}`, {deposit})
+    const res = await this.patch<ICreateOrderResponse, {deposit: number}>(`/${id}`, {deposit})
     return res;
   }
 }

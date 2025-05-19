@@ -4,16 +4,18 @@ import MainDashboardContainer from "@/components/shared/main-dashboard-container
 import { RecentReports } from "../reports/recent-reports";
 import { HeaderCard } from "./header-card";
 import { Header } from "../header/header";
+import { useParams } from "next/navigation";
 
 export default function StaffDashboard() {
-
+    const params = useParams()
+    const role = params?.role as 'admin' | "staff"
     return (
         <div className="flex min-h-screen bg-gray-50">
             <MainDashboardContainer>
                 <Header title="Staff Dashboard" />
                 <main className="p-4 md:p-6 space-y-6">
-                    <HeaderCard/>
-                    <RecentReports/>
+                    <HeaderCard role={role}/>
+                    <RecentReports role={role}/>
                     {/* <Card>
                         <CardHeader>
                             <CardTitle>Daily Summary</CardTitle>

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { User } from "lucide-react"
+import { DoorOpen, Settings, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -41,9 +41,14 @@ function UserProfileCard() {
                     </Badge>
                     <span>Role</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push("/dashboard/admin/settings")}>
+                <DropdownMenuItem className="cursor-pointer" onClick={() => router.push("/dashboard/admin/settings")}>
+                    <Settings/>
                     <span>Settings</span>
                 </DropdownMenuItem>
+                {role === "admin" && <DropdownMenuItem className="cursor-pointer" onClick={() => router.push("/select-portal")}>
+                    <DoorOpen/>
+                    <span>Switch Portals</span>
+                </DropdownMenuItem>}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className='py-0'>
                     <Button onClick={() => logoutUser()} containerClass='w-full' className='w-full px-4 py-1' variant="ghost">

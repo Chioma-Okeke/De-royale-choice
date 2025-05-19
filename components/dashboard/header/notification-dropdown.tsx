@@ -9,13 +9,15 @@ import { getUnreadInquiriesQueryOpts } from '@/lib/query-options'
 import { useRouter } from '@bprogress/next'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Bell } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import React from 'react'
 
 function NotificationDropdown() {
     const router = useRouter()
     const { data: inquiries, isLoading, error } = useQuery(getUnreadInquiriesQueryOpts)
     const queryClient = useQueryClient()
-    const {user} = useAuth()
+    const params = useParams()
+    const role = params?.role as "admin" | "staff"
 
     const markAllAsRead = async () => {
         const contactService = new ContactService()
@@ -24,7 +26,7 @@ function NotificationDropdown() {
     }
 
     const navigateToInquiriesPage = () => {
-        router.push(`/dashboard/${user?.role}/inquiries`)
+        router.push(`/dashboard/${role}/inquiries`)
     }
 
     return (

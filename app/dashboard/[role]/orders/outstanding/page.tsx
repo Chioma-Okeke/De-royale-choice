@@ -23,6 +23,7 @@ import MainDashboardContainer from "@/components/shared/main-dashboard-container
 import { useQuery } from "@tanstack/react-query";
 import { getOrdersQueryOpts } from "@/lib/query-options";
 import { TableBodySkeleton } from "@/components/shared/table-skeleton";
+import { OrderStatusPill } from "@/components/shared/order-status-pill";
 
 export default function OutstandingOrders() {
     const pageSize = 10;
@@ -88,7 +89,7 @@ export default function OutstandingOrders() {
                                                     <TableCell>₦{entry.amount.toLocaleString()}</TableCell>
                                                     <TableCell>{entry.deposit?.toLocaleString() ? `₦${entry.deposit?.toLocaleString()}` : "N/A"}</TableCell>
                                                     <TableCell>{entry.balance?.toLocaleString() ? `₦${entry.balance?.toLocaleString()}` : "N/A"}</TableCell>
-                                                    <TableCell>{entry.status}</TableCell>
+                                                    <TableCell><OrderStatusPill status={entry.status}/></TableCell>
                                                 </TableRow>
                                             ))
                                         ) : (

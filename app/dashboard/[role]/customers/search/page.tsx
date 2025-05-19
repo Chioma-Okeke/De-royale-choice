@@ -24,6 +24,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getOrdersQueryOpts } from "@/lib/query-options";
 import { useRouter } from "@bprogress/next";
 import { useAuth } from "@/hooks/use-auth";
+import { OrderStatusPill } from "@/components/shared/order-status-pill";
 
 export default function CustomerSearch() {
     const { toast } = useToast();
@@ -77,7 +78,7 @@ export default function CustomerSearch() {
             title: "Printing Receipt",
             description: `Printing receipt for registration ${id}`,
         });
-        router.push(`/dashboard/${user?.role}/receipts/${id}`)
+        router.push(`/dashboard/admin/receipts/${id}`)
     };
 
     return (
@@ -156,10 +157,10 @@ export default function CustomerSearch() {
                                                 <TableCell>{result.amount}</TableCell>
                                                 <TableCell>{result.deposit?.toLocaleString() ? `₦${result.deposit?.toLocaleString()}` : "N/A"}</TableCell>
                                                 <TableCell>{result.balance?.toLocaleString() ? `₦${result.balance?.toLocaleString()}` : "N/A"}</TableCell>
-                                                <TableCell>{result.status}</TableCell>
+                                                <TableCell><OrderStatusPill status={result.status}/></TableCell>
                                                 <TableCell className="text-right">
                                                     <div className="flex justify-end gap-2">
-                                                        {user?.role === "admin" && <Button
+                                                        {user?.role === "admin" && result.status === "Pending" && <Button
                                                             variant="ghost"
                                                             size="icon"
                                                             onClick={() => editOrder(result.orderId)}

@@ -24,15 +24,18 @@ import { useQuery } from "@tanstack/react-query";
 import { getOrdersQueryOpts } from "@/lib/query-options";
 import { useRouter } from "@bprogress/next";
 import { useAuth } from "@/hooks/use-auth";
+import { OrderStatusPill } from "@/components/shared/order-status-pill";
+import { useParams } from "next/navigation";
 
-export default function CustomerSearch() {
+export default function OrdersSearch() {
     const { toast } = useToast();
     const [searchTerm, setSearchTerm] = useState("");
     const [searchType, setSearchType] = useState("name"); // Not yet used in API
     const pageSize = 10;
     const [currentPage, setCurrentPage] = useState(1);
     const offset = (currentPage - 1) * pageSize;
-    const { user } = useAuth()
+    const params = useParams()
+    const role = params.role as "admin" | "staff"
 
     const {
         data: filteredEntries,
@@ -70,7 +73,7 @@ export default function CustomerSearch() {
             title: "Printing Receipt",
             description: `Printing receipt for registration ${id}`,
         });
-        router.push(`/dashboard/${user?.role}/receipts/${id}`)
+        router.push(`/dashboard/${role}/receipts/${id}`)
     };
 
     return (
@@ -150,7 +153,7 @@ export default function CustomerSearch() {
                                                 <TableCell>{result.amount}</TableCell>
                                                 <TableCell>{result.deposit?.toLocaleString() ? `₦${result.deposit?.toLocaleString()}` : "N/A"}</TableCell>
                                                 <TableCell>{result.balance?.toLocaleString() ? `₦${result.balance?.toLocaleString()}` : "N/A"}</TableCell>
-                                                <TableCell>{result.status}</TableCell>
+                                                <TableCell><OrderStatusPill status={result.status}/></TableCell>
                                                 <TableCell className="text-right">
                                                     <div className="flex justify-end gap-2">
                                                         <Button

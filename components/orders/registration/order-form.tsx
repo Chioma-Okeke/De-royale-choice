@@ -31,12 +31,12 @@ type LaundryItemFormValues = z.infer<typeof createOrderSchema>;
 interface OrderFormProps {
     selectedCustomer: IGetCustomerContent | null;
     setSelectedCustomer: (customer: IGetCustomerContent | null) => void;
+    role?: "admin" | "staff"
 }
 
-function OrderForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps) {
+function OrderForm({ selectedCustomer, setSelectedCustomer, role }: OrderFormProps) {
     const { data: categories } = useQuery(getCategoriesQueryOpts)
     const router = useRouter()
-    const { user } = useAuth()
     const defaultItem = { categoryId: "", itemId: "", itemName: "", quantity: 1, price: 0, totalPrice: 0, };
     const defaultValues = {
         items: [defaultItem],
@@ -73,7 +73,7 @@ function OrderForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps) {
             toast.success("Order Creation Successfull", {
                 description: "Order was successfully created."
             })
-            router.push(`/dashboard/${user?.role}/receipts/${response.order._id}`)
+            router.push(`/dashboard/${role}/receipts/${response.order._id}`)
         },
         onError: (response) => {
             console.error(response)

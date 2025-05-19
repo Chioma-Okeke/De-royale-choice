@@ -12,8 +12,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
         <p class="m-0"><strong>${order.customerId.name}</strong></p>
         <p class="m-0">${order.receiptId}</p>
         <p class="m-0"><strong>Dropped of at:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
-        <p class="m-0"> <strong>Total items:</strong> ${totalQuantities}</p>
-        <p class="m-0"> <strong>${counter}</strong> ${totalQuantities}</p>
+        <p class="m-0"> <strong>${counter}</strong> of ${totalQuantities}</p>
       </div>`;
       counter++
       return html
@@ -86,8 +85,8 @@ export function renderReceiptHTML(order: any, copy: string): string {
             text-align: right;
           }
 
-          .py-2 {
-            padding: 8px 0;
+          .py-1.5 {
+            padding: 6px 0;
           }
 
           .total-section {
@@ -101,6 +100,10 @@ export function renderReceiptHTML(order: any, copy: string): string {
             align-items: center;
             justify-content: center;
             margin: 28px 0;
+          }
+
+          .text-red {
+            color: red
           }
 
         </style>
@@ -118,17 +121,21 @@ export function renderReceiptHTML(order: any, copy: string): string {
         </div>
 
         <div class="mb-3">
+          <div class="mb-2">
+            <p class="m-0">Payment Status: ${order.status}</p>
+            ${order.status === "Pending" ? `<p class="text-red m-0">Balance: ₦${order?.totalAmount - order?.deposit}</p>` : ""}
+          </div>
           <div class="mb-1"><strong>Invoice ID:</strong> ${order.receiptId}</div>
           <div class="mb-1"><strong>Invoice Date:</strong> ${new Date(order.createdAt).toDateString()}</div>
           <div class="mb-1"><strong>Branch:</strong> Amuwo Odofin</div>
-          <div class="mb-1"><strong>Name:</strong> ${order.customerId.name}</div>
+          <div class="mb-1"><strong>Name:</strong> ${order.customerId.name?.toUpperCase()}</div>
         </div>
 
         <table class="border-top border-bottom mb-2 py-2">
           <thead>
             <tr>
               <th>NAME</th>
-              <th class="qty">QTY</th>
+              <th class="qty">QUANTITY</th>
               <th class="subtotal">SUBTOTAL</th>
             </tr>
           </thead>

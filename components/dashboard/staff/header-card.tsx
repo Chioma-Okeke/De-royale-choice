@@ -13,8 +13,7 @@ import { useRouter } from "@bprogress/next";
 import { Printer, Search, Users } from "lucide-react";
 import Link from "next/link";
 
-export function HeaderCard() {
-    const { user } = useAuth()
+export function HeaderCard({role}: {role: "admin" | "staff"}) {
     const router = useRouter()
     return (
         <div className="grid gap-4 grid-cols-2">
@@ -32,7 +31,7 @@ export function HeaderCard() {
                         <Button
                             asChild
                             className="mt-4 bg-emerald-600 hover:bg-emerald-700 cursor-pointer"
-                            onClick={() => router.push(`/dashboard/${user?.role}/orders/register`)}
+                            onClick={() => router.push(`/dashboard/${role}/orders/register`)}
                         >
                             Take order
                         </Button>
@@ -55,7 +54,7 @@ export function HeaderCard() {
                             variant="outline"
                             className="mt-4"
                         >
-                            <Link href={`/dashboard/${user?.role}/orders/search`}>
+                            <Link href={`/dashboard/${role}/orders/search`}>
                                 Go to Printing
                             </Link>
                         </Button>

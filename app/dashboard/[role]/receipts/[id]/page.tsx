@@ -61,9 +61,9 @@ export default function ReceiptPrinting() {
         printWindow.document.write(html);
         printWindow.document.close();
         printWindow.focus();
-      };
+    };
 
-    if (isLoading) return <ReceiptPageSkeleton/>
+    if (isLoading) return <ReceiptPageSkeleton />
     if (isError) return <p>Error: {(error as Error).message}</p>
 
     return (
@@ -236,6 +236,15 @@ export default function ReceiptPrinting() {
                                         {orderDetails?.totalAmount.toLocaleString()}
                                     </span>
                                 </div>
+                                {orderDetails?.status === "Pending" && <div className="border-t pt-4 flex justify-between">
+                                    <span className="font-bold">
+                                        Outstanding:
+                                    </span>
+                                    <span className="font-bold text-red-500">
+                                        ₦
+                                        {((orderDetails?.totalAmount ?? 0) - (orderDetails?.deposit ?? 0))?.toLocaleString()}
+                                    </span>
+                                </div>}
 
                                 <div className="text-center text-sm text-muted-foreground pt-4">
                                     <p>
@@ -300,7 +309,7 @@ export default function ReceiptPrinting() {
                         </CardContent>
                         <CardFooter className="flex justify-between">
                             <Button onClick={() => router.back()} variant={"outline"}>
-                                <ChevronLeft/>
+                                <ChevronLeft />
                                 <p>Back</p>
                             </Button>
                             {orderDetails && <Button onClick={() => handlePrint(orderDetails?._id)}>

@@ -89,10 +89,14 @@ export async function PATCH(
         const body = await request.json();
         const { deposit } = body;
 
-        const status = order.totalAmount === deposit ? "Completed" : "Pending";
+        const updatedDeposit = order.deposit + deposit
+
+        const status = order.totalAmount === updatedDeposit ? "Completed" : "Pending";
+        console.log(status, updatedDeposit, "in route")
         const balance = order.totalAmount - deposit;
 
-        order.deposit = deposit;
+        order.deposit = updatedDeposit;
+        order.status = status
 
         await order.save();
 

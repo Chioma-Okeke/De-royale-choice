@@ -44,6 +44,7 @@ import { createCustomerSchema, createOrderSchema } from "@/schema";
 import { IGetCustomerContent, ITypeaheadProps } from "@/types";
 import CustomerForm from "@/components/orders/registration/customer-form";
 import OrderForm from "@/components/orders/registration/order-form";
+import { useParams } from "next/navigation";
 
 type LaundryItemFormValues = z.infer<typeof createOrderSchema>;
 
@@ -65,6 +66,9 @@ export default function CustomerRegistration() {
         0
     );
 
+    const params = useParams()
+    const role = params.role as "admin" | "staff"
+
     const handlePrint = () => {
         toast.success(
             "Printing Receipt", {
@@ -83,7 +87,7 @@ export default function CustomerRegistration() {
                 <main className="p-4 md:p-6 ">
                     <div className="grid gap-6">
                         <CustomerForm selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer} />
-                        <OrderForm selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer} />
+                        <OrderForm role={role} selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer} />
                     </div>
                 </main>
             </MainDashboardContainer>

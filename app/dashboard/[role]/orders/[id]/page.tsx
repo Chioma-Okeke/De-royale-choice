@@ -44,12 +44,12 @@ import ReceiptPageSkeleton from "../../receipts/loading"
 import { toast } from "sonner"
 
 const formSchema = z.object({
-  deposit: z.number().min(0, "Deposit must be at least 0"),
+  deposit: z.number()
 })
 
 export default function ReceiptPrinting() {
   const router = useRouter()
-  const [updatedDeposit, setUpdatedDeposit] = useState<number | null>(null);
+  const [updatedDeposit, setUpdatedDeposit] = useState<number>(0);
   const params = useParams()
   const id = params?.id as string
 
@@ -66,9 +66,6 @@ export default function ReceiptPrinting() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      deposit: 0,
-    },
     mode: "onChange",
   })
 
@@ -86,7 +83,7 @@ export default function ReceiptPrinting() {
       toast.success("Order updated successfully", {
         description: "Order was successfully updated"
       })
-      router.refresh()
+      router.push(`/dashboard/admin/receipts/${orderDetails?._id}`)
     },
     onError: (err: any) => {
       toast.error("Failed to update order", {
@@ -105,7 +102,7 @@ export default function ReceiptPrinting() {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <MainDashboardContainer>
-        <Header title="Print Receipts" />
+        <Header title="Edit Order" />
         <main className="p-4 md:p-6">
           <Card>
             <CardHeader>
@@ -165,14 +162,14 @@ export default function ReceiptPrinting() {
                 <div className="border-t pt-4 flex justify-between">
                   <span className="font-bold">Deposit:</span>
                   <span className="font-bold">
-                    ₦{(updatedDeposit ?? orderDetails?.deposit)?.toLocaleString()}
+                    ₦{((orderDetails?.deposit ?? 0) + updatedDeposit)?.toLocaleString()}
                   </span>
                 </div>
                 <div className="border-t pt-4 flex justify-between">
                   <span className="font-bold">Outstanding:</span>
                   <span className="font-bold">
                     ₦{(
-                      (orderDetails?.totalAmount ?? 0) - (updatedDeposit ?? orderDetails?.deposit ?? 0)
+                      (orderDetails?.totalAmount ?? 0) - ((orderDetails?.deposit ?? 0) + updatedDeposit)
                     ).toLocaleString()}
                   </span>
                 </div>
@@ -188,11 +185,11 @@ export default function ReceiptPrinting() {
                       name="deposit"
                       render={({ field }) => (
                         <FormItem className="mt-6 max-w-xs">
-                          <FormLabel>Update Deposit Amount (₦)</FormLabel>
+                          <FormLabel>Input Outstanding (₦)</FormLabel>
                           <FormControl>
                             <Input
-                              type="number"
-                              placeholder="Enter new deposit"
+                              type="text"
+                              placeholder="Enter outstanding amount"
                               {...field}
                               onChange={(e) => {
                                 const value = Number(e.target.value);
