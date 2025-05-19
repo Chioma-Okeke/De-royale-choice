@@ -28,6 +28,7 @@ export default function OutstandingOrders() {
     const pageSize = 10;
     const [currentPage, setCurrentPage] = useState(1);
     const column = 9
+    const offset = (currentPage - 1) * pageSize;
 
     const {
         data: filteredEntries,
@@ -35,6 +36,8 @@ export default function OutstandingOrders() {
     } = useQuery(
         getOrdersQueryOpts({
             status: "Pending",
+            limit: pageSize,
+            offset: offset,
         })
     );
 
