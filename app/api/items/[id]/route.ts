@@ -59,7 +59,7 @@ export async function PUT(
             );
         }
 
-        const { id } = params;
+        const { id } = await params;
 
         await connectDb();
 

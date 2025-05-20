@@ -28,6 +28,7 @@ type ItemFormValues = z.infer<typeof itemSchema>;
 interface ItemDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  closeDialog: () => void,
   // onSubmit: (data: ItemFormValues) => void;
   mode: "create" | "edit";
   categories: IGetCategoryContent[];
@@ -41,6 +42,7 @@ export function ItemDialog({
   mode,
   categories,
   selectedItem,
+  closeDialog
 }: ItemDialogProps) {
   const form = useForm<ItemFormValues>({
     resolver: zodResolver(itemSchema),
@@ -79,15 +81,14 @@ export function ItemDialog({
             } successfully.`,
         }
       );
-      onOpenChange(false)
+      closeDialog()
       form.reset()
     },
-    onError: () => {
+    onError: (response) => {
       toast.error(
         mode === "create" ? "Item Creation Failed" : "Item Update Failed",
         {
-          description: `Error while ${mode === "create" ? "adding" : "updating"
-            } Item.`,
+          description: response.message,
         }
       )
     }

@@ -83,8 +83,8 @@ export function ReportCard() {
                 <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                     <div className="flex-1">
                         <div className="flex gap-4">
-                            <div className="relative flex-1 flex items-center gap-3">
-                                <span className="w-[50%]">Start Date</span>
+                            <div className="relative flex-1 flex items-center gap-1">
+                                <span className="w-[25%]">Start Date</span>
                                 <Input
                                     id="start-date"
                                     type="date"
@@ -93,8 +93,8 @@ export function ReportCard() {
                                     onChange={(e) => setStartDate(e.target.value)}
                                 />
                             </div>
-                            <div className="relative flex-1 flex items-center gap-3">
-                                <span className="w-[50%]">End Date</span>
+                            <div className="relative flex-1 flex items-center gap-1">
+                                <span className="w-[25%]">End Date</span>
                                 <Input
                                     id="end-date"
                                     type="date"

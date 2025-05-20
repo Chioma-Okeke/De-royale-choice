@@ -16,7 +16,7 @@ export const itemSchema = z.object({
     categoryId: z.string().min(1, "Category is required"),
     itemName: z.string().min(1, "Item name is required"),
     itemPrice: z.coerce.number().min(0, "Price must be at least 0"),
-    piecePerItem: z.number().min(0, "You need to selected quantoty per piece"),
+    piecePerItem: z.coerce.number().min(0, "You need to selected quantoty per piece"),
 });
 
 export const createCustomerSchema = z.object({
@@ -34,6 +34,7 @@ export const createOrderSchema = z.object({
             quantity: z.number().min(1),
             price: z.number().min(0),
             totalPrice: z.number().min(0),
+            piecePerItem: z.number().min(1, "You need to selected quantity per piece"),
         })
     ),
     deposit: z.number().min(1, "Deposit is required"),

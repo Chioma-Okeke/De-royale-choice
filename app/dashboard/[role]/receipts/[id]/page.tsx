@@ -31,6 +31,7 @@ import { useParams } from "next/navigation";
 import ReceiptPageSkeleton from "../loading";
 import ReceiptService from "@/app/services/receipt-service";
 import { useRouter } from "@bprogress/next";
+import ErrorFallback from "@/components/shared/error-fallback";
 
 export default function ReceiptPrinting() {
     const router = useRouter()
@@ -43,6 +44,7 @@ export default function ReceiptPrinting() {
         isLoading,
         isError,
         error,
+        refetch
     } = useQuery({
         queryFn: () => new OrderService().getSingleOrder(id),
         queryKey: ['singleOrder', id],
@@ -64,7 +66,9 @@ export default function ReceiptPrinting() {
     };
 
     if (isLoading) return <ReceiptPageSkeleton />
-    if (isError) return <p>Error: {(error as Error).message}</p>
+    if (isError) return <ErrorFallback errorMessage={error instanceof Error ? error.message : "Failed to load users"}
+        onRetry={refetch} />
+
 
     return (
         <div className="flex min-h-screen bg-gray-50">
@@ -154,7 +158,7 @@ export default function ReceiptPrinting() {
                                     </p>
                                     <p className="text-muted-foreground">
                                         Date:{" "}
-                                        {orderDetails?.createdAt}
+                                        {orderDetails?.createdAt ? new Date(orderDetails.createdAt).toLocaleDateString() : ""}
                                     </p>
                                 </div>
 
@@ -188,6 +192,9 @@ export default function ReceiptPrinting() {
                                                     Qty
                                                 </TableHead>
                                                 <TableHead className="text-right">
+                                                    Total Pieces
+                                                </TableHead>
+                                                <TableHead className="text-right">
                                                     Price (₦)
                                                 </TableHead>
                                                 <TableHead className="text-right">
@@ -197,7 +204,7 @@ export default function ReceiptPrinting() {
                                         </TableHeader>
                                         <TableBody>
                                             {orderDetails?.laundryItems.map(
-                                                (item, index) => (
+                                                (item) => (
                                                     <TableRow
                                                         key={item._id}
                                                     >
@@ -209,6 +216,11 @@ export default function ReceiptPrinting() {
                                                         <TableCell className="text-right">
                                                             {
                                                                 item.quantity
+                                                            }
+                                                        </TableCell>
+                                                        <TableCell className="text-right">
+                                                            {
+                                                                item.piecePerItem
                                                             }
                                                         </TableCell>
                                                         <TableCell className="text-right">
@@ -263,16 +275,16 @@ export default function ReceiptPrinting() {
                                         <>
                                             {orderDetails.laundryItems
                                                 .flatMap((item) =>
-                                                    Array.from({ length: item.quantity }).map(() => item)
+                                                    Array.from({ length: item.piecePerItem }).map(() => item)
                                                 )
                                                 .slice(0, 4)
-                                                .map((item, index, fullList) => (
+                                                .map((item, index) => (
                                                     <div
                                                         key={index}
                                                         className="border rounded-lg p-4 text-center"
                                                     >
                                                         <div className="text-xs mb-2">
-                                                            Tag {index + 1} of {fullList.length}
+                                                            Tag {index + 1} of {item.piecePerItem}
                                                         </div>
                                                         <div className="font-bold">
                                                             {orderDetails.receiptId}
@@ -290,13 +302,13 @@ export default function ReceiptPrinting() {
                                                 ))}
 
                                             {orderDetails.laundryItems
-                                                .flatMap((item) => Array(item.quantity).fill(item))
+                                                .flatMap((item) => Array(item.piecePerItem).fill(item))
                                                 .length > 4 && (
                                                     <div className="border rounded-lg p-4 text-center flex items-center justify-center">
                                                         <span className="text-sm text-muted-foreground">
                                                             +
                                                             {orderDetails.laundryItems
-                                                                .flatMap((item) => Array(item.quantity).fill(item))
+                                                                .flatMap((item) => Array(item.piecePerItem).fill(item))
                                                                 .length - 4}{" "}
                                                             more tags
                                                         </span>

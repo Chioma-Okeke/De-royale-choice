@@ -21,6 +21,7 @@ export const LaundryItemSchema = new Schema({
         type: Number,
         required: true,
     },
+    piecePerItem: {type: Number, required: true},
     price: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
 }, {

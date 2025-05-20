@@ -66,7 +66,7 @@ export default function RegisterCustomerForm() {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email Address</FormLabel>
+                                    <FormLabel>Email Address <span className='text-sm text-red-500'>*</span></FormLabel>
                                     <Input placeholder="Enter user email address" {...field} />
                                     <FormMessage />
                                 </FormItem>
@@ -77,7 +77,7 @@ export default function RegisterCustomerForm() {
                             name="role"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>User role</FormLabel>
+                                    <FormLabel>User role <span className='text-sm text-red-500'>*</span></FormLabel>
                                     <FormControl>
                                         <select
                                             {...field}

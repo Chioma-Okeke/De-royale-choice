@@ -39,6 +39,7 @@ function CategoryForm() {
                 description: `Category has been added successfully.`,
             });
             setOpen(false)
+            form.reset()
         },
         onError: () => {
             toast.error("Category Creation Failed.", {

@@ -138,6 +138,7 @@ export async function POST(req: Request) {
 
         const laundryItemDocs = await Promise.all(
             items.map(async (item: any) => {
+                console.log(item, "item in route")
                 const laundryItem = await LaundryItem.create({
                     orderId: newOrder._id,
                     categoryId: item.categoryId,
@@ -145,6 +146,7 @@ export async function POST(req: Request) {
                     itemName: item.itemName,
                     quantity: item.quantity,
                     price: item.price,
+                    piecePerItem: item.piecePerItem,
                     totalPrice: item.totalPrice,
                 });
 

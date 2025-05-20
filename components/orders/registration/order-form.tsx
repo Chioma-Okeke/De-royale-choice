@@ -37,7 +37,7 @@ interface OrderFormProps {
 function OrderForm({ selectedCustomer, setSelectedCustomer, role }: OrderFormProps) {
     const { data: categories } = useQuery(getCategoriesQueryOpts)
     const router = useRouter()
-    const defaultItem = { categoryId: "", itemId: "", itemName: "", quantity: 1, price: 0, totalPrice: 0, };
+    const defaultItem = { categoryId: "", piecePerItem: 1, itemId: "", itemName: "", quantity: 1, price: 0, totalPrice: 0, };
     const defaultValues = {
         items: [defaultItem],
         deposit: 0
@@ -84,7 +84,6 @@ function OrderForm({ selectedCustomer, setSelectedCustomer, role }: OrderFormPro
     })
 
     const sendOrder = (data: z.infer<typeof createOrderSchema>) => {
-        console.log(data)
         if (data.deposit > totalAmount) {
             form.setError("deposit", {
                 type: "manual",
@@ -123,9 +122,10 @@ function OrderForm({ selectedCustomer, setSelectedCustomer, role }: OrderFormPro
                                     <TableHead className="w-[180px]">Category</TableHead>
                                     <TableHead>Description</TableHead>
                                     <TableHead className="w-[100px] text-right">Quantity</TableHead>
+                                    <TableHead className="w-[50px]">Pcs</TableHead>
                                     <TableHead className="w-[100px] text-right">Price (₦)</TableHead>
                                     <TableHead className="w-[100px] text-right">Total (₦)</TableHead>
-                                    <TableHead className="w-[50px]"></TableHead>
+                                    <TableHead className="w-[50px]">Action</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>

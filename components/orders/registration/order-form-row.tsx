@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import {
     Table,
@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 
 
 function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
+    const itemPieces = useRef(1)
     const category = useWatch({
         control: form.control,
         name: `items.${index}.categoryId`,
@@ -47,7 +48,7 @@ function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
         const selectedItem = categoryItems.find(
             (item: IGetSingleItem) => item._id === description
         );
-        if (selectedItem?.itemPrice != null && selectedItem.itemName !== null) {
+        if (selectedItem?.itemPrice != null && selectedItem.itemName !== null && selectedItem.piecePerItem) {
             form.setValue(
                 `items.${index}.price`,
                 Number(selectedItem.itemPrice)
@@ -56,6 +57,11 @@ function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
                 `items.${index}.itemName`,
                 selectedItem.itemName
             )
+            form.setValue(
+                `items.${index}.piecePerItem`,
+                Number(selectedItem.piecePerItem)
+            )
+            itemPieces.current = Number(selectedItem.piecePerItem)
         }
     }, [description, category, categoryItems, form, index]);
 
@@ -68,10 +74,20 @@ function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
         control: form.control,
         name: `items.${index}.price`,
     });
+    const piecePerItem = useWatch({
+        control: form.control,
+        name: `items.${index}.piecePerItem`,
+    });
+
     useEffect(() => {
-        if (typeof price === 'number' && typeof quantity === 'number') {
+        if (typeof price === 'number' && typeof quantity === 'number' && typeof piecePerItem === 'number') {
             const total = price * quantity;
+            const totalPsc = quantity * itemPieces.current
             form.setValue(`items.${index}.totalPrice`, total);
+            form.setValue(
+                `items.${index}.piecePerItem`,
+                totalPsc
+            )
         }
         }, [price, quantity, form, index]);
 
@@ -180,6 +196,10 @@ function OrderFormRow({ field, index, form, remove, categories, fields }: any) {
                         <Plus className="h-4 w-4" />
                     </Button>
                 </div>
+            </TableCell>
+
+            <TableCell className="text-right">
+                {piecePerItem?.toLocaleString()}
             </TableCell>
 
             <TableCell className="text-right">

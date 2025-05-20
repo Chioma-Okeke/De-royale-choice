@@ -26,6 +26,8 @@ import { loginFormSchema } from '@/schema';
 import { AuthService } from '@/app/services/auth-service';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { useState } from 'react';
 
 type LoginFormValues = z.infer<typeof loginFormSchema>;
 
@@ -52,7 +54,7 @@ export default function LoginPage() {
             } else {
                 router.push(`/dashboard/${user?.role}`);
             }
-            
+
             toast.success('Authentication Successful', {
                 description: 'You have successfully logged in.',
             });
@@ -75,7 +77,7 @@ export default function LoginPage() {
             <Card className="w-full max-w-md border-brand-navy/20 shadow-lg rounded-md">
                 <CardHeader className="space-y-1">
                     <CardTitle className="text-2xl text-center text-brand-navy">
-                        Staff Portal
+                        Internal Portal
                     </CardTitle>
                     <CardDescription className="text-center">
                         Enter your credentials to access your dashboard
@@ -107,21 +109,37 @@ export default function LoginPage() {
                             <FormField
                                 control={form.control}
                                 name="password"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>
-                                            Password <span className="text-red-500 text-sm">*</span>
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="password"
-                                                placeholder="Enter your password"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
+                                render={({ field }) => {
+                                    const [showPassword, setShowPassword] = useState(false)
+
+                                    return (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Password <span className="text-red-500 text-sm">*</span>
+                                            </FormLabel>
+                                            <FormControl>
+                                                <div className="relative">
+                                                    <Input
+                                                        type={showPassword ? 'text' : 'password'}
+                                                        placeholder="Enter your password"
+                                                        {...field}
+                                                    />
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-0 h-6 w-6 text-muted-foreground"
+                                                        onClick={() => setShowPassword(prev => !prev)}
+                                                        tabIndex={-1}
+                                                    >
+                                                        {showPassword ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
+                                                    </Button>
+                                                </div>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )
+                                }}
                             />
 
                             <Button

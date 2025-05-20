@@ -65,6 +65,11 @@ function ItemsTabContent() {
         setIsDialogOpen(true)
     }
 
+    const closeItemDialog = () => {
+        setIsDialogOpen(false)
+        setSelectedItem(null)
+    }
+
     return (
         <>
             <Card>
@@ -187,6 +192,7 @@ function ItemsTabContent() {
                 mode={mode}
                 categories={categories || []}
                 selectedItem={selectedItem}
+                closeDialog={closeItemDialog}
             />
 
         </>

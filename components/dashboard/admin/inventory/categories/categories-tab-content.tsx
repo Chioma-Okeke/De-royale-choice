@@ -39,7 +39,7 @@ function CategoriesTabContent() {
             });
         },
         onError: () => {
-            toast.error("Category DeletionFailed", {
+            toast.error("Category Deletion Failed", {
                 description: `Category could not be deleted. Please try again.`
             })
         }

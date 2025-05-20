@@ -1,7 +1,6 @@
 'use client'
 
 import { Header } from "@/components/dashboard/header/header";
-import { Sidebar } from "@/components/dashboard/sidebar/sidebar";
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
 import {
     Table,
@@ -17,6 +16,7 @@ import InquiryDetailsModal from "@/components/modals/inquiries-details-modal";
 import { useQuery } from "@tanstack/react-query";
 import { getContactQueryOpts } from "@/lib/query-options";
 import { TableBodySkeleton } from "@/components/shared/table-skeleton";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 function InquiriesPage() {
     const { data: inquiries, isLoading } = useQuery(getContactQueryOpts)
@@ -25,60 +25,69 @@ function InquiriesPage() {
     return (
         <div>
             <MainDashboardContainer>
-                <Header title="Inquires" role="staff" username="staff" />
+                <Header title="Inquires" />
                 <main className="p-4 md:p-6 space-y-6">
-                    <p>All contact information for inquiries made on the landing page.</p>
-                    <div className="rounded-md border">
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Name</TableHead>
-                                    <TableHead>Phone number</TableHead>
-                                    <TableHead className="hidden md:table-cell">
-                                        Subject
-                                    </TableHead>
-                                    <TableHead className="hidden md:table-cell">
-                                        Message
-                                    </TableHead>
-                                    <TableHead>Action</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {isLoading ? (
-                                    <TableBodySkeleton
-                                        rows={4}
-                                        columns={columns}
-                                    />
-                                ) : (inquiries && inquiries?.length > 0 ? inquiries?.map((entry: IGetContactsContent) => (
-                                    <TableRow key={entry.name} className={!entry.isRead ? "font-bold" : ""}>
-                                        <TableCell>
-                                            <div className="flex items-center gap-2">
-                                                {!entry.isRead && <div className="w-2 h-2 rounded-full bg-primary p-1"></div>}
-                                                {entry.name}
-                                            </div>
-                                        </TableCell>
-                                        <TableCell>{entry.phoneNumber}</TableCell>
-                                        <TableCell className="hidden md:table-cell">
-                                            {entry.subject}
-                                        </TableCell>
-                                        <TableCell className="hidden md:table-cell">
-                                            {entry.message}
-                                        </TableCell>
-                                        <TableCell>
-                                            <InquiryDetailsModal inquiry={entry} />
-                                        </TableCell>
-                                    </TableRow>
-                                )) : (
-                                    <TableRow>
-                                        <TableCell colSpan={columns} className="text-center py-10 text-lg text-muted-foreground">
-                                            No contacts found.
-                                        </TableCell>
-                                    </TableRow>
-                                )
-                                )}
-                            </TableBody>
-                        </Table>
-                    </div>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Inquiries</CardTitle>
+                            <CardDescription>
+                                Summary of inquiries made on the landing page
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="rounded-md border">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Name</TableHead>
+                                            <TableHead>Phone number</TableHead>
+                                            <TableHead className="hidden md:table-cell">
+                                                Subject
+                                            </TableHead>
+                                            <TableHead className="hidden md:table-cell">
+                                                Message
+                                            </TableHead>
+                                            <TableHead>Action</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {isLoading ? (
+                                            <TableBodySkeleton
+                                                rows={4}
+                                                columns={columns}
+                                            />
+                                        ) : (inquiries && inquiries?.length > 0 ? inquiries?.map((entry: IGetContactsContent) => (
+                                            <TableRow key={entry.name} className={!entry.isRead ? "font-bold" : ""}>
+                                                <TableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        {!entry.isRead && <div className="w-2 h-2 rounded-full bg-primary p-1"></div>}
+                                                        {entry.name}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>{entry.phoneNumber}</TableCell>
+                                                <TableCell className="hidden md:table-cell">
+                                                    {entry.subject}
+                                                </TableCell>
+                                                <TableCell className="hidden md:table-cell">
+                                                    {entry.message}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <InquiryDetailsModal inquiry={entry} />
+                                                </TableCell>
+                                            </TableRow>
+                                        )) : (
+                                            <TableRow>
+                                                <TableCell colSpan={columns} className="text-center py-10 text-lg text-muted-foreground">
+                                                    No contacts found.
+                                                </TableCell>
+                                            </TableRow>
+                                        )
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </main>
             </MainDashboardContainer>
         </div>

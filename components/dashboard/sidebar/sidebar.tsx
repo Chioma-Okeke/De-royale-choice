@@ -14,6 +14,14 @@ import {
     Menu,
     ShoppingBag,
     Phone,
+    ReceiptText,
+    HandCoins,
+    Shirt,
+    Contact,
+    CircleUserRound,
+    UserRoundSearch,
+    ClockArrowDown,
+    BookText,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -71,28 +79,28 @@ export function SidebarNav({ role }: SidebarProps) {
             routes: [
                 {
                     label: "All Order",
-                    icon: Users,
+                    icon: BookText,
                     active: pathname === `${baseDashboardPath}/reports`,
                     href: `${baseDashboardPath}/reports`,
                     roles: ["staff", "admin"],
                 },
                 {
                     label: "New Order",
-                    icon: Users,
+                    icon: HandCoins,
                     active: pathname === `${baseDashboardPath}/orders/register`,
                     href: `${baseDashboardPath}/orders/register`,
-                    roles: ["staff", "admin"],
+                    roles: ["staff"],
                 },
                 {
                     label: "Outstanding Orders",
-                    icon: Users,
+                    icon: ClockArrowDown,
                     active: pathname === `${baseDashboardPath}/orders/outstanding`,
                     href: `${baseDashboardPath}/orders/outstanding`,
                     roles: ["staff", "admin"],
                 },
                 {
                     label: "Receipts",
-                    icon: Search,
+                    icon: ReceiptText,
                     href: `${baseDashboardPath}/orders/search`,
                     active: pathname === `${baseDashboardPath}/orders/search`,
                     roles: ["staff", "admin"],
@@ -105,7 +113,7 @@ export function SidebarNav({ role }: SidebarProps) {
             routes: [
                 {
                     label: "Customer List",
-                    icon: Search,
+                    icon: UserRoundSearch,
                     href: `${baseDashboardPath}/customers/search`,
                     active: pathname === `${baseDashboardPath}/customers/search`,
                     roles: ["admin"],
@@ -118,17 +126,24 @@ export function SidebarNav({ role }: SidebarProps) {
             routes: [
                 {
                     label: "Inventory",
-                    icon: ShoppingBag,
+                    icon: Shirt,
                     href: `${baseDashboardPath}/inventory`,
                     active: pathname === `${baseDashboardPath}/inventory`,
                     roles: ["admin"],
                 },
                 {
                     label: "Inquiries",
-                    icon: Phone,
+                    icon: Contact,
                     href: `${baseDashboardPath}/inquiries`,
                     active: pathname === `${baseDashboardPath}/inquiries`,
                     roles: ["admin", "staff"],
+                },
+                {
+                    label: "Users List",
+                    icon: CircleUserRound,
+                    href: `${baseDashboardPath}/users`,
+                    active: pathname === `${baseDashboardPath}/users`,
+                    roles: ["admin"],
                 },
             ],
             roles: ["admin", "staff"],
@@ -180,7 +195,7 @@ export function SidebarNav({ role }: SidebarProps) {
                                                         <span>{route.label}</span>
                                                     </a>
                                                 </SidebarMenuButton>
-                                                {route.label === "Inquiries" && <SidebarMenuBadge className="h-5 w-5 rounded-full p-0 flex items-center justify-center bg-brand-red text-white">{inquiries?.length}</SidebarMenuBadge>}
+                                                {route.label === "Inquiries" && inquiries && inquiries?.length > 0 && <SidebarMenuBadge className="h-5 w-5 rounded-full p-0 flex items-center justify-center bg-brand-red text-white">{inquiries?.length}</SidebarMenuBadge>}
                                             </SidebarMenuItem>
                                         ))}
                                     </SidebarMenu>

@@ -28,6 +28,7 @@ export interface ICreateOrder {
         quantity: number;
         price: number;
         totalPrice: number;
+        piecePerItem: number;
     }[];
     totalAmount: number;
     deposit: number
@@ -95,6 +96,7 @@ export interface ISingleOrderResponse {
       categoryId: string;
       price: number;
       totalPrice: number;
+      piecePerItem: number;
       createdAt: string;
       updatedAt: string;
       __v: number;
@@ -157,6 +159,7 @@ export interface IGetSingleItem {
     _id: string;
     itemName: string;
     itemPrice: string;
+    piecePerItem: string;
 }
 
 export interface ICreateItemRequest {
@@ -188,6 +191,12 @@ export interface IGetUser {
         email: string;
         role: "admin" | "staff";
     };
+}  export interface IGetUsers {
+    users: {
+        _id: string;
+        email: string;
+        role: "admin" | "staff";
+    }[]
 }
 
 export interface IGetBusinessStats {
@@ -212,7 +221,7 @@ export interface IDailyStats {
 }
 
 export interface IPasswordResetData {
-    targetedUserId: string
+    email: string
     newPassword: string
 }
 

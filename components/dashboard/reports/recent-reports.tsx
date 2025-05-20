@@ -18,7 +18,7 @@ import { useRouter } from "@bprogress/next";
 import { OrderStatusPill } from "@/components/shared/order-status-pill";
 
 export function RecentReports({role}: {role?: "admin" | "staff"}) {
-    const column = 6;
+    const column = 10;
     const router = useRouter()
 
     const { data: recentRegistrations, isLoading } = useQuery(
@@ -34,9 +34,9 @@ export function RecentReports({role}: {role?: "admin" | "staff"}) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Recent Registrations</CardTitle>
+                <CardTitle>Recent Orders</CardTitle>
                 <CardDescription>
-                    Latest customer registrations and their status
+                    Latest customer orders and their status
                 </CardDescription>
             </CardHeader>
             <CardContent>

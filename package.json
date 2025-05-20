@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "migrate": "ts-node migrateChangeFieldChange.ts",
-    "migrate:item-names": "ts-node migrations/migrate-item-names.ts"
+    "migrate:item-names": "ts-node migrations/migrate-item-names.ts",
+    "refresh-db": "ts-node db-refresh.ts"
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",

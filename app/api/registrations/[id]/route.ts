@@ -92,7 +92,6 @@ export async function PATCH(
         const updatedDeposit = order.deposit + deposit
 
         const status = order.totalAmount === updatedDeposit ? "Completed" : "Pending";
-        console.log(status, updatedDeposit, "in route")
         const balance = order.totalAmount - deposit;
 
         order.deposit = updatedDeposit;

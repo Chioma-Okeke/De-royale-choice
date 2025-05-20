@@ -20,9 +20,9 @@ export async function PATCH(req: NextRequest) {
             );
         }
 
-        const { targetUserId, newPassword } = await req.json();
+        const { email, newPassword } = await req.json();
 
-        if (!targetUserId || !newPassword) {
+        if (!email || !newPassword) {
             return NextResponse.json(
                 { message: "Missing fields" },
                 { status: 400 }
@@ -31,7 +31,7 @@ export async function PATCH(req: NextRequest) {
 
         await connectDb();
 
-        const user = await User.findById(targetUserId);
+        const user = await User.findOne({email});
         if (!user) {
             return NextResponse.json(
                 { message: "User not found" },
@@ -39,11 +39,12 @@ export async function PATCH(req: NextRequest) {
             );
         }
 
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-        user.password = hashedPassword;
+        // const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = newPassword;
         await user.save();
 
-        const isSelfReset = authResult.user._id === targetUserId;
+        const isSelfReset = authResult.user._id.toString() === user._id?.toString();
+        console.log(isSelfReset, authResult.user._id, user._id, "is self reset")
 
         return NextResponse.json({
             message: "Password reset successful.",

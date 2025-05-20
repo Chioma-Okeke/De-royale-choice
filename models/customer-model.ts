@@ -1,4 +1,4 @@
-import mongoose, { Model, Schema } from "mongoose";
+import mongoose, { model, Model, models, Schema } from "mongoose";
 import { ICustomer } from "./types";
 
 const CustomerSchema: Schema<ICustomer> = new mongoose.Schema(
@@ -26,6 +26,6 @@ const CustomerSchema: Schema<ICustomer> = new mongoose.Schema(
     }
 );
 
-const Customer: Model<ICustomer> = mongoose.models.Customer || mongoose.model("Customer", CustomerSchema)
+const Customer: Model<ICustomer> = models.Customer || model<ICustomer>("Customer", CustomerSchema);
 
 export default Customer;

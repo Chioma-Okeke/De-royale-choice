@@ -134,6 +134,7 @@ export default function ReceiptPrinting() {
                       <TableRow>
                         <TableHead>Description</TableHead>
                         <TableHead className="text-right">Qty</TableHead>
+                        <TableHead className="text-right">Total Pieces</TableHead>
                         <TableHead className="text-right">Price (₦)</TableHead>
                         <TableHead className="text-right">Total (₦)</TableHead>
                       </TableRow>
@@ -143,6 +144,7 @@ export default function ReceiptPrinting() {
                         <TableRow key={item._id}>
                           <TableCell>{item.itemName}</TableCell>
                           <TableCell className="text-right">{item.quantity}</TableCell>
+                          <TableCell className="text-right">{item.piecePerItem}</TableCell>
                           <TableCell className="text-right">{item.price.toLocaleString()}</TableCell>
                           <TableCell className="text-right">
                             {(item.price * item.quantity).toLocaleString()}

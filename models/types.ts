@@ -132,6 +132,7 @@ export interface ILaundryItem extends Document {
   itemName: string
   quantity: number
   price: number
+  piecePerItem: number
   totalPrice: number
   createdAt: Date
   updatedAt: Date

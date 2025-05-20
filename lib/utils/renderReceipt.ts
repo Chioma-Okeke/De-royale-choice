@@ -1,13 +1,13 @@
 export function renderReceiptHTML(order: any, copy: string): string {
   const totalQuantities = order.laundryItems.reduce(
-    (sum: number, item: { quantity?: number }) => sum + (item.quantity ?? 0),
+    (sum: number, item: { piecePerItem?: number }) => sum + (item.piecePerItem ?? 0),
     0
   );
 
   let counter = 1
 
   const tagsHTML = order.laundryItems.flatMap((item: any) => {
-    return Array.from({ length: item.quantity }, (_, i) => {
+    return Array.from({ length: item.piecePerItem }, (_, i) => {
       const html = `<div class="tag">
         <p class="m-0"><strong>${order.customerId.name}</strong></p>
         <p class="m-0">${order.receiptId}</p>
@@ -51,7 +51,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           }
 
           .tag {
-            border: 1px dashed black;
+            border: 2px dashed black;
             border-radius: 8px
             text-align: center;
             align-items: center;
@@ -81,7 +81,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             text-align: left;
           }
 
-          th.qty, td.qty, th.subtotal, td.subtotal {
+          th.totalPcs, td.totalPcs, th.qty, td.qty, th.subtotal, td.subtotal {
             text-align: right;
           }
 
@@ -121,9 +121,9 @@ export function renderReceiptHTML(order: any, copy: string): string {
         </div>
 
         <div class="mb-3">
-          <div class="mb-2">
-            <p class="m-0">Payment Status: ${order.status}</p>
-            ${order.status === "Pending" ? `<p class="text-red m-0">Balance: ₦${order?.totalAmount - order?.deposit}</p>` : ""}
+          <div class="my-3">
+            <p class="m-0"><strong>Payment Status:</strong> ${order.status}</p>
+            ${order.status === "Pending" ? `<p class="text-red m-0"><strong>Balance:</strong> ₦${order?.totalAmount - order?.deposit}</p>` : ""}
           </div>
           <div class="mb-1"><strong>Invoice ID:</strong> ${order.receiptId}</div>
           <div class="mb-1"><strong>Invoice Date:</strong> ${new Date(order.createdAt).toDateString()}</div>
@@ -135,13 +135,14 @@ export function renderReceiptHTML(order: any, copy: string): string {
           <thead>
             <tr>
               <th>NAME</th>
-              <th class="qty">QUANTITY</th>
+              <th class="qty">QTY</th>
+              <th class="totalPcs">TOTAL PIECES</th>
               <th class="subtotal">SUBTOTAL</th>
             </tr>
           </thead>
           <tbody>
             ${order.laundryItems.map((item: any) => {
-              return `<tr><td>${item.itemName}</td><td class="qty">${item.quantity}</td><td class="subtotal">₦${item.totalPrice}</td></tr>`
+              return `<tr><td>${item.itemName}</td><td class="qty">${item.quantity}</td><td class="totalPcs">${item.piecePerItem}</td><td class="subtotal">₦${item.totalPrice}</td></tr>`
             })}
           </tbody>
         </table>

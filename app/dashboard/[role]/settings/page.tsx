@@ -1,9 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { ChevronLeft } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useRouter } from '@bprogress/next'
 
 import { useAuth } from '@/hooks/use-auth'
 import NotAuthorized from '@/app/not-authorized/page'
@@ -15,11 +13,6 @@ import ResetPasswordForm from '@/components/dashboard/settings/reset-password-fo
 export default function SettingsPage() {
     const pathname = usePathname()
     const { user } = useAuth()
-    const router = useRouter()
-
-    const navigateBack = () => {
-        router.back()
-    }
 
     if (pathname.includes(`/dashboard/admin`) && user?.role !== "admin") {
         return <NotAuthorized role={user?.role as 'admin' | 'staff'} />
@@ -30,10 +23,6 @@ export default function SettingsPage() {
             <MainDashboardContainer>
                 <Header title="Settings" />
                 <main className="p-4 md:p-6 space-y-6">
-                    <div className='flex items-center'>
-                        <ChevronLeft onClick={navigateBack} className="cursor-pointer hover:scale-110 transition-all ease-in-out duration-300" />
-                        <span>Back</span>
-                    </div>
 
                     <Tabs defaultValue="register" className="max-w-2xl mx-auto mt-4">
                         <TabsList className="grid w-full grid-cols-2">

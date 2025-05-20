@@ -84,7 +84,7 @@ export default function CustomerSearch() {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <MainDashboardContainer>
-                <Header title="Search Records" />
+                <Header title="Customers List" />
                 <main className="p-4 md:p-6 space-y-6">
                     <Card>
                         <CardHeader>

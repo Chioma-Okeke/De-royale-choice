@@ -16,26 +16,43 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        await connectDb()
+        await connectDb();
 
-        const customers = await Customer.find()
-        const orders = await Order.find().populate("laundryItems")
-        const totalRevenue = orders.reduce((sum, order) => sum + (order.totalAmount || 0), 0)
-        const totalItemsProcessed = orders.reduce((count, order) => count + (order.laundryItems.length || 0), 0)
+        // ✅ Get the start and end of the current month
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endOfMonth = new Date(
+            now.getFullYear(),
+            now.getMonth() + 1,
+            0,
+            23,
+            59,
+            59
+        );
+
+        const customers = await Customer.find();
+        const orders = await Order.find({
+            createdAt: { $gte: startOfMonth, $lte: endOfMonth },
+        }).populate("laundryItems");
+
+        const totalRevenue = orders.reduce(
+            (sum, order) => sum + (order.totalAmount || 0),
+            0
+        );
+        
+        const totalItemsProcessed = orders.reduce(
+            (count, order) => count + (order.laundryItems.length || 0),
+            0
+        );
 
         const statistics = {
             customersCount: customers.length,
             ordersCount: orders.length,
             totalRevenue,
-            totalItemsProcessed
-        }
+            totalItemsProcessed,
+        };
 
-        return NextResponse.json(
-            { stats: statistics },
-            { status: 200 }
-        )
-
-
+        return NextResponse.json({ stats: statistics }, { status: 200 });
     } catch (error) {
         console.error("Error fetching business statistics:", error);
         return NextResponse.json(
