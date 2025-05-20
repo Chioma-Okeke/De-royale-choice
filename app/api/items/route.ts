@@ -17,15 +17,18 @@ export async function GET(request: NextRequest) {
             );
         }
 
+        const url = new URL(request.url);
+        const limit = parseInt(url.searchParams.get("limit") || "15");
+        const offset = parseInt(url.searchParams.get("offset") || "0");
+        const sortBy = url.searchParams.get("sortBy") || "categoryName";
+
         await connectDb();
 
         // Fetch items and categories
         const [items, categories] = await Promise.all([
-            Item.find().lean(),
+            Item.find().lean().skip(offset).limit(limit),
             Category.find().lean(),
         ]);
-
-        console.log(items, categories, "here")
 
         if (!items || items.length === 0) {
             return NextResponse.json(
@@ -34,23 +37,32 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        // Create a map of categoryId to categoryName
         const categoryMap = new Map(
             categories.map((cat) => [String(cat._id), cat.name])
         );
 
-        // Replace categoryId with categoryName
         const itemsWithCategoryName = items.map((item) => ({
             ...item,
             categoryName: categoryMap.get(String(item.categoryId)) || "Unknown",
         }));
 
         // Sort by item name
-        itemsWithCategoryName.sort((a, b) =>
-            a.itemName.localeCompare(b.itemName)
-        );
+        itemsWithCategoryName.sort((a, b) => {
+            if (sortBy === "categoryName") {
+                return a.categoryName.localeCompare(b.categoryName);
+            } else if (sortBy === "itemName") {
+                return a.itemName.localeCompare(b.itemName);
+            } else {
+                return 0;
+            }
+        });
 
-        return NextResponse.json({ items: itemsWithCategoryName });
+        const totalCount = await Item.countDocuments();
+
+        return NextResponse.json({
+            items: itemsWithCategoryName,
+            total: totalCount,
+        });
     } catch (error) {
         console.error("Error fetching items:", error);
         return NextResponse.json(
@@ -73,11 +85,16 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json();
-        console.log(body, "in items")
+        console.log(body, "in items");
         const { itemName, categoryId, itemPrice, piecePerItem } = body;
 
         // Validate required fields
-        if (!itemName || !categoryId || itemPrice === undefined || piecePerItem === undefined) {
+        if (
+            !itemName ||
+            !categoryId ||
+            itemPrice === undefined ||
+            piecePerItem === undefined
+        ) {
             return NextResponse.json(
                 {
                     error: "All fields are required",
@@ -124,7 +141,7 @@ export async function POST(request: NextRequest) {
             itemName,
             itemPrice,
             categoryId,
-            piecePerItem
+            piecePerItem,
         });
 
         await newItem.save();
@@ -135,7 +152,7 @@ export async function POST(request: NextRequest) {
             itemPrice: newItem.itemPrice,
             categoryName: category.name,
             categoryId: category._id,
-            piecePerItem: newItem.piecePerItem ?? 1
+            piecePerItem: newItem.piecePerItem ?? 1,
         };
 
         return NextResponse.json(

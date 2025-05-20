@@ -19,7 +19,7 @@ export function TableBodySkeleton({
           {Array.from({ length: columns }).map((_, colIndex) => (
             <TableCell key={colIndex}>
               <Skeleton
-                className={`h-4 ${columnWidths[colIndex] || "w-24"}`}
+                className={`h-4 ${columnWidths[colIndex] || "w-12"}`}
               />
             </TableCell>
           ))}

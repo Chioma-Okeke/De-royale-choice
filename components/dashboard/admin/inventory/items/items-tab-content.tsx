@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { ItemDialog } from './items-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Pencil, Plus, Trash2 } from 'lucide-react';
+import { Pencil, Plus, SortAsc, Trash2 } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ConfirmDeleteDialog } from '@/components/modals/delete-modal';
 import { getCategoriesQueryOpts, getItemsQueryOpts } from '@/lib/query-options';
@@ -11,6 +11,7 @@ import { IGetItemsContent } from '@/types';
 import ItemsService from '@/app/services/items-service';
 import { toast } from 'sonner';
 import { TableBodySkeleton } from '@/components/shared/table-skeleton';
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 
 function ItemsTabContent() {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -19,9 +20,21 @@ function ItemsTabContent() {
     const [open, setOpen] = useState(false);
     const queryClient = useQueryClient()
     const columns = 5
+    const pageSize = 10
+    const [currentPage, setCurrentPage] = useState(1)
+    const offset = (currentPage - 1) * pageSize
+    const [sortBy, setSortBy] = useState("")
 
     const { data: categories } = useQuery(getCategoriesQueryOpts)
-    const { data: items, isLoading } = useQuery(getItemsQueryOpts)
+    const { data: items, isLoading } = useQuery(getItemsQueryOpts({
+        limit: pageSize,
+        offset: offset,
+        sortBy: sortBy
+    }))
+
+
+    const totalCount = items?.total || 0;
+    const totalPages = Math.ceil(totalCount / pageSize);
 
     const { mutate, isPending } = useMutation({
         mutationFn: async (item: IGetItemsContent) => {
@@ -31,7 +44,12 @@ function ItemsTabContent() {
             )
         },
         onSuccess: () => {
-            queryClient.invalidateQueries(getItemsQueryOpts)
+            queryClient.invalidateQueries({
+                queryKey: ["items", {
+                    limit: pageSize,
+                    offset: offset
+                }]
+            })
             toast.success("Item Deleted", {
                 description: `Item has been deleted successfully.`,
             });
@@ -93,8 +111,26 @@ function ItemsTabContent() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Item Name</TableHead>
-                                <TableHead>Category</TableHead>
+                                <TableHead >
+                                    <div className="flex items-center gap-1">
+                                        Category
+                                        <SortAsc
+                                            className="cursor-pointer hover:scale-125 transition-all ease-in-out duration-300"
+                                            size={14}
+                                            onClick={() => setSortBy("categoryName")}
+                                        />
+                                    </div>
+                                </TableHead>
+                                <TableHead >
+                                    <div className="flex items-center gap-1">
+                                        Item Name
+                                        <SortAsc
+                                            className="cursor-pointer hover:scale-125 transition-all ease-in-out duration-300"
+                                            size={14}
+                                            onClick={() => setSortBy("itemName")}
+                                        />
+                                    </div>
+                                </TableHead>
                                 <TableHead>
                                     Price (₦)
                                 </TableHead>
@@ -112,13 +148,13 @@ function ItemsTabContent() {
                                     rows={4}
                                     columns={columns}
                                 />
-                            ) : items && items.length > 0 ? items.map((item) => (
+                            ) : items && items.items.length > 0 ? items.items.map((item) => (
                                 <TableRow key={item._id}>
-                                    <TableCell className="font-medium">
-                                        {item.itemName}
-                                    </TableCell>
                                     <TableCell>
                                         {item.categoryName}
+                                    </TableCell>
+                                    <TableCell className="font-medium">
+                                        {item.itemName}
                                     </TableCell>
                                     <TableCell>
                                         {item.itemPrice?.toLocaleString()}
@@ -183,6 +219,50 @@ function ItemsTabContent() {
                             )}
                         </TableBody>
                     </Table>
+                    {/* Pagination */}
+                    <Pagination>
+                        <PaginationContent>
+                            <span>Showing <strong>{items?.items.length}</strong> of {totalCount} items</span>
+                            <>
+                                <PaginationItem>
+                                    <PaginationPrevious
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setCurrentPage((prev) => Math.max(prev - 1, 1));
+                                        }}
+                                    />
+                                </PaginationItem>
+
+                                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                                    <PaginationItem key={page}>
+                                        <PaginationLink
+                                            href="#"
+                                            isActive={currentPage === page}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setCurrentPage(page);
+                                            }}
+                                        >
+                                            {page}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                ))}
+
+                                {totalPages > 3 && <PaginationItem><PaginationEllipsis /></PaginationItem>}
+
+                                <PaginationItem>
+                                    <PaginationNext
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+                                        }}
+                                    />
+                                </PaginationItem>
+                            </>
+                        </PaginationContent>
+                    </Pagination>
                 </CardContent>
             </Card>
 

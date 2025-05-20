@@ -1,4 +1,4 @@
-import { ICreateItemRequest, IGetCategoriesResponse, IGetItemsResponse } from "@/types";
+import { ICreateItemRequest, IGetCategoriesResponse, IGetItemsResponse, IPaginationParams } from "@/types";
 import { BaseService } from "./base-service";
 
 class ItemsService extends BaseService {
@@ -6,11 +6,12 @@ class ItemsService extends BaseService {
         super("/items");
     }
 
-    public async getItemsList() {
+    public async getItemsList(params?: IPaginationParams) {
         const res = await this.get<IGetItemsResponse>(
-            ``
+            ``,
+            { ...params } as Record<string, unknown>
         );
-        return res.items;
+        return res;
     }
 
     public async createItem(data: ICreateItemRequest) {

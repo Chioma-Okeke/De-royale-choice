@@ -3,7 +3,7 @@ import CategoryService from "@/app/services/category-service";
 import ContactService from "@/app/services/contact-service";
 import ItemsService from "@/app/services/items-service";
 import OrderService from "@/app/services/order-service";
-import { IGetOrdersParams } from "@/types";
+import { IGetOrdersParams, IPaginationParams } from "@/types";
 import { queryOptions } from "@tanstack/react-query";
 
 export const getCategoriesQueryOpts = queryOptions({
@@ -20,12 +20,6 @@ export function getSingleCategoryOpts(categoryId: string) {
       enabled: !!categoryId,
     })
   }
-
-export const getItemsQueryOpts = queryOptions({
-    queryFn: () => new ItemsService().getItemsList(),
-    queryKey: ['Items'],
-    staleTime: 0
-})
 
 export const getContactQueryOpts = queryOptions({
     queryFn: () => new ContactService().getContacts(),
@@ -52,4 +46,12 @@ export function getOrdersQueryOpts(params: IGetOrdersParams, enabled?: boolean) 
     staleTime: 0,
     enabled: enabled !== false
   })
-} 
+}
+
+export function getItemsQueryOpts (params?: IPaginationParams) {
+  return queryOptions({
+    queryFn: () => new ItemsService().getItemsList(params),
+    queryKey: ['Items', params],
+    staleTime: 0
+})
+}

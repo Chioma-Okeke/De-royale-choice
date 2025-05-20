@@ -72,7 +72,7 @@ export function ItemDialog({
       return itemsService.updateItem(data, selectedItem._id);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(getItemsQueryOpts); 
+      queryClient.invalidateQueries(getItemsQueryOpts()); 
 
       toast.success(
         mode === "create" ? "Item Created" : "Item Updated",
@@ -101,6 +101,7 @@ export function ItemDialog({
   const handleOpenChange = (value: boolean) => {
     onOpenChange(value)
     if (!value) {
+      closeDialog()
       form.reset()
     }
   }
@@ -206,7 +207,7 @@ export function ItemDialog({
 
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => {
-                onOpenChange(false)
+                closeDialog()
                 form.reset()
               }}>
                 Cancel

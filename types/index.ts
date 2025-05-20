@@ -110,13 +110,16 @@ export interface ISingleOrderResponse {
     __v: number;
   }
 
-export interface IGetOrdersParams {
+export interface IGetOrdersParams extends IPaginationParams {
     search?: string;
     status?: string;
     dateFrom?: string;
     dateTo?: string;
+}
+export interface IPaginationParams {
     limit?: number;
     offset?: number;
+    sortBy?: string
 }
 
 export interface IGetCategoriesResponse {
@@ -145,6 +148,7 @@ export interface Category {
 
 export interface IGetItemsResponse {
     items: IGetItemsContent[];
+    total: number
 }
 export interface IGetItemsContent {
     _id: string;
