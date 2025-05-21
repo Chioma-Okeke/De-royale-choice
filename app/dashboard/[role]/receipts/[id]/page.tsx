@@ -331,7 +331,7 @@ export default function ReceiptPrinting() {
                         <CardFooter className="flex justify-between">
                             {orderDetails && <Button isLoading={isPrintInProgress} icon={Printer} iconSize={16} onClick={() => handlePrint(orderDetails?._id)}>
                                 {isPrintInProgress ? "Printing..." : (
-                                    `Print{" "}
+                                    `Print${" "}
                                 ${printType === "customer"
                                     ? "Customer Copy"
                                     : printType === "company"
