@@ -32,11 +32,13 @@ import ReceiptPageSkeleton from "../loading";
 import ReceiptService from "@/app/services/receipt-service";
 import { useRouter } from "@bprogress/next";
 import ErrorFallback from "@/components/shared/error-fallback";
+import { toast } from "sonner";
 
 export default function ReceiptPrinting() {
     const [printType, setPrintType] = useState<"customer" | "company">("customer");
     const params = useParams()
     const id = params?.id as string
+    const [isPrintInProgress, setIsPrintInProgress] = useState(false);
 
     const {
         data: orderDetails,
@@ -50,18 +52,26 @@ export default function ReceiptPrinting() {
         enabled: !!id,
     })
 
-    console.log(orderDetails, "here are the fetched details")
-
     const handlePrint = async (orderId: string) => {
-        console.log(printType, "print")
-        const receiptService = new ReceiptService()
-        const html = await receiptService.fetchReceiptHTML(orderId, printType)
-        const printWindow = window.open('', '_blank');
-        if (!printWindow) return;
+        setIsPrintInProgress(true);
+        try {
+            const receiptService = new ReceiptService()
+            const html = await receiptService.fetchReceiptHTML(orderId, printType)
+            const printWindow = window.open('', '_blank');
+            if (!printWindow) return;
 
-        printWindow.document.write(html);
-        printWindow.document.close();
-        printWindow.focus();
+            printWindow.document.write(html);
+            printWindow.document.close();
+            printWindow.focus();
+
+        } catch (error) {
+            console.error("Error printing receipt:", error);
+            toast.error("Printing Error", {
+                description: "An error occurred while printing the receipt."
+            })
+        } finally {
+            setIsPrintInProgress(false)
+        }
     };
 
     if (isLoading) return <ReceiptPageSkeleton />
@@ -319,14 +329,15 @@ export default function ReceiptPrinting() {
 
                         </CardContent>
                         <CardFooter className="flex justify-between">
-                            {orderDetails && <Button onClick={() => handlePrint(orderDetails?._id)}>
-                                <Printer className="mr-2 h-4 w-4" />
-                                Print{" "}
-                                {printType === "customer"
+                            {orderDetails && <Button isLoading={isPrintInProgress} icon={Printer} iconSize={16} onClick={() => handlePrint(orderDetails?._id)}>
+                                {isPrintInProgress ? "Printing..." : (
+                                    `Print{" "}
+                                ${printType === "customer"
                                     ? "Customer Copy"
                                     : printType === "company"
                                         ? "Company Copy"
-                                        : ""}
+                                        : ""}`
+                                )}
                             </Button>}
                         </CardFooter>
                     </Card>
