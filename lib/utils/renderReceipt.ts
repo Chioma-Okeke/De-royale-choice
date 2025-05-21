@@ -64,13 +64,14 @@ export function renderReceiptHTML(order: any, copy: string): string {
             align-items: center;
             display: flex;
             justify-content: space-between;
-            margin: 0 0 36px 0;
+            margin: 0 0 54px 0;
           }
 
           .m-0 { margin: 0; }
           .mb-1 { margin-bottom: 4px; }
           .mb-2 { margin-bottom: 8px; }
           .mb-3 { margin-bottom: 12px; }
+          .mb-4 { margin-bottom: 16px; }
           .mt-1 { margin-top: 4px; }
           .my-3 {margin: 12px 0;}
           .border-top { border-top: 1px dashed black; }
