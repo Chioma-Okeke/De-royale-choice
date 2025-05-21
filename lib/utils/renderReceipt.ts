@@ -122,7 +122,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
       </head>
       <body>
 
-        <div class="text-center mb-3">
+        <div class="text-center mb-4">
           <div class="mb-3">
             <div class="mb-1">Plot 2016 FESTAC Link Road</div>
             <div class="mb-1">Beside Peridot, Amuwo-Odofin, Lagos</div>
@@ -130,7 +130,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           <div class="mb-1">Mobile: 07077977782</div>
         </div>
 
-        <div class="mb-3">
+        <div class="my-3">
           <div class="my-3">
             <p class="m-0"><strong>Payment Status:</strong> ${order.status}</p>
             ${
@@ -151,7 +151,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           <div class="mb-1"><strong>Customer Name:</strong> ${order.customerId.name?.toUpperCase()}</div>
         </div>
 
-        <table class="border-top border-bottom mb-2 py-2">
+        <table class="border-top border-bottom mb-2 py-2 my-3">
           <thead>
             <tr>
               <th>NAME</th>
