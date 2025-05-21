@@ -9,7 +9,6 @@ const CustomerSchema: Schema<ICustomer> = new mongoose.Schema(
         },
         phoneNumber: {
             type: String,
-            required: true,
         },
         address: {
             type: String

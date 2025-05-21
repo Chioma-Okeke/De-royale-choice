@@ -25,6 +25,11 @@ class OrderService extends BaseService {
     const res = await this.patch<ICreateOrderResponse, {deposit: number}>(`/${id}`, {deposit})
     return res;
   }
+
+  public async deleteOrder(id: string) {
+    const res = await this.delete<ICreateOrderResponse>(`/${id}`)
+    return res
+  }
 }
 
 export default OrderService

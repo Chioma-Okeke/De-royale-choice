@@ -123,7 +123,7 @@ export default function UsersPage() {
                                                         }
                                                     }}
                                                     title={`Delete "${selectedUser?.email}"?`}
-                                                    description="This will permanently delete the category and all items in it."
+                                                    description="This will permanently delete this user."
                                                     loading={isPending}
                                                 />
                                             </TableCell>

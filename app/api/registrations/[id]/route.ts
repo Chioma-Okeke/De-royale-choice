@@ -102,7 +102,7 @@ export async function PATCH(
         return NextResponse.json({
             message: "Registration updated successfully",
             order: {
-                ...order,
+                ...order.toObject(),
                 status,
                 balance,
             },
@@ -135,8 +135,10 @@ export async function DELETE(
             );
         }
 
-        const { id } = params;
-        const registration = db.registrations.get(id);
+        const { id } = await params;
+
+        await connectDb()
+        const registration = await Order.findById(id);
 
         if (!registration) {
             return NextResponse.json(
@@ -145,47 +147,19 @@ export async function DELETE(
             );
         }
 
-        // Check if registration can be deleted (only if it's not processed yet)
-        if (
-            registration.status !== "registered" &&
-            registration.status !== "cancelled"
-        ) {
-            return NextResponse.json(
-                {
-                    error: "Cannot delete registration that is already being processed or completed",
-                },
-                { status: 400 }
-            );
+        for (const laundryItem of registration.laundryItems) {
+            await LaundryItem.findByIdAndDelete(laundryItem)
         }
 
-        // Delete associated tags
-        for (const [tagId, tag] of db.tags.entries()) {
-            if (tag.registrationId === id) {
-                db.tags.delete(tagId);
-            }
-        }
-
-        // Delete associated laundry items
-        for (const [itemId, item] of db.laundryItems.entries()) {
-            if (item.registrationId === id) {
-                db.laundryItems.delete(itemId);
-            }
-        }
-
-        // Remove registration from customer's registrations
-        const customer = db.customers.get(registration.customerId);
+        const customer = await Customer.findById(registration.customerId)
         if (customer) {
-            customer.registrations = customer.registrations.filter(
-                (regId) => regId !== id
-            );
-            db.customers.set(customer.id, {
-                ...customer,
-                updatedAt: new Date(),
-            });
+            customer.orders = customer.orders?.filter((order) => {
+                return order.toString() !== registration._id?.toString()
+            })
+            await customer.save()
         }
 
-        // Delete registration
-        db.registrations.delete(id);
+        await registration.deleteOne()
 
         return NextResponse.json({
             message: "Registration deleted successfully",

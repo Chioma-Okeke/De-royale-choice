@@ -11,6 +11,8 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { useAuth } from '@/hooks/use-auth'
 import { AuthService } from '@/app/services/auth-service'
+import { Eye, EyeOff } from 'lucide-react'
+import { useState } from 'react'
 
 // ✅ Define schema with Zod
 const resetPasswordSchema = z.object({
@@ -22,6 +24,7 @@ type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>
 
 export default function ResetPasswordForm() {
     const { logoutUser } = useAuth()
+    const [showPassword, setShowPassword] = useState(false)
 
     const {
         register,
@@ -75,16 +78,30 @@ export default function ResetPasswordForm() {
                         <label htmlFor="newPassword" className="block text-sm font-medium">
                             New Password <span className='text-sm text-red-500'>*</span>
                         </label>
-                        <Input
-                            id="newPassword"
-                            type="password"
-                            placeholder="Enter new password"
-                            {...register('newPassword')}
-                        />
+
+                        <div className="relative">
+                            <Input
+                                id="newPassword"
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="Enter new password"
+                                {...register('newPassword')}
+                                className="pr-10"
+                            />
+                            <button
+                                type="button"
+                                className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                tabIndex={-1}
+                            >
+                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
+                        </div>
+
                         {errors.newPassword && (
                             <p className="text-red-500 text-sm">{errors.newPassword.message}</p>
                         )}
                     </div>
+
 
                     <Button type="submit" isLoading={mutation.isPending} className="w-full" disabled={!isDirty || mutation.isPending}>
                         {isSubmitting || mutation.isPending ? 'Resetting...' : 'Reset Password'}

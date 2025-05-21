@@ -26,7 +26,7 @@ export default function SettingsPage() {
 
                     <Tabs defaultValue="register" className="max-w-2xl mx-auto mt-4">
                         <TabsList className="grid w-full grid-cols-2">
-                            <TabsTrigger value="register">Register Customer</TabsTrigger>
+                            <TabsTrigger value="register">Register User</TabsTrigger>
                             <TabsTrigger value="reset">Reset Password</TabsTrigger>
                         </TabsList>
                         <TabsContent value="register">

@@ -150,8 +150,8 @@ export interface IOrder extends Document {
 
 export interface ICustomer extends Document {
   name: string
-  phoneNumber: string
-  address: string
+  phoneNumber?: string
+  address?: string
   orders?: mongoose.Schema.Types.ObjectId[]
   createdAt: Date
 }

@@ -67,12 +67,9 @@ export default function CustomerSearch() {
     };
 
     const editOrder = (id: string) => {
-        toast({
-            title: "Printing Receipt",
-            description: `Printing receipt for registration ${id}`,
-        });
         router.push(`/dashboard/admin/orders/${id}`)
     };
+
     const printReceipt = (id: string) => {
         toast({
             title: "Printing Receipt",

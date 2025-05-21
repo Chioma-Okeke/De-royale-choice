@@ -15,7 +15,7 @@ export interface IGetCustomerContent {
 
 export interface ICreateCustomer {
     name: string;
-    phone: string;
+    phone?: string;
     address?: string;
 }
 
@@ -35,7 +35,11 @@ export interface ICreateOrder {
 }
 
 export interface IGetOrders {
-    registrations: {
+    registrations: IGetOrdersContent[];
+    total: number;
+}
+
+export interface IGetOrdersContent {
         orderId: string
         receiptId: string;
         customer: string;
@@ -46,9 +50,7 @@ export interface IGetOrders {
         amount: number;
         deposit: number;
         balance: number;
-    }[];
-    total: number;
-}
+    }
 
 export interface ICreateOrderResponse {
     message: string

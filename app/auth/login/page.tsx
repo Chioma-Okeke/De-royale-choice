@@ -26,7 +26,7 @@ import { loginFormSchema } from '@/schema';
 import { AuthService } from '@/app/services/auth-service';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { Eye, EyeIcon, EyeOff, EyeOffIcon } from 'lucide-react';
 import { useState } from 'react';
 
 type LoginFormValues = z.infer<typeof loginFormSchema>;
@@ -40,6 +40,7 @@ export default function LoginPage() {
             password: '',
         },
     })
+    const [showPassword, setShowPassword] = useState(false)
 
     const { mutate, isPending } = useMutation({
         mutationFn: async (data: z.infer<typeof loginFormSchema>) => {
@@ -109,38 +110,34 @@ export default function LoginPage() {
                             <FormField
                                 control={form.control}
                                 name="password"
-                                render={({ field }) => {
-                                    const [showPassword, setShowPassword] = useState(false)
-
-                                    return (
-                                        <FormItem>
-                                            <FormLabel>
-                                                Password <span className="text-red-500 text-sm">*</span>
-                                            </FormLabel>
-                                            <FormControl>
-                                                <div className="relative">
-                                                    <Input
-                                                        type={showPassword ? 'text' : 'password'}
-                                                        placeholder="Enter your password"
-                                                        {...field}
-                                                    />
-                                                    <Button
-                                                        type="button"
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-0 h-6 w-6 text-muted-foreground"
-                                                        onClick={() => setShowPassword(prev => !prev)}
-                                                        tabIndex={-1}
-                                                    >
-                                                        {showPassword ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
-                                                    </Button>
-                                                </div>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )
-                                }}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            Password <span className="text-red-500 text-sm">*</span>
+                                        </FormLabel>
+                                        <FormControl>
+                                            <div className="relative">
+                                                <Input
+                                                    type={showPassword ? 'text' : 'password'}
+                                                    placeholder="Enter your password"
+                                                    {...field}
+                                                    className="pr-10"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500"
+                                                    onClick={() => setShowPassword((prev) => !prev)}
+                                                    tabIndex={-1}
+                                                >
+                                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                                </button>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
+
 
                             <Button
                                 type="submit"

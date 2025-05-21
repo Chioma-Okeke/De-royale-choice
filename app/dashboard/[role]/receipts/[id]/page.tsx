@@ -34,7 +34,6 @@ import { useRouter } from "@bprogress/next";
 import ErrorFallback from "@/components/shared/error-fallback";
 
 export default function ReceiptPrinting() {
-    const router = useRouter()
     const [printType, setPrintType] = useState<"customer" | "company">("customer");
     const params = useParams()
     const id = params?.id as string
@@ -320,10 +319,6 @@ export default function ReceiptPrinting() {
 
                         </CardContent>
                         <CardFooter className="flex justify-between">
-                            <Button onClick={() => router.back()} variant={"outline"}>
-                                <ChevronLeft />
-                                <p>Back</p>
-                            </Button>
                             {orderDetails && <Button onClick={() => handlePrint(orderDetails?._id)}>
                                 <Printer className="mr-2 h-4 w-4" />
                                 Print{" "}

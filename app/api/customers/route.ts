@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
             customers = customers.filter(
                 (customer) =>
                     customer.name.toLowerCase().includes(searchLower) ||
-                    customer.phoneNumber.includes(search)
+                    customer.phoneNumber?.includes(search)
             );
         }
 
@@ -68,9 +68,9 @@ export async function POST(request: NextRequest) {
         const { name, phone, address } = body;
 
         // Validate required fields
-        if (!name || !phone) {
+        if (!name) {
             return NextResponse.json(
-                { error: "Name and phone number are required" },
+                { error: "Name is required" },
                 { status: 400 }
             );
         }

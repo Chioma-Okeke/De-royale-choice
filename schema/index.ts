@@ -21,7 +21,7 @@ export const itemSchema = z.object({
 
 export const createCustomerSchema = z.object({
     name: z.string().min(1, "Name is required"),
-    phone: z.string().min(10, "Phone must be at least 10 digits"),
+    phone: z.string().optional(),
     address: z.string().optional(),
 });
 

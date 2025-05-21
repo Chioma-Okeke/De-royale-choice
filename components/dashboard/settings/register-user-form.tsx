@@ -10,6 +10,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { toast } from 'sonner'
 import { useMutation } from '@tanstack/react-query'
 import { AuthService } from '@/app/services/auth-service'
+import { useState } from 'react'
+import { Eye, EyeOff } from 'lucide-react'
 
 const customerSchema = z.object({
     email: z.string().min(1, 'Email is required').email('Invalid Email Address'),
@@ -28,6 +30,7 @@ export default function RegisterCustomerForm() {
             password: '',
         },
     })
+    const [showPassword, setShowPassword] = useState(false)
 
     const { isDirty } = form.formState
 
@@ -56,7 +59,7 @@ export default function RegisterCustomerForm() {
     return (
         <Card className="shadow-lg">
             <CardHeader>
-                <CardTitle className="text-xl">Register New Customer</CardTitle>
+                <CardTitle className="text-xl">Register New User</CardTitle>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
@@ -104,23 +107,35 @@ export default function RegisterCustomerForm() {
                                         Password <span className="text-red-500 text-sm">*</span>
                                     </FormLabel>
                                     <FormControl>
-                                        <Input
-                                            type="password"
-                                            placeholder="Enter your password"
-                                            {...field}
-                                        />
+                                        <div className="relative">
+                                            <Input
+                                                type={showPassword ? 'text' : 'password'}
+                                                placeholder="Enter your password"
+                                                {...field}
+                                                className="pr-10"
+                                            />
+                                            <button
+                                                type="button"
+                                                className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500"
+                                                onClick={() => setShowPassword((prev) => !prev)}
+                                                tabIndex={-1}
+                                            >
+                                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                            </button>
+                                        </div>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
+
                         <Button
                             isLoading={isPending}
                             disabled={isPending || !isDirty}
                             type="submit"
                             className="w-full"
                         >
-                            Register Customer
+                            Register User
                         </Button>
                     </form>
                 </Form>

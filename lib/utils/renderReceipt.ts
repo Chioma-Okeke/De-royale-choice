@@ -1,25 +1,35 @@
 export function renderReceiptHTML(order: any, copy: string): string {
-  const totalQuantities = order.laundryItems.reduce(
-    (sum: number, item: { piecePerItem?: number }) => sum + (item.piecePerItem ?? 0),
-    0
-  );
+    const totalQuantities = order.laundryItems.reduce(
+        (sum: number, item: { piecePerItem?: number }) =>
+            sum + (item.piecePerItem ?? 0),
+        0
+    );
 
-  let counter = 1
+    let counter = 1;
 
-  const tagsHTML = order.laundryItems.flatMap((item: any) => {
-    return Array.from({ length: item.piecePerItem }, (_, i) => {
-      const html = `<div class="tag">
-        <p class="m-0"><strong>${order.customerId.name}</strong></p>
-        <p class="m-0">${order.receiptId}</p>
-        <p class="m-0"><strong>Dropped of at:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
-        <p class="m-0"> <strong>${counter}</strong> of ${totalQuantities}</p>
-      </div>`;
-      counter++
-      return html
+    const tagsHTML = order.laundryItems.flatMap((item: any) => {
+        return Array.from({ length: item.piecePerItem }, (_, i) => {
+            const html = `<div class="tag">
+            <div class="flex-col">
+              <p class="m-0"><strong>${order.receiptId}</strong></p>
+              <p class="m-0"> <strong>${counter}</strong> of ${totalQuantities}</p>
+            </div>
+            <div>
+              <p class="m-0">${new Date(
+                  order.createdAt
+              ).toDateString()}</p>
+            </div>
+            <div class="flex-col">
+              <p class="m-0"><strong>${order.receiptId}</strong></p>
+              <p class="m-0"><strong>${order.customerId.name}</strong></p>
+            </div>
+        </div>`;
+            counter++;
+            return html;
+        });
     });
-  });
 
-  return `
+    return `
       <!DOCTYPE html>
       <html>
       <head>
@@ -28,7 +38,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
         <style>
           @media print {
             @page {
-              size: 80mm auto;
+              size: 105mm auto;
               margin: 0;
             }
 
@@ -40,8 +50,8 @@ export function renderReceiptHTML(order: any, copy: string): string {
 
           body {
             font-family: monospace;
-            font-size: 12px;
-            width: 80mm;
+            font-size: 16px;
+            width: 105mm;
             margin: 0 auto;
             padding: 10px;
           }
@@ -51,15 +61,10 @@ export function renderReceiptHTML(order: any, copy: string): string {
           }
 
           .tag {
-            border: 2px dashed black;
-            border-radius: 8px
-            text-align: center;
             align-items: center;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 4px;
-            padding: 8px 0
+            justify-content: space-between;
+            margin: 0 0 36px 0;
           }
 
           .m-0 { margin: 0; }
@@ -92,6 +97,12 @@ export function renderReceiptHTML(order: any, copy: string): string {
           .total-section {
             text-align: right
           }
+
+          .flex-col {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+          }
           
           .footer {
             display: flex;
@@ -99,7 +110,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             gap: 4px;
             align-items: center;
             justify-content: center;
-            margin: 28px 0;
+            margin: 42px 0;
           }
 
           .text-red {
@@ -112,23 +123,31 @@ export function renderReceiptHTML(order: any, copy: string): string {
 
         <div class="text-center mb-3">
           <div class="mb-3">
-            <div class="mb-1">3, Tony Ejehobian Street, Majek Bus Stop</div>
-            <div class="mb-1">Abijo Lekki-Epe. 344, Durban Road</div>
-            <div class="mb-1">Beside AMCHospital, Amuwo-Odofin, Lagos</div>
+            <div class="mb-1">Plot 2016 FESTAC Link Road</div>
+            <div class="mb-1">Beside Peridot, Amuwo-Odofin, Lagos</div>
           </div>
-          <div class="mb-1">Mobile: +234(811)802-8359, +234(810)973-7915</div>
-          <div class="mb-1">+234(090)352-9886</div>
+          <div class="mb-1">Mobile: 07077977782</div>
         </div>
 
         <div class="mb-3">
           <div class="my-3">
             <p class="m-0"><strong>Payment Status:</strong> ${order.status}</p>
-            ${order.status === "Pending" ? `<p class="text-red m-0"><strong>Balance:</strong> ₦${order?.totalAmount - order?.deposit}</p>` : ""}
+            ${
+                order.status === "Pending"
+                    ? `<p class="text-red m-0"><strong>Balance:</strong> ₦${
+                          order?.totalAmount - order?.deposit
+                      }</p>`
+                    : ""
+            }
           </div>
-          <div class="mb-1"><strong>Invoice ID:</strong> ${order.receiptId}</div>
-          <div class="mb-1"><strong>Invoice Date:</strong> ${new Date(order.createdAt).toDateString()}</div>
+          <div class="mb-1"><strong>Invoice ID:</strong> ${
+              order.receiptId
+          }</div>
+          <div class="mb-1"><strong>Invoice Date:</strong> ${new Date(
+              order.createdAt
+          ).toDateString()}</div>
           <div class="mb-1"><strong>Branch:</strong> Amuwo Odofin</div>
-          <div class="mb-1"><strong>Name:</strong> ${order.customerId.name?.toUpperCase()}</div>
+          <div class="mb-1"><strong>Customer Name:</strong> ${order.customerId.name?.toUpperCase()}</div>
         </div>
 
         <table class="border-top border-bottom mb-2 py-2">
@@ -136,31 +155,35 @@ export function renderReceiptHTML(order: any, copy: string): string {
             <tr>
               <th>NAME</th>
               <th class="qty">QTY</th>
-              <th class="totalPcs">TOTAL PIECES</th>
+              <th class="totalPcs">Pcs</th>
               <th class="subtotal">SUBTOTAL</th>
             </tr>
           </thead>
           <tbody>
             ${order.laundryItems.map((item: any) => {
-              return `<tr><td>${item.itemName}</td><td class="qty">${item.quantity}</td><td class="totalPcs">${item.piecePerItem}</td><td class="subtotal">₦${item.totalPrice}</td></tr>`
+                return `<tr><td>${item.itemName}</td><td class="qty">${item.quantity}</td><td class="totalPcs">${item.piecePerItem}</td><td class="subtotal">₦${item.totalPrice}</td></tr>`;
             })}
           </tbody>
         </table>
 
         <div class="total-section">
-            <div class="mb-1"><strong>Subtotal:</strong> ₦${order.totalAmount}</div>
+            <div class="mb-1"><strong>Subtotal:</strong> ₦${
+                order.totalAmount
+            }</div>
             <div class="mb-1"><strong>Total Qty:</strong> ${totalQuantities} pcs</div>
             <div class="mb-1"><strong>VAT:</strong> 0.00%</div>
-            <div class="border-top border-bottom mb-2 py-2"><strong>Total: ₦${order.totalAmount}</strong></div>
+            <div class="border-top border-bottom mb-2 py-2"><strong>Total: ₦${
+                order.totalAmount
+            }</strong></div>
         </div>
 
-        <div class="text-center mb-2 footer">
+        <div class="text-center footer">
           <p class="m-0">Thank you very much! Pls come again!!!</p>
           <p class="m-0"><strong>— Business Hours —</strong></p>
           <p class="m-0">Mon–Fri 8:00am - 6pm</p>
           <p class="m-0">Sat 8:00am - 5pm</p>
         </div>
-        ${copy === "company" ? tagsHTML : ``}
+        ${copy === "company" ? tagsHTML.join("") : ``}
         <script>
             window.onload = () => { window.print(); };
           </script>
