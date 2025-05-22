@@ -29,7 +29,7 @@ export function ReportCard() {
     const [endDate, setEndDate] = useState("");
     const { user } = useAuth()
 
-    const pageSize = 10;
+    const pageSize = 9;
     const [currentPage, setCurrentPage] = useState(1);
     const offset = (currentPage - 1) * pageSize;
     const queryClient = useQueryClient()

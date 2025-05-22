@@ -72,6 +72,8 @@ export function renderReceiptHTML(order: any, copy: string): string {
           .mb-2 { margin-bottom: 8px; }
           .mb-3 { margin-bottom: 12px; }
           .mb-4 { margin-bottom: 16px; }
+          .mb-6 { margin-bottom: 24px; }
+          .mb-10 { margin-bottom: 40px; }
           .mt-1 { margin-top: 4px; }
           .my-3 {margin: 12px 0;}
           .border-top { border-top: 1px dashed black; }
@@ -118,8 +120,8 @@ export function renderReceiptHTML(order: any, copy: string): string {
             color: red
           }
 
-          .text-lg {
-            font-size: 20px
+          .text-3xl {
+            font-size: 32px
           }
 
           .text-brand-purple {
@@ -138,12 +140,12 @@ export function renderReceiptHTML(order: any, copy: string): string {
       </head>
       <body>
 
-        <div className="flex-col mb-4">
-          <span className="text-lg font-700 text-brand-purple">DE UNIQUE ROYAL CHOICE</span>
-          <span className="text-lg font-700 text-brand-yellow border">DRY CLEANERS</span>
+        <div class="flex-col mb-10">
+          <span class="text-3xl font-700 text-brand-purple">DE UNIQUE ROYAL CHOICE</span>
+          <span class="text-3xl font-700 text-brand-yellow border">DRY CLEANERS</span>
         </div>
 
-        <div class="text-center mb-4">
+        <div class="text-center mb-6">
           <div class="mb-3">
             <div class="mb-1">Plot 2016 FESTAC Link Road</div>
             <div class="mb-1">Beside Peridot, Amuwo-Odofin, Lagos</div>
@@ -151,7 +153,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           <div class="mb-1">Mobile: 07077977782</div>
         </div>
 
-        <div class="my-3">
+        <div class="my-3 mb-4">
           <div class="my-3">
             <p class="m-0"><strong>Payment Status:</strong> ${order.status}</p>
             ${
