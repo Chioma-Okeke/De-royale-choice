@@ -92,12 +92,11 @@ export default function CustomerSearch() {
         mutationKey: ["deleteOrder", selectedOrder?.orderId],
         onSuccess: () => {
             queryClient.invalidateQueries(getOrdersQueryOpts({
-                dateFrom: "",
-                dateTo: "",
+                search: "",
                 limit: pageSize,
                 offset: offset,
             }))
-            toast.success("Oder Deleted", {
+            toast.success("Order Deleted", {
                 description: `Order has been deleted successfully.`,
             });
             setOpen(false)
