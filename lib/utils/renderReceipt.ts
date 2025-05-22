@@ -43,7 +43,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             }
 
             body {
-              margin: 0;
+              margin: 40px 0 0 0;
               padding: 0;
             }
           }
@@ -140,9 +140,9 @@ export function renderReceiptHTML(order: any, copy: string): string {
       </head>
       <body>
 
-        <div class="flex-col mb-10">
+        <div class="flex-col mb-10 text-center">
           <span class="text-3xl font-700 text-brand-purple">DE UNIQUE ROYAL CHOICE</span>
-          <span class="text-3xl font-700 text-brand-yellow border">DRY CLEANERS</span>
+          <span class="text-3xl font-700 text-brand-yellow">DRY CLEANERS</span>
         </div>
 
         <div class="text-center mb-6">
