@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
         await connectDb()
 
         // Check if customer with same phone already exists
-        const existingUser = await Customer.findOne({phoneNumber: phone})
+        const existingUser = await Customer.findOne({name: name})
         if (existingUser) {
             return NextResponse.json({message: "Customer already exists."}, {status: 400})
         }

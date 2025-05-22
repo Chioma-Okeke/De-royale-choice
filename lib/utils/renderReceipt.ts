@@ -50,7 +50,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
 
           body {
             font-family: monospace;
-            font-size: 16px;
+            font-size: 20px;
             width: 105mm;
             margin: 0 auto;
             padding: 10px;
@@ -118,9 +118,30 @@ export function renderReceiptHTML(order: any, copy: string): string {
             color: red
           }
 
+          .text-lg {
+            font-size: 20px
+          }
+
+          .text-brand-purple {
+            color: #2d1160
+          }
+
+          .text-brand-yellow {
+            color: #ffd700
+          }
+
+          .font-700 {
+            font-weight: 700
+          }
+
         </style>
       </head>
       <body>
+
+        <div className="flex-col mb-4">
+          <span className="text-lg font-700 text-brand-purple">DE UNIQUE ROYAL CHOICE</span>
+          <span className="text-lg font-700 text-brand-yellow border">DRY CLEANERS</span>
+        </div>
 
         <div class="text-center mb-4">
           <div class="mb-3">

@@ -27,8 +27,6 @@ import { useAuth } from "@/hooks/use-auth";
 export function ReportCard() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    const [open, setOpen] = useState(false);
-    const [selectedOrder, setSelectedOrder] = useState<IGetOrdersContent | null>(null)
     const { user } = useAuth()
 
     const pageSize = 10;
@@ -72,42 +70,6 @@ export function ReportCard() {
     }
 
     const column = 10;
-
-    const { mutate, isPending } = useMutation({
-        mutationFn: async (order: IGetOrdersContent) => {
-            const orderService = new OrderService()
-            await orderService.deleteOrder(order.orderId)
-        },
-        mutationKey: ["deleteOrder", selectedOrder?.orderId],
-        onSuccess: () => {
-            queryClient.invalidateQueries(getOrdersQueryOpts({
-                dateFrom: "",
-                dateTo: "",
-                limit: pageSize,
-                offset: offset,
-            }))
-            toast.success("Oder Deleted", {
-                description: `Order has been deleted successfully.`,
-            });
-            setOpen(false)
-            setSelectedOrder(null)
-        },
-        onError: (error) => {
-            console.error("Error deleting Order:", error);
-            toast.error("Order Deletion Failed", {
-                description: "The order could not be deleted due to an error."
-            })
-        }
-    })
-
-    const handleDeleteConfirmation = (order: IGetOrdersContent) => {
-        setSelectedOrder(order)
-        setOpen(true)
-    }
-
-    const handleDelete = (order: IGetOrdersContent) => {
-        mutate(order)
-    }
 
     return (
         <Card>
@@ -165,7 +127,6 @@ export function ReportCard() {
                                 <TableHead>Deposit</TableHead>
                                 <TableHead>Balance</TableHead>
                                 <TableHead>Status</TableHead>
-                                {user?.role === "admin" && <TableHead>Actions</TableHead>}
                             </TableRow>
                         </TableHeader>
                         <TableBody className="overflow-x-auto">
@@ -183,34 +144,6 @@ export function ReportCard() {
                                         <TableCell>{entry.deposit?.toLocaleString() ? `₦${entry.deposit?.toLocaleString()}` : "N/A"}</TableCell>
                                         <TableCell>{entry.balance?.toLocaleString() ? `₦${entry.balance?.toLocaleString()}` : "N/A"}</TableCell>
                                         <TableCell><OrderStatusPill status={entry.status} /></TableCell>
-                                        {user?.role === "admin" && <TableCell>
-                                            <Button
-                                                variant="destructive"
-                                                size="icon"
-                                                icon={Trash2}
-                                                onClick={() => handleDeleteConfirmation(entry)}>
-                                                <span className="sr-only">
-                                                    Delete
-                                                </span>
-                                            </Button>
-
-                                            <ConfirmDeleteDialog
-                                                open={open}
-                                                onClose={() => {
-                                                    setOpen(false);
-                                                    setSelectedOrder(null);
-                                                }}
-                                                onConfirm={() => {
-                                                    if (selectedOrder) {
-                                                        handleDelete(selectedOrder)
-                                                    }
-                                                }
-                                                }
-                                                title={`Delete order "${selectedOrder?.receiptId}"?`}
-                                                description="This will permanently delete the order. Are you sure?"
-                                                loading={isPending}
-                                            />
-                                        </TableCell>}
                                     </TableRow>
                                 ))
                             ) : (

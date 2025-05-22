@@ -17,23 +17,28 @@ import {
     Table, TableBody, TableCell, TableHead,
     TableHeader, TableRow,
 } from "@/components/ui/table";
-import { Search, Eye, Printer, Filter, Pen } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { Search, Eye, Printer, Filter, Pen, Trash2 } from "lucide-react";
 import MainDashboardContainer from "@/components/shared/main-dashboard-container";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getOrdersQueryOpts } from "@/lib/query-options";
 import { useRouter } from "@bprogress/next";
 import { useAuth } from "@/hooks/use-auth";
 import { OrderStatusPill } from "@/components/shared/order-status-pill";
+import { IGetOrdersContent } from "@/types";
+import { ConfirmDeleteDialog } from "@/components/modals/delete-modal";
+import OrderService from "@/app/services/order-service";
+import { toast } from "sonner";
 
 export default function CustomerSearch() {
-    const { toast } = useToast();
     const [searchTerm, setSearchTerm] = useState("");
     const [searchType, setSearchType] = useState("name"); // Not yet used in API
     const pageSize = 10;
     const [currentPage, setCurrentPage] = useState(1);
     const offset = (currentPage - 1) * pageSize;
     const { user } = useAuth()
+    const [open, setOpen] = useState(false);
+    const queryClient = useQueryClient()
+    const [selectedOrder, setSelectedOrder] = useState<IGetOrdersContent | null>(null)
 
     const {
         data: filteredEntries,
@@ -71,12 +76,49 @@ export default function CustomerSearch() {
     };
 
     const printReceipt = (id: string) => {
-        toast({
-            title: "Printing Receipt",
+        toast.success("Printing Receipt", {
             description: `Printing receipt for registration ${id}`,
         });
         router.push(`/dashboard/admin/receipts/${id}`)
     };
+
+
+
+    const { mutate, isPending } = useMutation({
+        mutationFn: async (order: IGetOrdersContent) => {
+            const orderService = new OrderService()
+            await orderService.deleteOrder(order.orderId)
+        },
+        mutationKey: ["deleteOrder", selectedOrder?.orderId],
+        onSuccess: () => {
+            queryClient.invalidateQueries(getOrdersQueryOpts({
+                dateFrom: "",
+                dateTo: "",
+                limit: pageSize,
+                offset: offset,
+            }))
+            toast.success("Oder Deleted", {
+                description: `Order has been deleted successfully.`,
+            });
+            setOpen(false)
+            setSelectedOrder(null)
+        },
+        onError: (error) => {
+            console.error("Error deleting Order:", error);
+            toast.error("Order Deletion Failed", {
+                description: "The order could not be deleted due to an error."
+            })
+        }
+    })
+
+    const handleDeleteConfirmation = (order: IGetOrdersContent) => {
+        setSelectedOrder(order)
+        setOpen(true)
+    }
+
+    const handleDelete = (order: IGetOrdersContent) => {
+        mutate(order)
+    }
 
     return (
         <div className="flex min-h-screen bg-gray-50">
@@ -154,7 +196,7 @@ export default function CustomerSearch() {
                                                 <TableCell>{result.amount}</TableCell>
                                                 <TableCell>{result.deposit?.toLocaleString() ? `₦${result.deposit?.toLocaleString()}` : "N/A"}</TableCell>
                                                 <TableCell>{result.balance?.toLocaleString() ? `₦${result.balance?.toLocaleString()}` : "N/A"}</TableCell>
-                                                <TableCell><OrderStatusPill status={result.status}/></TableCell>
+                                                <TableCell><OrderStatusPill status={result.status} /></TableCell>
                                                 <TableCell className="text-right">
                                                     <div className="flex justify-end gap-2">
                                                         {user?.role === "admin" && result.status === "Pending" && <Button
@@ -171,6 +213,32 @@ export default function CustomerSearch() {
                                                         >
                                                             <Printer className="h-4 w-4" />
                                                         </Button>
+                                                        <Button
+                                                            variant="destructive"
+                                                            size="icon"
+                                                            icon={Trash2}
+                                                            onClick={() => handleDeleteConfirmation(result)}>
+                                                            <span className="sr-only">
+                                                                Delete
+                                                            </span>
+                                                        </Button>
+
+                                                        <ConfirmDeleteDialog
+                                                            open={open}
+                                                            onClose={() => {
+                                                                setOpen(false);
+                                                                setSelectedOrder(null);
+                                                            }}
+                                                            onConfirm={() => {
+                                                                if (selectedOrder) {
+                                                                    handleDelete(selectedOrder)
+                                                                }
+                                                            }
+                                                            }
+                                                            title={`Delete order "${selectedOrder?.receiptId}"?`}
+                                                            description="This will permanently delete the order. Are you sure?"
+                                                            loading={isPending}
+                                                        />
                                                     </div>
                                                 </TableCell>
                                             </TableRow>
