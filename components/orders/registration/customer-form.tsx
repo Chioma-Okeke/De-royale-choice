@@ -47,7 +47,7 @@ function CustomerForm({ selectedCustomer, setSelectedCustomer }: OrderFormProps)
     const response = await lookupService.getCustomerList(term)
 
     return response.map((customer: IGetCustomerContent) => ({
-      label: `${customer.name} (${customer.phoneNumber})`,
+      label: `${customer.name}${customer.phoneNumber ? ` (${customer.phoneNumber})` : ''}`,
       value: customer._id,
       raw: customer,
     }))
