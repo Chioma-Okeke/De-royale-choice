@@ -91,11 +91,13 @@ export default function CustomerSearch() {
         },
         mutationKey: ["deleteOrder", selectedOrder?.orderId],
         onSuccess: () => {
+            setSearchTerm("")
             queryClient.invalidateQueries(getOrdersQueryOpts({
-                search: "",
+                search: searchTerm,
                 limit: pageSize,
                 offset: offset,
             }))
+            router.refresh()
             toast.success("Order Deleted", {
                 description: `Order has been deleted successfully.`,
             });
