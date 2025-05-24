@@ -84,7 +84,7 @@ function OrderForm({ selectedCustomer, setSelectedCustomer, role }: OrderFormPro
     })
 
     const sendOrder = (data: z.infer<typeof createOrderSchema>) => {
-        if (data.deposit > totalAmount) {
+        if ((data.deposit ?? 0) > totalAmount) {
             form.setError("deposit", {
                 type: "manual",
                 message: "Deposit cannot be more than the total amount (₦" + totalAmount.toLocaleString() + ")"
@@ -99,10 +99,9 @@ function OrderForm({ selectedCustomer, setSelectedCustomer, role }: OrderFormPro
         const payload: ICreateOrder = {
             customerId: selectedCustomer?._id,
             items: data.items,
-            deposit: data.deposit,
+            deposit: data.deposit ?? 0,
             totalAmount
         }
-        console.log(payload, "payload")
         mutate(payload)
 
 

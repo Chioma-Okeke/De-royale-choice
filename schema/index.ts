@@ -37,7 +37,7 @@ export const createOrderSchema = z.object({
             piecePerItem: z.number().min(1, "You need to selected quantity per piece"),
         })
     ),
-    deposit: z.number().min(1, "Deposit is required"),
+    deposit: z.number().optional(),
 });
 
 export const loginFormSchema = z.object({

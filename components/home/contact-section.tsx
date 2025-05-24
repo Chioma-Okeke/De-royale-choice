@@ -26,17 +26,17 @@ function ContactSection() {
                             <div className="space-y-4">
                                 <div className="flex items-center space-x-3">
                                     <MapPin className="h-5 w-5 text-brand-purple" />
-                                    <p>123 Laundry Street, Lagos, Nigeria</p>
+                                    <p className="max-w-md  ">Plot 2016 FESTAC Link Road, Beside Peridot Filling Station, Amuwo-Odofin, Lagos, Nigeria.</p>
                                 </div>
                                 <div className="flex items-center space-x-3">
                                     <PhoneCall className="h-5 w-5 text-brand-purple" />
-                                    <p>07077977789, 08023346702</p>
+                                    <p>07077977782</p>
                                 </div>
                                 <div className="flex items-center space-x-3">
                                     <Clock className="h-5 w-5 text-brand-purple" />
                                     <div>
-                                        <p>Monday - Friday: 8:00 AM - 7:00 PM</p>
-                                        <p>Saturday: 9:00 AM - 5:00 PM</p>
+                                        <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
+                                        <p>Saturday: 8:00 AM - 5:00 PM</p>
                                         <p>Sunday: Closed</p>
                                     </div>
                                 </div>
