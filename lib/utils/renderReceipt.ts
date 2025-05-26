@@ -1,3 +1,5 @@
+import { formatDateToDDMMYYYY } from "../utils";
+
 export function renderReceiptHTML(order: any, copy: string): string {
     const totalQuantities = order.laundryItems.reduce(
         (sum: number, item: { piecePerItem?: number }) =>
@@ -15,9 +17,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
               <p class="m-0"> <strong>${counter}</strong> of ${totalQuantities}</p>
             </div>
             <div>
-              <p class="m-0">${new Date(
-                  order.createdAt
-              ).toDateString()}</p>
+              <p class="m-0 text-xl">${formatDateToDDMMYYYY(order.createdAt)}</p>
             </div>
             <div class="flex-col">
               <p class="m-0"><strong>${order.receiptId}</strong></p>
@@ -38,7 +38,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
         <style>
           @media print {
             @page {
-              size: 120mm auto;
+              size: 150mm auto;
               margin: 0;
               font-size: 28px
             }
@@ -52,7 +52,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           body {
             font-family: monospace;
             font-size: 30px;
-            width: 120mm;
+            width: 150mm;
             margin: 0 auto;
             padding: 10px;
           }
@@ -127,6 +127,9 @@ export function renderReceiptHTML(order: any, copy: string): string {
 
           .text-2xl {            
             font-size: 30px
+          
+          .text-xl {            
+            font-size: 24px
           }
 
           .text-brand-purple {

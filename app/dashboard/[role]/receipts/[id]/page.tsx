@@ -53,22 +53,26 @@ export default function ReceiptPrinting() {
     })
 
     const handlePrint = async (orderId: string) => {
-        setIsPrintInProgress(true);
         try {
+            setIsPrintInProgress(true);
             const receiptService = new ReceiptService()
             const html = await receiptService.fetchReceiptHTML(orderId, printType)
             const printWindow = window.open('', '_blank');
-            if (!printWindow) return;
-
+            if (!printWindow) {
+                setIsPrintInProgress(false)
+                return;
+            }
             printWindow.document.write(html);
             printWindow.document.close();
             printWindow.focus();
+            setIsPrintInProgress(false)
 
         } catch (error) {
             console.error("Error printing receipt:", error);
             toast.error("Printing Error", {
                 description: "An error occurred while printing the receipt."
             })
+            setIsPrintInProgress(false)
         } finally {
             setIsPrintInProgress(false)
         }
@@ -333,10 +337,10 @@ export default function ReceiptPrinting() {
                                 {isPrintInProgress ? "Printing..." : (
                                     `Print${" "}
                                 ${printType === "customer"
-                                    ? "Customer Copy"
-                                    : printType === "company"
-                                        ? "Company Copy"
-                                        : ""}`
+                                        ? "Customer Copy"
+                                        : printType === "company"
+                                            ? "Company Copy"
+                                            : ""}`
                                 )}
                             </Button>}
                         </CardFooter>
