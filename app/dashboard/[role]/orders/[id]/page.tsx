@@ -62,6 +62,7 @@ export default function ReceiptPrinting() {
     queryFn: () => new OrderService().getSingleOrder(id),
     queryKey: ['singleOrder', id],
     enabled: !!id,
+    staleTime: 0
   })
 
   const form = useForm<z.infer<typeof formSchema>>({

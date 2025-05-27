@@ -11,15 +11,17 @@ export function renderReceiptHTML(order: any, copy: string): string {
 
     const tagsHTML = order.laundryItems.flatMap((item: any) => {
         return Array.from({ length: item.piecePerItem }, (_, i) => {
-            const html = `<div class="tag text-2xl">
-            <div class="flex-col">
+            const html = `<div class="tag ">
+            <div class="flex-col text-2xl">
               <p class="m-0"><strong>${order.receiptId}</strong></p>
               <p class="m-0"> <strong>${counter}</strong> of ${totalQuantities}</p>
             </div>
             <div>
-              <p class="m-0 text-xl">${formatDateToDDMMYYYY(order.createdAt)}</p>
+              <p class="m-0 text-xl">${formatDateToDDMMYYYY(
+                  order.createdAt
+              )}</p>
             </div>
-            <div class="flex-col">
+            <div class="flex-col text-2xl">
               <p class="m-0"><strong>${order.receiptId}</strong></p>
               <p class="m-0"><strong>${order.customerId.name}</strong></p>
             </div>
@@ -40,7 +42,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             @page {
               size: 150mm auto;
               margin: 0;
-              font-size: 28px
+              font-size: 30px
             }
 
             body {
@@ -77,6 +79,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           .mb-10 { margin-bottom: 40px; }
           .mt-1 { margin-top: 4px; }
           .my-3 {margin: 12px 0;}
+          .my-10 {margin: 40px 0;}
           .border-top { border-top: 1px dashed black; }
           .border-bottom { border-bottom: 1px dashed black; }
 
@@ -105,7 +108,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           .flex-col {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 8px;
           }
           
           .footer {
@@ -126,10 +129,11 @@ export function renderReceiptHTML(order: any, copy: string): string {
           }
 
           .text-2xl {            
-            font-size: 30px
+            font-size: 30px;
+          }
           
           .text-xl {            
-            font-size: 24px
+            font-size: 28px
           }
 
           .text-brand-purple {
@@ -161,7 +165,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           <div class="mb-1">Mobile: 07077977782</div>
         </div>
 
-        <div class="my-3 mb- text-2xl">
+        <div class="my-10 text-2xl">
           <div class="my-3">
             <p class="m-0"><strong>Payment Status:</strong> ${order.status}</p>
             ${
@@ -182,7 +186,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           <div class="mb-1"><strong>Customer Name:</strong> ${order.customerId.name?.toUpperCase()}</div>
         </div>
 
-        <table class="border-top border-bottom mb-2 py-2 my-3 text-2xl">
+        <table class="border-top border-bottom mb-10 py-2 my-3 text-2xl">
           <thead>
             <tr>
               <th>NAME</th>
@@ -209,7 +213,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             }</strong></div>
         </div>
 
-        <div class="text-center footer text-2xl">
+        <div class="text-center footer text-2xl my-10">
           <p class="m-0">Thank you very much! Pls come again!!!</p>
           <p class="m-0"><strong>— Business Hours —</strong></p>
           <p class="m-0">Mon–Fri 8:00am - 6pm</p>

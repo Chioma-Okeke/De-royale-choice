@@ -50,6 +50,7 @@ export default function ReceiptPrinting() {
         queryFn: () => new OrderService().getSingleOrder(id),
         queryKey: ['singleOrder', id],
         enabled: !!id,
+        staleTime: 0
     })
 
     const handlePrint = async (orderId: string) => {
