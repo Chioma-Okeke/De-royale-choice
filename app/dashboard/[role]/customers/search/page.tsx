@@ -61,7 +61,6 @@ export default function CustomerSearch() {
 
     const totalCount = filteredEntries?.registrations.length || 0;
     const totalPages = Math.ceil(totalCount / pageSize);
-    console.log(totalPages, "pages total")
 
     const router = useRouter()
 

@@ -85,7 +85,6 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json();
-        console.log(body, "in items");
         const { itemName, categoryId, itemPrice, piecePerItem } = body;
 
         // Validate required fields

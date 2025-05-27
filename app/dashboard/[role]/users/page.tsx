@@ -40,8 +40,6 @@ export default function UsersPage() {
         staleTime: 1000 * 60 * 5,
     })
 
-    console.log(users, "on fetch")
-
     const { mutate, isPending } = useMutation({
         mutationFn: async (user: User) => {
             const userService = new UserService()

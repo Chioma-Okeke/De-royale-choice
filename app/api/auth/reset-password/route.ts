@@ -44,7 +44,6 @@ export async function PATCH(req: NextRequest) {
         await user.save();
 
         const isSelfReset = authResult.user._id.toString() === user._id?.toString();
-        console.log(isSelfReset, authResult.user._id, user._id, "is self reset")
 
         return NextResponse.json({
             message: "Password reset successful.",

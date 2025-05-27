@@ -17,8 +17,6 @@ export async function POST(req: NextRequest) {
         const { email, password } = await req.json();
         const user = await User.findOne({ email });
 
-        console.log(password, user?.password)
-
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return NextResponse.json(
                 { message: "Invalid credentials" },

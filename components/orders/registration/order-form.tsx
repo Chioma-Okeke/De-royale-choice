@@ -108,7 +108,7 @@ function OrderForm({ selectedCustomer, setSelectedCustomer, role }: OrderFormPro
     }
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(sendOrder, (errors) => console.log('Form Errors:', errors))}>
+            <form onSubmit={form.handleSubmit(sendOrder)}>
                 <Card>
                     <CardHeader>
                         <CardTitle>Laundry Items</CardTitle>

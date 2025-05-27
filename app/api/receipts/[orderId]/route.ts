@@ -13,12 +13,10 @@ export async function GET(req: NextRequest, { params }: { params: { orderId: str
   //   const format = req.nextUrl.searchParams.get('format');
   const url = new URL(req.url);
   const copy = url.searchParams.get("copy") || "";
-  console.log(copy, "i dey here")
 
   await connectDb();
 
   const order = await Order.findById(orderId).populate('laundryItems customerId');
-  console.log(order, "order")
   if (!order) return NextResponse.json({ message: 'Order not found' }, { status: 404 });
 
   const html = renderReceiptHTML(order, copy!); // Render HTML string from template

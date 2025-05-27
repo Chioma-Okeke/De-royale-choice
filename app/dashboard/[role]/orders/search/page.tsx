@@ -58,13 +58,12 @@ export default function OrdersSearch() {
 
     const totalCount = filteredEntries?.registrations.length || 0;
     const totalPages = Math.ceil(totalCount / pageSize);
-    console.log(totalPages, "pages total")
 
     const router = useRouter()
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        setCurrentPage(1); // Reset to first page
+        setCurrentPage(1);
         refetch();
     };
 

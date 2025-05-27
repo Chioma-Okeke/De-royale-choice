@@ -12,16 +12,16 @@ export function renderReceiptHTML(order: any, copy: string): string {
     const tagsHTML = order.laundryItems.flatMap((item: any) => {
         return Array.from({ length: item.piecePerItem }, (_, i) => {
             const html = `<div class="tag">
-            <div class="flex-col text-2xl">
+            <div class="flex-col">
               <p class="m-0"><strong>${order.receiptId}</strong></p>
               <p class="m-0"> <strong>${counter}</strong> of ${totalQuantities}</p>
             </div>
             <div>
-              <p class="m-0 text-xl">${formatDateToDDMMYYYY(
+              <p class="m-0">${formatDateToDDMMYYYY(
                   order.createdAt
               )}</p>
             </div>
-            <div class="flex-col text-2xl">
+            <div class="flex-col">
               <p class="m-0"><strong>${order.receiptId}</strong></p>
               <p class="m-0"><strong>${order.customerId.name}</strong></p>
             </div>
@@ -40,21 +40,23 @@ export function renderReceiptHTML(order: any, copy: string): string {
         <style>
           @media print {
             @page {
-              size: 150mm auto;
+              size: 80mm auto;
               margin: 0;
-              font-size: 32px
             }
 
             body {
               margin: 40px 0 0 0;
               padding: 0;
+              font-size: 14px;
+              width: 80mm;
+              font-weight: 500;
             }
           }
 
           body {
             font-family: monospace;
-            font-size: 32px;
-            width: 150mm;
+            font-size: 14px;
+            width: 80mm;
             margin: 0 auto;
             padding: 10px;
           }
@@ -67,8 +69,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             align-items: center;
             display: flex;
             justify-content: space-between;
-            margin: 60px 0;            
-            font-size: 32px;
+            margin: 60px 0;
           }
 
           .m-0 { margin: 0; }
@@ -80,7 +81,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           .mb-10 { margin-bottom: 40px; }
           .mt-1 { margin-top: 4px; }
           .my-3 {margin: 12px 0;}
-          .my-10 {margin: 40px 0;}
+          .my-10 {margin: 32px 0;}
           .border-top { border-top: 1px dashed black; }
           .border-bottom { border-bottom: 1px dashed black; }
 
@@ -103,7 +104,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           }
 
           .total-section {
-            text-align: right
+            text-align: right;
           }
 
           .flex-col {
@@ -122,31 +123,23 @@ export function renderReceiptHTML(order: any, copy: string): string {
           }
 
           .text-red {
-            color: red
+            color: red;
           }
 
-          .text-4xl {
-            font-size: 36px
-          }
-
-          .text-2xl {            
-            font-size: 32px;
-          }
-          
-          .text-xl {            
-            font-size: 28px
+          .text-xl {
+            font-size: 20px;
           }
 
           .text-brand-purple {
-            color: #2d1160
+            color: #2d1160;
           }
 
           .text-brand-yellow {
-            color: #ffd700
+            color: #ffd700;
           }
 
           .font-700 {
-            font-weight: 700
+            font-weight: 700;
           }
 
         </style>
@@ -154,19 +147,19 @@ export function renderReceiptHTML(order: any, copy: string): string {
       <body>
 
         <div class="flex-col mb-10 text-center">
-          <span class="text-4xl font-700 text-brand-purple">DE UNIQUE ROYAL CHOICE</span>
-          <span class="text-4xl font-700 text-brand-yellow">DRY CLEANERS</span>
+          <span class="text-xl font-700 text-brand-purple">DE UNIQUE ROYAL CHOICE</span>
+          <span class="text-xl font-700 text-brand-yellow">DRY CLEANERS</span>
         </div>
 
-        <div class="text-center mb-6 text-2xl">
+        <div class="text-center mb-6">
           <div class="mb-3">
             <div class="mb-1">Plot 2016 FESTAC Link Road</div>
             <div class="mb-1">Beside Peridot Filling Station, Amuwo-Odofin, Lagos</div>
           </div>
-          <div class="mb-1">Mobile: 07077977782</div>
+          <div class="mb-1"><strong>Mobile:</strong> 07077977782</div>
         </div>
 
-        <div class="my-10 text-2xl">
+        <div class="my-10">
           <div class="my-3">
             <p class="m-0"><strong>Payment Status:</strong> ${order.status}</p>
             ${
@@ -187,7 +180,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           <div class="mb-1"><strong>Customer Name:</strong> ${order.customerId.name?.toUpperCase()}</div>
         </div>
 
-        <table class="border-top border-bottom mb-10 py-2 my-3 text-2xl">
+        <table class="border-top border-bottom mb-10 py-2 my-3">
           <thead>
             <tr>
               <th>NAME</th>
@@ -203,7 +196,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           </tbody>
         </table>
 
-        <div class="total-section text-2xl">
+        <div class="total-section">
             <div class="mb-1"><strong>Subtotal:</strong> ₦${
                 order.totalAmount
             }</div>
@@ -214,7 +207,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             }</strong></div>
         </div>
 
-        <div class="text-center footer text-2xl my-10">
+        <div class="text-center footer my-10">
           <p class="m-0">Thank you very much! Pls come again!!!</p>
           <p class="m-0"><strong>— Business Hours —</strong></p>
           <p class="m-0">Mon–Fri 8:00am - 6pm</p>

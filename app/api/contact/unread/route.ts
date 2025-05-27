@@ -6,6 +6,5 @@ import { NextResponse } from "next/server";
 export async function GET() {
     await connectDb();
     const unReadInquiries = await Contact.find({isRead: false}).sort({createdAt: -1})
-    console.log(unReadInquiries)
     return NextResponse.json(unReadInquiries)
 }

@@ -6,7 +6,6 @@ class ReceiptService extends BaseService {
   }
 
   public async fetchReceiptHTML(orderId: string, copy: string) {
-    console.log(copy, "in service")
     const res = await this.get<string>(`/${orderId}`, { copy : copy });
     return res;
   };

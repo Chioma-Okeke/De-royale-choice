@@ -55,8 +55,6 @@ export async function GET() {
       ],
     }
 
-    console.log(data, "stats daily")
-
     return NextResponse.json(data, {status: 200});
   } catch (error) {
     console.error("Daily Activity Error:", error);
