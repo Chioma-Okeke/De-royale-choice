@@ -67,7 +67,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             align-items: center;
             display: flex;
             justify-content: space-between;
-            margin: 0 0 54px 0;            
+            margin: 60px 0;            
             font-size: 32px;
           }
 
