@@ -164,9 +164,9 @@ export function renderReceiptHTML(order: any, copy: string): string {
             <p class="m-0"><strong>Payment Status:</strong> ${order.status}</p>
             ${
                 order.status === "Pending"
-                    ? `<p class="text-red m-0"><strong>Balance:</strong> ₦${
+                    ? `<p class="text-red m-0"><strong>Balance: ₦${
                           order?.totalAmount - order?.deposit
-                      }</p>`
+                      }</strong></p>`
                     : ""
             }
           </div>
