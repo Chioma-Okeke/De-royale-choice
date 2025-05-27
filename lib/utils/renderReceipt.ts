@@ -81,7 +81,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           .mb-10 { margin-bottom: 40px; }
           .mt-1 { margin-top: 4px; }
           .my-3 {margin: 12px 0;}
-          .my-10 {margin: 32px 0;}
+          .my-8 {margin: 32px 0;}
           .border-top { border-top: 1px dashed black; }
           .border-bottom { border-bottom: 1px dashed black; }
 
@@ -159,7 +159,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           <div class="mb-1"><strong>Mobile:</strong> 07077977782</div>
         </div>
 
-        <div class="my-10">
+        <div class="my-8">
           <div class="my-3">
             <p class="m-0"><strong>Payment Status:</strong> ${order.status}</p>
             ${
@@ -207,7 +207,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             }</strong></div>
         </div>
 
-        <div class="text-center footer my-10">
+        <div class="text-center footer my-8">
           <p class="m-0">Thank you very much! Pls come again!!!</p>
           <p class="m-0"><strong>— Business Hours —</strong></p>
           <p class="m-0">Mon–Fri 8:00am - 6pm</p>
