@@ -11,7 +11,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
 
     const tagsHTML = order.laundryItems.flatMap((item: any) => {
         return Array.from({ length: item.piecePerItem }, (_, i) => {
-            const html = `<div class="tag ">
+            const html = `<div class="tag">
             <div class="flex-col text-2xl">
               <p class="m-0"><strong>${order.receiptId}</strong></p>
               <p class="m-0"> <strong>${counter}</strong> of ${totalQuantities}</p>
@@ -42,7 +42,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             @page {
               size: 150mm auto;
               margin: 0;
-              font-size: 30px
+              font-size: 32px
             }
 
             body {
@@ -53,7 +53,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
 
           body {
             font-family: monospace;
-            font-size: 30px;
+            font-size: 32px;
             width: 150mm;
             margin: 0 auto;
             padding: 10px;
@@ -67,7 +67,8 @@ export function renderReceiptHTML(order: any, copy: string): string {
             align-items: center;
             display: flex;
             justify-content: space-between;
-            margin: 0 0 54px 0;
+            margin: 0 0 54px 0;            
+            font-size: 32px;
           }
 
           .m-0 { margin: 0; }
@@ -129,7 +130,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           }
 
           .text-2xl {            
-            font-size: 30px;
+            font-size: 32px;
           }
           
           .text-xl {            
