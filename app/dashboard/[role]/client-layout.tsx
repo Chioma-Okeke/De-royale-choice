@@ -45,7 +45,7 @@ export default function ClientLayout({
       <SidebarProvider>
         <div className="flex min-h-screen bg-gray-50 overflow-hidden w-full">
           <SidebarNav role={role} />
-          <main className="flex-1 w-full scroll-bar">
+          <main className="flex-1 w-full scroll-bar overflow-auto">
             {children}
           </main>
         </div>
