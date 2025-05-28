@@ -47,7 +47,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             body {
               margin: 40px 0 0 0;
               padding: 0;
-              font-size: 16px;
+              font-size: 15px;
               width: 80mm;
               font-weight: 500;
             }
@@ -55,7 +55,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
 
           body {
             font-family: monospace;
-            font-size: 16px;
+            font-size: 15px;
             width: 80mm;
             margin: 0 auto;
             padding: 10px;
