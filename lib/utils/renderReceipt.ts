@@ -47,7 +47,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             body {
               margin: 40px 0 0 0;
               padding: 0;
-              font-size: 14px;
+              font-size: 16px;
               width: 80mm;
               font-weight: 500;
             }
@@ -55,7 +55,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
 
           body {
             font-family: monospace;
-            font-size: 14px;
+            font-size: 16px;
             width: 80mm;
             margin: 0 auto;
             padding: 10px;
@@ -72,11 +72,21 @@ export function renderReceiptHTML(order: any, copy: string): string {
             margin: 60px 0;
           }
 
-          .m-0 { margin: 0; }
-          .mb-1 { margin-bottom: 4px; }
-          .mb-2 { margin-bottom: 8px; }
-          .mb-3 { margin-bottom: 12px; }
-          .mb-4 { margin-bottom: 16px; }
+          .m-0 { 
+            margin: 0; 
+          }
+          .mb-1 { 
+            margin-bottom: 4px;
+          }
+          .mb-2 { 
+            margin-bottom: 8px;
+          }
+          .mb-3 {
+            margin-bottom: 12px;
+          }
+          .mb-4 {
+            margin-bottom: 16px;
+          }
           .mb-6 { margin-bottom: 24px; }
           .mb-10 { margin-bottom: 40px; }
           .mt-1 { margin-top: 4px; }
