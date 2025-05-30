@@ -14,18 +14,15 @@ export function renderReceiptHTML(order: any, copy: string): string {
             const html = `<div class="tag">
             <div class="flex-col">
               <p class="m-0"><strong>${order.receiptId}</strong></p>
-              <p class="m-0"> <strong>${counter}</strong> of ${totalQuantities}</p>
-            </div>
-            <div>
-              <p class="m-0">${formatDateToDDMMYYYY(
-                  order.createdAt
-              )}</p>
+              <p class="m-0 mt-1 text-2xl"> <strong>${counter}</strong> of ${totalQuantities}</p>
             </div>
             <div class="flex-col">
-              <p class="m-0"><strong>${order.receiptId}</strong></p>
-              <p class="m-0"><strong>${order.customerId.name}</strong></p>
+              <p class="m-0 text-2xl">${formatDateToDDMMYYYY(
+                    order.createdAt
+                )}</p>
+                <p class="m-0 mt-1"><strong>${order.customerId.name}</strong></p>
             </div>
-        </div>`;
+            </div>`;
             counter++;
             return html;
         });
@@ -40,23 +37,23 @@ export function renderReceiptHTML(order: any, copy: string): string {
         <style>
           @media print {
             @page {
-              size: 80mm auto;
+              size: 90mm auto;
               margin: 0;
+              padding: 60px 0;
             }
 
             body {
               margin: 40px 0 0 0;
-              padding: 0;
-              font-size: 30px;
-              width: 80mm;
+              font-size: 28px;
+              width: 90mm;
               font-weight: 500;
             }
           }
 
           body {
             font-family: monospace;
-            font-size: 30px;
-            width: 80mm;
+            font-size: 28px;
+            width: 90mm;
             margin: 0 auto;
             padding: 10px;
           }
@@ -70,6 +67,8 @@ export function renderReceiptHTML(order: any, copy: string): string {
             display: flex;
             justify-content: space-between;
             margin: 60px 0;
+            gap: 4px;
+            text-align: left;
           }
 
           .m-0 { 
@@ -90,6 +89,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           .mb-6 { margin-bottom: 24px; }
           .mb-10 { margin-bottom: 40px; }
           .mt-1 { margin-top: 4px; }
+          .mt-2 { margin-top: 8px; }
           .my-3 {margin: 12px 0;}
           .my-8 {margin: 32px 0;}
           .border-top { border-top: 1px dashed black; }
@@ -120,7 +120,6 @@ export function renderReceiptHTML(order: any, copy: string): string {
           .flex-col {
             display: flex;
             flex-direction: column;
-            gap: 8px;
           }
           
           .footer {
@@ -136,8 +135,12 @@ export function renderReceiptHTML(order: any, copy: string): string {
             color: red;
           }
 
-          .text-xl {
-            font-size: 36px;
+          .text-4xl {
+            font-size: 32px;
+          }
+
+          .text-2xl {
+            font-size: 24px;
           }
 
           .text-brand-purple {
@@ -157,12 +160,12 @@ export function renderReceiptHTML(order: any, copy: string): string {
       <body>
 
         <div class="flex-col mb-10 text-center">
-          <span class="text-xl font-700 text-brand-purple">DE UNIQUE ROYAL CHOICE</span>
-          <span class="text-xl font-700 text-brand-yellow">DRY CLEANERS</span>
+          <span class="text-4xl font-700 text-brand-purple">DE UNIQUE ROYAL CHOICE</span>
+          <span class="text-4xl font-700 text-brand-yellow mt-2">DRY CLEANERS</span>
         </div>
 
         <div class="text-center mb-6">
-          <div class="mb-3">
+          <div class="mb-3 text-2xl">
             <div class="mb-1">Plot 2016 FESTAC Link Road</div>
             <div class="mb-1">Beside Peridot Filling Station, Amuwo-Odofin, Lagos</div>
           </div>
