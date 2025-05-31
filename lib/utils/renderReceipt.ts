@@ -10,23 +10,28 @@ export function renderReceiptHTML(order: any, copy: string): string {
     let counter = 1;
 
     const tagsHTML = order.laundryItems.flatMap((item: any) => {
-        return Array.from({ length: item.piecePerItem }, (_, i) => {
-            const html = `<div class="tag">
+      return Array.from({ length: item.piecePerItem }, (_, i) => {
+        const shouldInsertPageBreak = counter > 1 && counter % 10 === 1; // every 10 tags, before the next
+        const pageBreak = shouldInsertPageBreak ? '<div class="page-break"></div>' : '';
+
+        const html = `
+          ${pageBreak}
+          <div class="tag">
             <div class="flex-col">
               <p class="m-0"><strong>${order.receiptId}</strong></p>
-              <p class="m-0 mt-1 text-xl"> <strong>${counter}</strong> of ${totalQuantities}</p>
+              <p class="m-0 mt-1 text-xl"><strong>${counter}</strong> of ${totalQuantities}</p>
             </div>
             <div class="flex-col">
-              <p class="m-0 text-2xl">${formatDateToDDMMYYYY(
-                    order.createdAt
-                )}</p>
-                <p class="m-0 mt-1"><strong>${order.customerId.name}</strong></p>
+              <p class="m-0 text-2xl">${formatDateToDDMMYYYY(order.createdAt)}</p>
+              <p class="m-0 mt-1"><strong>${order.customerId.name}</strong></p>
             </div>
-            </div>`;
-            counter++;
-            return html;
-        });
+          </div>`;
+          
+        counter++;
+        return html;
+      });
     });
+
 
     return `
       <!DOCTYPE html>
@@ -49,6 +54,11 @@ export function renderReceiptHTML(order: any, copy: string): string {
               font-weight: 500;
               margin: 60px 0;
               padding: 60px 0;
+            }
+
+            .page-break {
+              page-break-before: always;
+              margin-top: 60px
             }
           }
 
@@ -137,7 +147,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           }
 
           .text-4xl {
-            font-size: 32px;
+            font-size: 28px;
           }
 
           .text-2xl {
