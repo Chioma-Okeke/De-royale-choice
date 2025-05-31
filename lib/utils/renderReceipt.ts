@@ -38,8 +38,8 @@ export function renderReceiptHTML(order: any, copy: string): string {
           @media print {
             @page {
               size: 90mm auto;
-              margin: 35px 0;
-              padding: 35px 0;
+              margin: 30px 0;
+              padding: 30px 0;
             }
 
             body {
@@ -47,13 +47,13 @@ export function renderReceiptHTML(order: any, copy: string): string {
               font-size: 28px;
               width: 90mm;
               font-weight: 500;
-              margin: 35px 0;
-              padding: 35px 0;
+              margin: 30px 0;
+              padding: 30px 0;
             }
 
             .page-break {
               page-break-before: always;
-              margin-top: 35px
+              margin-top: 30px
             }
           }
 
