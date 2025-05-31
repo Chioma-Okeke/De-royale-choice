@@ -38,8 +38,8 @@ export function renderReceiptHTML(order: any, copy: string): string {
           @media print {
             @page {
               size: 90mm auto;
-              margin: 60px 0;
-              padding: 60px 0;
+              margin-top: 60px;
+              padding-top: 60px;
             }
 
             body {
@@ -47,8 +47,8 @@ export function renderReceiptHTML(order: any, copy: string): string {
               font-size: 28px;
               width: 90mm;
               font-weight: 500;
-              margin: 60px 0;
-              padding: 60px 0;
+              margin-top: 60px;
+              padding-top: 60px;
             }
 
             .page-break {
@@ -62,7 +62,6 @@ export function renderReceiptHTML(order: any, copy: string): string {
             font-size: 28px;
             width: 90mm;
             margin: 0 auto;
-            padding: 10px;
           }
 
           .text-center {
