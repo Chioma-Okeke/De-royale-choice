@@ -14,7 +14,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             const html = `<div class="tag">
             <div class="flex-col">
               <p class="m-0"><strong>${order.receiptId}</strong></p>
-              <p class="m-0 mt-1 text-2xl"> <strong>${counter}</strong> of ${totalQuantities}</p>
+              <p class="m-0 mt-1 text-xl"> <strong>${counter}</strong> of ${totalQuantities}</p>
             </div>
             <div class="flex-col">
               <p class="m-0 text-2xl">${formatDateToDDMMYYYY(
@@ -38,7 +38,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
           @media print {
             @page {
               size: 90mm auto;
-              margin: 0;
+              margin: 60px 0;
               padding: 60px 0;
             }
 
@@ -47,6 +47,8 @@ export function renderReceiptHTML(order: any, copy: string): string {
               font-size: 28px;
               width: 90mm;
               font-weight: 500;
+              margin: 60px 0;
+              padding: 60px 0;
             }
           }
 
@@ -67,7 +69,6 @@ export function renderReceiptHTML(order: any, copy: string): string {
             display: flex;
             justify-content: space-between;
             margin: 60px 0;
-            gap: 4px;
             text-align: left;
           }
 
@@ -141,6 +142,10 @@ export function renderReceiptHTML(order: any, copy: string): string {
 
           .text-2xl {
             font-size: 24px;
+          }
+
+          .text-xl {
+            font-size: 22px;
           }
 
           .text-brand-purple {
