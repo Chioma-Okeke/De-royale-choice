@@ -73,7 +73,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             align-items: center;
             display: flex;
             justify-content: space-between;
-            margin: 60px 0;
+            margin-top: 60px;
             text-align: left;
           }
 
