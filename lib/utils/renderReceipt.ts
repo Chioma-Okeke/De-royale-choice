@@ -62,6 +62,7 @@ export function renderReceiptHTML(order: any, copy: string): string {
             font-size: 28px;
             width: 90mm;
             margin: 0 auto;
+            padding: 10px;
           }
 
           .text-center {
